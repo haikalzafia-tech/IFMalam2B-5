@@ -1,17 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Auth; // Tambahkan baris ini!
 
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-
-// Contoh halaman dashboard (hanya untuk user login)
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth');
-
+Route::get('/', function () {
+    return view('auth.login');
+});
 
 Auth::routes();
 
