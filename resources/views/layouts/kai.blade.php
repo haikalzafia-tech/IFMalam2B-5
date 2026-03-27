@@ -138,7 +138,7 @@
                 <div class="container">
                     <div class="page-inner">
                         <div class="page-header">
-                            <h4 class="page-title">@yield('title', 'E-Gudang App')</h4>
+                            <h4 class="page-title">@yield('page_title', 'E-Gudang App')</h4>
                         </div>
                         @yield('content')
                     </div>

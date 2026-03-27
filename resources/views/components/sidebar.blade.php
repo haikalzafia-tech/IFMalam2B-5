@@ -34,11 +34,13 @@
                     </a>
                     <div class="collapse" id="dashboard">
                         <ul class="nav nav-collapse">
+                            @foreach ($link['items'] as $item)
                             <li>
-                                <a href="../demo1/index.html">
-                                    <span class="sub-item">Dashboard 1</span>
+                                <a href="{{ route($item['route']) }}">
+                                    <span class="sub-item">{{ $item['label'] }}</span>
                                 </a>
                             </li>
+                            @endforeach
                         </ul>
                     </div>
                 </li>
