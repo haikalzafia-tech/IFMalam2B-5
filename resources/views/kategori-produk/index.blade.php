@@ -19,7 +19,12 @@
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $item->nama_kategori }}</td>
-                    <td></td>
+                    <td>
+                        <div class="d-flex align-items-center gap-1">
+                            <x-kategori-produk.form-kategori-produk id="{{ $item->id }}" />
+                            <x-confirm-delete id="{{ $item->id }}" route="master-data.kategori-produk.destroy" />
+                        </div>
+                    </td>
                 </tr>
                 @empty
                 <tr>

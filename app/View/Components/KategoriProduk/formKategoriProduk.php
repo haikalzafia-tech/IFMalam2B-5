@@ -16,7 +16,8 @@ class formKategoriProduk extends Component
     public function __construct($id = null)
     {
         if($id) {
-            $kategori = KategoriProduk::frindOrFail($id);
+            $kategori = KategoriProduk::findOrFail($id);
+            $this->id = $kategori->id;
             $this->nama_kategori = $kategori->nama_kategori;
             $this->action = route('master-data.kategori-produk.update', $kategori->id);
         } else {

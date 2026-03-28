@@ -1,6 +1,6 @@
 <div>
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-round {{ $id ? 'btn-primary-icon' : 'btn-dark' }}" data-bs-toggle="modal"
+    <button type="button" class="btn btn-round {{ $id ? 'btn-primary btn-icon' : 'btn-dark' }}" data-bs-toggle="modal"
         data-bs-target="#formKategori{{ $id ??'' }}">
         @if ($id)
         <i class="fas fa-edit"></i>
