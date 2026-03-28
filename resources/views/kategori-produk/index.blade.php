@@ -3,10 +3,18 @@
 @section('content')
 <div class="card">
     <div class="card-body py-5">
-        <div>
-            <x-kategori-produk.form-kategori-produk />
+        <div class="row">
+            <div class="row col-10">
+                <div class="col-1">
+                    <x-per-page-option />
+                </div>
+            </div>
+            <div class="col-2 d-flex justify-content-end">
+                <x-kategori-produk.form-kategori-produk />
+            </div>
         </div>
-        <table class="table">
+
+        <table class="table mt-5">
             <thead>
                 <tr>
                     <th class="text-center" style="width: 15px">No</th>
@@ -33,6 +41,7 @@
                 @endforelse
             </tbody>
         </table>
+        {{  $kategori->links()}}
     </div>
 </div>
 @endsection

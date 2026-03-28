@@ -13,8 +13,9 @@ class KategoriProdukController extends Controller
     public function index()
     {
         $pageTitle = $this->pageTitle;
+        $parPage = request()->query('perPage') ?? 10;
         $query = KategoriProduk::query();
-        $kategori = $query->paginate(10);
+        $kategori = $query->paginate($parPage)->appends(request()->query());
         confirmDelete('Hapus data kategori produk tidak dapat di batalkan, lanjutkan ?');
         return view('kategori-produk.index', compact('pageTitle','kategori'));
     }
