@@ -2,19 +2,24 @@
 @section('page_title', $pageTitle)
 @section('content')
 <div class="card">
-    <div class="card-body py-5">
+    <div class="card-body py-3">
         <div class="row">
+
             <div class="row col-10">
-                <div class="col-1">
+                <div class="col-2">
                     <x-per-page-option />
                 </div>
+                <div class="col-8">
+                    <x-filter-by-field term='search' placeholder="Cari Kategori Produk" />
+                </div>
             </div>
-            <div class="col-2 d-flex justify-content-end">
+
+            <div class=" col-2 d-flex justify-content-ent">
                 <x-kategori-produk.form-kategori-produk />
             </div>
         </div>
 
-        <table class="table mt-5">
+        <table class="table mt-3">
             <thead>
                 <tr>
                     <th class="text-center" style="width: 15px">No</th>

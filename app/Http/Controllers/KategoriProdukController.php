@@ -14,7 +14,13 @@ class KategoriProdukController extends Controller
     {
         $pageTitle = $this->pageTitle;
         $parPage = request()->query('perPage') ?? 10;
+        $search = request()->query('search');
         $query = KategoriProduk::query();
+
+if ($search){
+    $query->where('nama_kategori', 'like', '%'. $search . '%');
+}
+    
         $kategori = $query->paginate($parPage)->appends(request()->query());
         confirmDelete('Hapus data kategori produk tidak dapat di batalkan, lanjutkan ?');
         return view('kategori-produk.index', compact('pageTitle','kategori'));

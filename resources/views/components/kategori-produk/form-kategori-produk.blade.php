@@ -5,7 +5,7 @@
         @if ($id)
         <i class="fas fa-edit"></i>
         @else
-        <span>Kategori Baru</span>
+        <span>Buat Baru</span>
         @endif
     </button>
 
