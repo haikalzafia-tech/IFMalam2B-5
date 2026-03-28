@@ -5,12 +5,15 @@
     <div class="card-body py-3">
         <div class="row">
 
-            <div class="row col-10">
+            <div class="row col-10 aling-items-center justify-content-between">
                 <div class="col-2">
                     <x-per-page-option />
                 </div>
-                <div class="col-8">
+                <div class="col-9">
                     <x-filter-by-field term='search' placeholder="Cari Kategori Produk" />
+                </div>
+                <div class="col-1">
+                    <x-button-reset-filter route="master-data.kategori-produk.index" />
                 </div>
             </div>
 
