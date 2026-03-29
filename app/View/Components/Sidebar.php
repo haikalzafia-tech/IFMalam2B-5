@@ -32,7 +32,11 @@ class Sidebar extends Component
                 [
                     'label' => 'Kategori Produk',
                     'route' => 'master-data.kategori-produk.index',
-                ]
+                ],
+                [
+                    'label' => 'Data Produk',
+                    'route' => 'master-data.produk.index',
+                ],
             ]
             
             ],

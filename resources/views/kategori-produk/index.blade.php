@@ -5,7 +5,7 @@
     <div class="card-body py-3">
         <div class="row">
 
-            <div class="row col-10 aling-items-center justify-content-between">
+            <div class="row col-10 align-items-center justify-content-between">
                 <div class="col-2">
                     <x-per-page-option />
                 </div>
@@ -16,7 +16,6 @@
                     <x-button-reset-filter route="master-data.kategori-produk.index" />
                 </div>
             </div>
-
             <div class=" col-2 d-flex justify-content-ent">
                 <x-kategori-produk.form-kategori-produk />
             </div>
