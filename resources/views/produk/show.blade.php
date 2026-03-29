@@ -3,23 +3,88 @@
 @section('content')
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h4 class="card-title">Detail :{{ $produk->nama_produk }}</h4>
-        <a href="{{ route('master-data.produk.index') }}" class="btn text-primary">Kembali</a>
+        <h4 class="card-title">Detail : {{ $produk->nama_produk }}</h4>
+        <a href="{{ route('master-data.produk.index') }}" class="text-primary">Kembali</a>
     </div>
     <div class="card-body">
         <x-meta-item label="Nama Produk" value="{{ $produk->nama_produk }}" />
         <x-meta-item label="Kategori" value="{{ $produk->kategori->nama_kategori }}" />
         <x-meta-item label="Deskripsi" value="{{ $produk->deskripsi_produk }}" />
-    </div class="mt-2">
-    <div class="d-flex justify-content-end">
-        <button class="btn btn-primary">Tambah Variant</button>
-    </div>
-    <div class="row mt-2">
-        <div class="col-12">
-            <div class="alert alert-info" style="box-shadow: none;">
-                <span>Belum ada variant produk, silahkan tambahkan variant baru</span>
+        <div class="mt-2">
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-dark btn-sm btn-round" data-bs-toggle="modal"
+                    data-bs-target="#modalFormVarian" id="btnTambahVarian">
+                    Tambah Varian
+                </button>
             </div>
+
+            <div class="row mt-2">
+                <div class="col-12">
+                    <div class="alert alert-info" style="box-shadow: none;">
+                        <span>Belum ada variant produk, silahkan tambahkan variant baru</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
+<x-produk.form-varian />
 @endsection
+@push('script')
+<script>
+$(document).ready(function() {
+
+    let modalEl = $('#modalFormVarian');
+    let modal = new bootstrap.Modal(modalEl);
+    let $form = $('#modalFormVarian form');
+
+
+    $("#btnTambahVarian").on('click', function() {
+        $form[0].reset();
+        $form.attr('action');
+        $form.find('small.text-danger').text('');
+        $('#modalFormVarian .modal-title').text('Tambah Varian Baru');
+        modal.show();
+    });
+
+    $form.submit(function(e) {
+        e.preventDefault();
+
+        let formData = new FormData(this);
+
+        $.ajax({
+            type: $form.attr('method'),
+            url: $form.attr('action'),
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                swal({
+                    title: "Berhasil",
+                    text: response.message,
+                    icon: "success",
+                    timer: 2000,
+                }).then(() => {
+                    modal.hide();
+                    location.reload();
+                })
+            },
+            error: function(xhr) {
+                let errors = xhr.responseJSON.errors;
+                console.log(errors);
+
+                $form.find('small.text-danger').text('');
+                $.each(errors, function(key, val) {
+                    $form.find('[name="' + key + '"]').next(
+                            'small.text-danger')
+                        .text(val[0]);
+                })
+            }
+        });
+    })
+
+
+});
+</script>
+@endpush
