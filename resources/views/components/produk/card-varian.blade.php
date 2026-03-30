@@ -3,7 +3,7 @@
         <img src="{{ asset('storage/varian-produk/'. $varian->gambar_varian) }}" alt="{{ $varian->nama_varian }}"
             class="img-fluid mb-2" style="max-height: 300px; object-fit: cover; width: 100%; height: 100%;">
         <h5 class="card-title">{{ $varian->nama_varian }}</h5>
-        <x-meta-item label='Nomor SKU' value="{{ $varian->sku_varian }}" />
+        <x-meta-item label='Nomor SKU' value="{{ $varian->nomor_sku }}" />
         <x-meta-item label='Harga' value="Rp. {{ number_format($varian->harga_varian) }}" />
         <x-meta-item label='Stok' value="{{number_format($varian->stok_varian)}} pcs" />
     </div>
