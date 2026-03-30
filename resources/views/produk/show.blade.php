@@ -19,13 +19,20 @@
             </div>
 
             <div class="row mt-2">
+
+
+                @forelse ($produk->varian as $item)
+                <div class="col-md-4">
+                    <x-produk.card-varian :varian="$item" />
+                </div>
+                @empty
                 <div class="col-12">
                     <div class="alert alert-info" style="box-shadow: none;">
                         <span>Belum ada variant produk, silahkan tambahkan variant baru</span>
                     </div>
                 </div>
+                @endforelse
             </div>
-
         </div>
     </div>
 </div>
@@ -45,6 +52,24 @@ $(document).ready(function() {
         $form.attr('action');
         $form.find('small.text-danger').text('');
         $('#modalFormVarian .modal-title').text('Tambah Varian Baru');
+        modal.show();
+    });
+
+    $(".btnEditVarian").on('click', function() {
+        let nama_Varian = $(this).data('nama-varian');
+        let harga_varian = $(this).data('harga-varian');
+        let stok_varian = $(this).data('stok-varian');
+        let action = $(this).data('action');
+
+        $form[0].reset();
+
+        $form.attr('action', action);
+        $form.append('<input type="hidden" name="_method" value="PUT">');
+        $form.find('input[name="nama_varian"]').val(nama_Varian);
+        $form.find('input[name="harga_varian"]').val(harga_varian);
+        $form.find('input[name="stok_varian"]').val(stok_varian);
+        $form.find('small.text-danger').text('');
+        $('#modalFormVarian .modal-title').text('Edit Varian');
         modal.show();
     });
 
@@ -83,7 +108,23 @@ $(document).ready(function() {
             }
         });
     })
+})
 
+
+$(".formDeleteVarian").on('click', function(e) {
+    e.preventDefault();
+    const form = this;
+    swal({
+        title: "Apakah Anda yakin?",
+        text: "Data varian produk akan dihapus secara permanen!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((isConfirm) => {
+        if (isConfirm) {
+            form.submit();
+        }
+    });
 
 });
 </script>
