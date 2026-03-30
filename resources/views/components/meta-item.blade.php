@@ -1,5 +1,11 @@
-<div>
-    <td class="align-top" style="width: 150px">{{ $label }}</td>
-    <td class="align-top" style="width: 5px">:</td>
-    <td class="align-top">{{ $value }}</td>
+<div class="d-flex mb-1">
+    <div style=" min-width: 120px; font-weight: 500;">
+        {{ $label }}
+    </div>
+
+    <div class="px-2">:</div>
+
+    <div class="flex-grow-1 fw-bold">
+        {{ $value }}
+    </div>
 </div>
