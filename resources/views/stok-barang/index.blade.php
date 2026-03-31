@@ -5,17 +5,27 @@
     <div class="card-body py-5">
         <div class="row align-items-center">
 
-            <div class="row col-9">
+            <div class="row col-9 justify-content-between">
                 <div class="col-2">
                     <x-per-page-option />
                 </div>
                 <div class="col-7">
                     <x-filter-by-field term="search" placholder="Cari Produk..." />
                 </div>
+                <div class="col-3">
+                    <x-filter-by-options term="kategori" :options="$kategori" field="nama_kategori"
+                        defaultValue="Pilih Kategori" />
+                </div>
             </div>
-            <div class="col-2"></div>
 
-            <div class="col-1"></div>
+            <div class="col-2">
+            </div>
+
+            <div class="col-1">
+                <x-button-reset-filter route="master-data.stok-barang.index" />
+            </div>
+
+
         </div>
         <table class="table mt-3">
             <thead>
