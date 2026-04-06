@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class StokBarangController extends Controller
 {
-    public $pageTitle = 'Stok Barang';
+    public $pageTitle = "Stok Barang";
     public function index()
     {
         $pageTitle = $this->pageTitle;

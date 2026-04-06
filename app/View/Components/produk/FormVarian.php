@@ -2,6 +2,7 @@
 
 namespace App\View\Components\produk;
 
+use App\Models\VarianProduk;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;

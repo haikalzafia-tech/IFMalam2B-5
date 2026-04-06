@@ -4,6 +4,7 @@ use App\Http\Controllers\KategoriProdukController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\VarianProdukController;
 use App\Http\Controllers\StokBarangController;
+use App\Http\Controllers\KartuStokController;
 use App\Models\KategoriProduk;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth; // Tambahkan baris ini!
@@ -27,4 +28,6 @@ Route::middleware('auth')->group(function(){
         Route::resource('varian-produk',VarianProdukController::class)->only(['store','update','destroy']);
         Route::resource('stok-barang', StokBarangController::class)->only(['index']);
     });
+    
+    Route::get('/kartu-stok/{nomor_sku}', [KartuStokController::class, 'kartuStok'])->name('kartu-stok');
 });
