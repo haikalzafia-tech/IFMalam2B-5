@@ -32,7 +32,7 @@
                     <tr>
                         <th class="text-center" style="width: 50px">No</th>
                         <th>SKU</th>
-                        <th style="min-width: 200px">Produk</th>
+                        <th style=" min-width: 200px">Produk</th>
                         <th>Kategori</th>
                         <th>Stok</th>
                         <th>Harga</th>
