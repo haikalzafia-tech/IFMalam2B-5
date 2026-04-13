@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nomor_transaksi');
             $table->enum('jenis_transaksi', ['pemasukan', 'pengeluaran']);
             $table->integer('jumlah_barang');
-            $table->integer('total_barang');
+            $table->integer('total_harga');
             $table->text('keterangan')->nullable();
             $table->string('petugas');
             $table->string('pengirim')->nullable();

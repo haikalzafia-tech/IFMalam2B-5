@@ -5,7 +5,7 @@
     <div class="card-body">
         <!-- form -->
         <form class="row col-12 justify-content-between" id="form-add-produk">
-            <div class="alert alert-danger" id="alert-danger"></div>
+            <div class="alert alert-danger" id="alert-danger" style="box-shadow: none !impor"></div>
             <div class="row">
                 <div class="form-group w-25">
                     <label for="pengirim" class="form-label">Pengirim</label>
@@ -25,7 +25,7 @@
                     <select id="select-produk" class="form-control w-100"></select>
                 </div>
                 <div class="col-2">
-                    <input type="text" name="nimir_batch" id="nomor_batch" class="form-control w-100"
+                    <input type="text" name="nomor_batch" id="nomor_batch" class="form-control w-100"
                         placeholder="Nomor Batch">
                 </div>
                 <div class="col-2">
@@ -35,7 +35,7 @@
                     <input type="number" name="harga" id="harga" class="form-control" placeholder="Harga">
                 </div>
                 <div class="col-2">
-                    <button type="submit" class="from-control btn btn-dark btn-round" id="btn-add">Tambahkan</button>
+                    <button type="submit" class="form-control btn btn-dark btn-round" id="btn-add">Tambahkan</button>
                 </div>
             </div>
         </form>
@@ -198,13 +198,63 @@ $(document).ready(function() {
             tableBody.append(`<tr><td colspan="7" class="text-center">Tidak ada data produk</td></tr>`)
         }
 
-        let grandTotal = selectedProduk.reduce((total, item) => total + item.subTotal,
-            0);
+        let grandTotal = selectedProduk.reduce((total, item) => total + item.subTotal, 0);
         $("#grand-total").text(numberFormat.format(grandTotal));
     }
 
     renderTable();
 
+    $("#form-transaksi").on("submit", function(e) {
+        e.preventDefault();
+        if (selectedProduk.length === 0) {
+            swal({
+                icon: 'Warning',
+                title: 'Perhatian',
+                text: 'Wajib menuliskan 1 produk yang akan di catat',
+                timer: 3000
+            })
+            return;
+        }
+
+        $.ajax({
+            method: "POST",
+            url: "{{ route('transaksi-masuk.store') }}",
+            data: {
+                _token: "{{ csrf_token() }}",
+                items: selectedProduk,
+                pengirim: $("#pengirim").val(),
+                kontak: $("#kontak").val(),
+                keterangan: $("#keterangan").val(),
+            },
+            success: function(response) {
+                if (response.success) {
+                    window.location.href = response.redirect_url;
+                }
+            },
+            error: function(xhr) {
+                const errors = xhr.responseJSON?.errors;
+                console.log();
+                if (errors) {
+                    renderError(errors);
+                    return;
+                }
+            }
+        });
+
+    });
+
+
+    function renderError(errors) {
+        let alertBox = $("#alert-danger");
+        alertBox.empty();
+        Object.values(errors).forEach(err => {
+            err.forEach(msg => {
+                alertBox.append(`<p>${msg}</p>`)
+            })
+        })
+
+        alertBox.show();
+    }
 });
 </script>
 @endpush

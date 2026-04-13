@@ -2,14 +2,115 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\storeTransaksiMasukRequest;
+use App\Models\KartuStok;
+use App\Models\Transaksi;
+use App\Models\VarianProduk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB; // Tambahkan ini untuk database transaction
 
 class TransaksiMasukController extends Controller
 {
     public $pageTitle = 'Transaksi Masuk';
+    public $jenisTransaksi = 'pemasukan';
+
+    public function index()
+    {
+        $pageTitle = $this->pageTitle;
+        // Opsional: Ambil data untuk ditampilkan di halaman index
+        $transaksi = Transaksi::where('jenis_transaksi', $this->jenisTransaksi)->latest()->get();
+        return view('transaksi-masuk.create', compact('pageTitle', 'transaksi'));
+    }
+
     public function create()
     {
         $pageTitle = $this->pageTitle;
         return view('transaksi-masuk.create', compact('pageTitle'));
+    }
+
+    public function store(storeTransaksiMasukRequest $request)
+    {
+        // Validasi manual jika FormRequest tidak otomatis menghandle AJAX
+        $validator = Validator::make($request->all(), $request->rules(), $request->messages());
+        if($validator->fails()){
+            return response()->json([
+                'success'  => false,
+                'errors'   => $validator->errors()
+            ], 422);
+        }
+        
+        $nomorTransaksi = Transaksi::generateNomorTransaksi($this->jenisTransaksi);
+        $items = $request->items;
+
+        // Gunakan Transaction agar jika satu item gagal, semua dibatalkan (keamanan data)
+        DB::beginTransaction();
+
+        try {
+            $transaksi = Transaksi::create([
+                'nomor_transaksi'  => $nomorTransaksi,
+                'jenis_transaksi'  => $this->jenisTransaksi,
+                'jumlah_barang'    => count($items),
+                'total_harga'      => array_sum(array_column($items, 'subTotal')),
+                'keterangan'      => $request->keterangan,
+                'petugas'         => Auth::user()->name,
+                'pengirim'        => $request->pengirim,
+                'kontak'          => $request->kontak
+            ]);
+
+            foreach ($items as $item) {
+                $query = explode('-', $item['text']);
+                
+                // Cek apakah produk & varian ada di string (mencegah error index 1)
+                $namaProduk = trim($query[0]);
+                $namaVarian = isset($query[1]) ? trim($query[1]) : '-';
+
+                $varian = VarianProduk::where('nomor_sku', $item['nomor_sku'])->first();
+                
+                if (!$varian) {
+                    throw new \Exception("Produk dengan SKU " . $item['nomor_sku'] . " tidak ditemukan.");
+                }
+
+                $transaksi->items()->create([
+                    'produk'      => $namaProduk,
+                    'varian'      => $namaVarian,
+                    'nomor_batch' => $item['nomor_batch'], 
+                    'qty'         => $item['qty'], 
+                    'harga'       => $item['harga'], 
+                    'subTotal'    => $item['subTotal'], 
+                    'nomor_sku'   => $item['nomor_sku']
+                ]);
+
+                // Update Stok
+                $varian->increment('stok_varian', $item['qty']);
+
+                // Catat di Kartu Stok
+                KartuStok::create([
+                    'nomor_transaksi' => $transaksi->nomor_transaksi,
+                    'jenis_transaksi' => 'in',
+                    'nomor_sku'       => $item['nomor_sku'],
+                    'jumlah_masuk'    => $item['qty'],
+                    'stok_akhir'      => $varian->stok_varian,
+                    'petugas'         => Auth::user()->name
+                ]);
+            }
+
+            DB::commit();
+            
+            toast()->success('Transaksi Masuk berhasil ditambahkan');
+            return response()->json([
+                'success'      => true,
+                'redirect_url' => route('transaksi-masuk.index') // Arahkan ke index setelah sukses
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }
