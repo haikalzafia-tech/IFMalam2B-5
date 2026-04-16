@@ -140,7 +140,7 @@ $(document).ready(function() {
         let subTotal = qty * harga;
 
         let existingItem = selectedProduk.find(item => item.nomor_sku === selectedOption.nomor_sku);
-
+        // Gunakan identitas untuk menunjukkan struktur bersarang
         if (existingItem) {
             existingItem.qty = parseInt(existingItem.qty) + parseInt(qty);
             existingItem.harga = parseInt(harga);

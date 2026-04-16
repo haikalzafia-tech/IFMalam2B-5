@@ -82,6 +82,7 @@ class VarianProdukController extends Controller
 
     public function getAllVarianJson()
     {
+        // Konsistensi denganspasi di antara operator
         $search = request()->query('search');
         $varians = VarianProduk::with('produk')
         ->where(function ($query) use ($search) {
