@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\storeVarianProdukRequest;
 use App\Http\Requests\updateVarianProdukRequest;
 use App\Models\KartuStok;
+use App\Models\LaporanKenaikanHarga;
 use App\Models\VarianProduk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,24 +27,25 @@ class VarianProdukController extends Controller
             'stok_varian' => $request->stok_varian,
             'gambar_varian' => $fileName,
         ]);
-        
-        
-        
+
+
+
         return response()->json(['message' => 'Varian produk berhasil ditambahkan'
-        ]);   
+        ]);
     }
-    
+
 
     public function update(updateVarianProdukRequest $request, $varian_produk)
     {
         $isAdjusment = false;
         $varian = VarianProduk::findOrFail($varian_produk);
-
+        $existKenaikanHarga = LaporanKenaikanHarga::where('nomor_sku', $varian->nomor_sku)->where('is_confirmed', false)->first
+            ();
         if ($request->stok_varian != $varian->stok_varian){
             $isAdjusment = true;
         }
-        
-        $fileName = $varian->gambar_varian; 
+
+        $fileName = $varian->gambar_varian;
 
 
         if ($request->file('gambar_varian')) {
@@ -57,7 +59,13 @@ class VarianProdukController extends Controller
             'stok_varian'   => $request->stok_varian,
             'gambar_varian' => $fileName,
         ]);
-        
+
+        if ($existKenaikanHarga && $request->harga_varian >= $existKenaikanHarga->harga_beli) {
+            $existKenaikanHarga->update([
+                'is_confirmed' => true
+            ]);
+        }
+
         if ($isAdjusment){
         KartuStok::create([
             'jenis_transaksi' => 'adjustment',
@@ -66,7 +74,7 @@ class VarianProdukController extends Controller
             'petugas'         => Auth::user()->name
         ]);
 }
-        
+
         return response()->json(['message' => 'Varian produk berhasil diperbarui']);
 
     }
@@ -98,7 +106,7 @@ class VarianProdukController extends Controller
                 'harga' => $q->harga_varian,
                 'stok'  => $q->stok_varian,
                 'nomor_sku' => $q->nomor_sku
-                
+
             ];
         });
         return response()->json($varians);

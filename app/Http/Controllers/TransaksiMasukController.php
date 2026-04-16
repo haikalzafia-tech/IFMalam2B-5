@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\storeTransaksiMasukRequest;
 use App\Models\KartuStok;
+use App\Models\LaporanKenaikanHarga;
 use App\Models\Transaksi;
 use App\Models\VarianProduk;
 use Carbon\Carbon;
@@ -27,7 +28,7 @@ class TransaksiMasukController extends Controller
         $tanggalAwal = request()->query('tanggal_awal');
         $tanggalAkhir = request()->query('tanggal_akhir');
         $perPage = request()->query('perPage',10);
-    
+
         $query = Transaksi::query();
         $query->orderBy('created_at','DESC');
         $query->where('jenis_transaksi',$this->jenisTransaksi);
@@ -35,7 +36,7 @@ class TransaksiMasukController extends Controller
         if($pengirim){
             $query->where('pengirim','like','%'.$pengirim.'%');
         }
-        
+
         if($tanggalAwal && $tanggalAkhir){
         $tanggalAwal = Carbon::parse($tanggalAwal)->startOfDay();
         $tanggalAkhir = Carbon::parse($tanggalAkhir)->endOfDay();
@@ -44,7 +45,7 @@ class TransaksiMasukController extends Controller
 
         $transaksi = $query->paginate($perPage)->appends(request()->query());
 
-        
+
         $pageTitle = $this->pageTitle;
         // // Opsional: Ambil data untuk ditampilkan di halaman index
         // $transaksi = Transaksi::where('jenis_transaksi', $this->jenisTransaksi)->latest()->get();
@@ -75,7 +76,7 @@ class TransaksiMasukController extends Controller
                 'errors'   => $validator->errors()
             ], 422);
         }
-        
+
         $nomorTransaksi = Transaksi::generateNomorTransaksi($this->jenisTransaksi);
         $items = $request->items;
 
@@ -96,13 +97,24 @@ class TransaksiMasukController extends Controller
 
             foreach ($items as $item) {
                 $query = explode('-', $item['text']);
-                
                 // Cek apakah produk & varian ada di string (mencegah error index 1)
                 $namaProduk = trim($query[0]);
                 $namaVarian = isset($query[1]) ? trim($query[1]) : '-';
 
                 $varian = VarianProduk::where('nomor_sku', $item['nomor_sku'])->first();
-                
+
+                if($item['harga'] > $varian->harga_varian) {
+                    LaporanKenaikanHarga::create([
+                        'nomor_transaksi' => $nomorTransaksi,
+                        'nomor_batch'     => $item['nomor_batch'],
+                        'nomor_sku'       => $item['nomor_sku'],
+                        'harga_lama'      => $varian->harga_varian,
+                        'harga_beli'      => $item['harga'],
+                        'kenaikan_harga'  => $item['harga'] - $varian->harga_varian,
+                        'jumlah_barang'   => $item['qty']
+                    ]);
+                }
+
                 if (!$varian) {
                     throw new \Exception("Produk dengan SKU " . $item['nomor_sku'] . " tidak ditemukan.");
                 }
@@ -110,10 +122,10 @@ class TransaksiMasukController extends Controller
                 $transaksi->items()->create([
                     'produk'      => $namaProduk,
                     'varian'      => $namaVarian,
-                    'nomor_batch' => $item['nomor_batch'], 
-                    'qty'         => $item['qty'], 
-                    'harga'       => $item['harga'], 
-                    'subTotal'    => $item['subTotal'], 
+                    'nomor_batch' => $item['nomor_batch'],
+                    'qty'         => $item['qty'],
+                    'harga'       => $item['harga'],
+                    'subTotal'    => $item['subTotal'],
                     'nomor_sku'   => $item['nomor_sku']
                 ]);
 
@@ -132,7 +144,7 @@ class TransaksiMasukController extends Controller
             }
 
             DB::commit();
-            
+
             toast()->success('Transaksi Masuk berhasil ditambahkan');
             return response()->json([
                 'success'      => true,
