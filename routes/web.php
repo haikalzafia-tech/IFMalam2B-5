@@ -1,17 +1,17 @@
 <?php
 
 use App\Http\Controllers\ExportLaporanTransaksiControler;
+use App\Http\Controllers\KartuStokController;
 use App\Http\Controllers\KategoriProdukController;
 use App\Http\Controllers\LaporanKenaikanHargaController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\StokBarangController;
 use App\Http\Controllers\TransaksiKeluarController;
 use App\Http\Controllers\TransaksiMasukController;
+use App\Http\Controllers\TransaksiReturController;
 use App\Http\Controllers\VarianProdukController;
-use App\Http\Controllers\StokBarangController;
-use App\Http\Controllers\KartuStokController;
-//use App\Models\KategoriProduk;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth; // Tambahkan baris ini!
+use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
@@ -29,6 +29,8 @@ Route::middleware('auth')->group(function() {
 
     Route::prefix('get-data')->name('get-data.')->group(function () {
         Route::get('/varian-produk', [VarianProdukController::class, 'getAllVarianJson'])->name('varian-produk');
+        Route::get('/transaksi-keluar', [TransaksiKeluarController::class, 'getTransaksiKeluar'])->name('transaksi-keluar');
+        Route::get('/transaksi-keluar/{nomor_transaksi}', [TransaksiKeluarController::class, 'getTransaksiKeluarItems'])->name('transaksi-keluar-items');
     });
 
     Route::post('export-laporan-transaksi', [ExportLaporanTransaksiControler::class, 'exportLaporanTransaksi'])->name('export-laporan-transaksi');
@@ -46,4 +48,6 @@ Route::middleware('auth')->group(function() {
     Route::get('/kartu-stok/{nomor_sku}', [KartuStokController::class, 'kartuStok'])->name('kartu-stok');
     Route::resource('transaksi-masuk', TransaksiMasukController::class)->only(['index', 'create', 'store', 'show']);
     Route::resource('transaksi-keluar', TransaksiKeluarController::class)->only(['index', 'create', 'store', 'show']);
+    Route::resource('transaksi-retur', TransaksiReturController::class)->only(['index', 'create', 'store', 'show']);
+
 });

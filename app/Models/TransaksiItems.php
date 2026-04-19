@@ -12,4 +12,9 @@ class TransaksiItems extends Model
     {
         return $this->belongsTo(Transaksi::class, 'transaksi_id');
     }
+
+    public function varian()
+    {
+        return $this->belongsTo(VarianProduk::class, 'nomor_sku', 'nomor_sku');
+    }
 }
