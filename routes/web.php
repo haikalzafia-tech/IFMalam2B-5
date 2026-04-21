@@ -4,12 +4,14 @@ use App\Http\Controllers\ExportLaporanTransaksiControler;
 use App\Http\Controllers\KartuStokController;
 use App\Http\Controllers\KategoriProdukController;
 use App\Http\Controllers\LaporanKenaikanHargaController;
+use App\Http\Controllers\PeriodeStokOpnameController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\StokBarangController;
 use App\Http\Controllers\TransaksiKeluarController;
 use App\Http\Controllers\TransaksiMasukController;
 use App\Http\Controllers\TransaksiReturController;
 use App\Http\Controllers\VarianProdukController;
+use App\Models\PeriodeStokOpname;
 use Illuminate\Support\Facades\Auth; // Tambahkan baris ini!
 use Illuminate\Support\Facades\Route;
 
@@ -49,5 +51,7 @@ Route::middleware('auth')->group(function() {
     Route::resource('transaksi-masuk', TransaksiMasukController::class)->only(['index', 'create', 'store', 'show']);
     Route::resource('transaksi-keluar', TransaksiKeluarController::class)->only(['index', 'create', 'store', 'show']);
     Route::resource('transaksi-retur', TransaksiReturController::class)->only(['index', 'create', 'store', 'show']);
-
+    Route::prefix('stok-opname')->name('stok-opname.')->group(function(){
+    Route::resource('periode', PeriodeStokOpnameController::class);
+    });
 });
