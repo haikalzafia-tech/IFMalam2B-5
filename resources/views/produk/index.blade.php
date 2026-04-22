@@ -39,7 +39,7 @@
                             {{ $item->nama_produk }}
                         </a>
                     </td>
-                    <td>{{ $item->kategori->nama_kategori }}</td>
+                    {{-- <td>{{ $item->kategori->nama_kategori }}</td> --}}<td>{{ $item->kategori?->nama_kategori ?? 'HAPUS SEGERA' }}</td>
                     <td>
                         <div class="d-flex align-items-center gap-1">
                             <x-produk.form-produk id="{{ $item->id }}" />

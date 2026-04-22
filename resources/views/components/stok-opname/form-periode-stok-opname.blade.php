@@ -1,4 +1,4 @@
-<div>
+{{-- <div>
     <!-- Button trigger modal -->
 <button type="button" class="btn btn-round {{ $id ? 'btn-primary btn-icon' : 'btn-dark' }}" data-bs-toggle="modal"
     data-bs-target="#formPeriode{{ $id ?? '' }}">
@@ -52,4 +52,4 @@
 </form>
 </div>
 </div>
-</div>
+</div> --}}

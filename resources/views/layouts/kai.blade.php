@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>{{ env('APP_NAME') }}</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
-    <link rel="icon" href="{{ asset('template') }}/assets/img/kaiadmin/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="{{ asset('template') }}/assets/img/SIGMA.png" type="image/x-icon" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <!-- Fonts and icons -->
     <script src="{{ asset('template') }}/assets/js/plugin/webfont/webfont.min.js"></script>
@@ -55,7 +55,7 @@
                     <!-- Logo Header -->
                     <div class="logo-header" data-background-color="dark">
                         <a href="index.html" class="logo">
-                            <img src="{{ asset('template') }}/assets/img/kaiadmin/logo_light.svg" alt="navbar brand"
+                            <img src="{{ asset('template') }}/assets/img/SIGMA.png" alt="navbar brand"
                                 class="navbar-brand" height="20" />
                         </a>
                         <div class="nav-toggle">
@@ -107,12 +107,12 @@
                                         </li>
                                         <li>
                                             <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">My Profile</a>
-                                            <a class="dropdown-item" href="#">My Balance</a>
-                                            <a class="dropdown-item" href="#">Inbox</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Account Setting</a>
-                                            <div class="dropdown-divider"></div>
+                                            {{-- <a class="dropdown-item" href="#">My Profile</a> --}}
+                                            {{-- <a class="dropdown-item" href="#">My Balance</a> --}}
+                                            {{-- <a class="dropdown-item" href="#">Inbox</a> --}}
+                                            {{-- <div class="dropdown-divider"></div> --}}
+                                            {{-- <a class="dropdown-item" href="#">Account Setting</a> --}}
+                                            {{-- <div class="dropdown-divider"></div> --}}
                                             <div>
                                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                     document.getElementById('logout-form').submit();">
@@ -137,7 +137,7 @@
             <div class="container">
                 <div class="page-inner">
                     <div class="page-header">
-                        <h4 class="page-title">@yield('page_title', 'E-Gudang App')</h4>
+                        <h4 class="page-title">@yield('page_title', 'Sistem Manajemen Gudang')</h4>
                     </div>
                     @yield('content')
                 </div>
@@ -145,7 +145,7 @@
 
             <footer class="footer">
                 <div class="container-fluid d-flex justify-content-between">
-                    <nav class="pull-left">
+                    {{-- <nav class="pull-left">
                         <ul class="nav">
                             <li class="nav-item">
                                 <a class="nav-link" href="http://www.themekita.com">
@@ -167,7 +167,7 @@
                     <div>
                         Distributed by
                         <a target="_blank" href="https://themewagon.com/">ThemeWagon</a>.
-                    </div>
+                    </div> --}}
                 </div>
             </footer>
         </div>

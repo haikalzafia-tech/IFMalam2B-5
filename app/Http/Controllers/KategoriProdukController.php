@@ -20,12 +20,12 @@ class KategoriProdukController extends Controller
 if ($search){
     $query->where('nama_kategori', 'like', '%'. $search . '%');
 }
-    
+
         $kategori = $query->paginate($parPage)->appends(request()->query());
-        confirmDelete('Hapus data kategori produk tidak dapat di batalkan, lanjutkan ?');
+        confirmDelete('Tidak dapat menghapus kategori produk sebelum menghapus data produk');
         return view('kategori-produk.index', compact('pageTitle','kategori'));
     }
-    
+
     public function store(storeKategoriProdukRequest $request)
     {
         KategoriProduk::create([
@@ -35,19 +35,20 @@ if ($search){
         return redirect()->route('master-data.kategori-produk.index');
     }
 
-    public function update(updateKategoriProdukRequest $request, KategoriProduk $kategoriProduk)
+    // Ubah $kategoriProduk menjadi $kategori_produk
+    public function destroy(KategoriProduk $kategori_produk)
     {
-        $kategoriProduk->nama_kategori = $request->nama_kategori;
-        $kategoriProduk->save();
-        toast()->success('Kategori Produk Berhasil diubah');
-        return redirect()->route('master-data.kategori-produk.index');
-        
-    }
-    
-    public function destroy(KategoriProduk $kategoriProduk)
-    {
-        $kategoriProduk->delete();
+        $kategori_produk->delete();
         toast()->success('Kategori produk berhasil dihapus');
+        return redirect()->route('master-data.kategori-produk.index');
+    }
+
+    // Lakukan hal yang sama untuk fungsi update
+    public function update(updateKategoriProdukRequest $request, KategoriProduk $kategori_produk)
+    {
+        $kategori_produk->nama_kategori = $request->nama_kategori;
+        $kategori_produk->save();
+        toast()->success('Kategori Produk Berhasil diubah');
         return redirect()->route('master-data.kategori-produk.index');
     }
 }

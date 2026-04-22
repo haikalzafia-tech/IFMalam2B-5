@@ -1,12 +1,15 @@
 <div class="sidebar" data-background-color="dark">
+    <!-- Logo Header -->
     <div class="sidebar-logo">
-        <!-- Logo Header -->
         <div class="logo-header" data-background-color="dark">
-            <a href="/home" class="logo">
-                <img src="{{ asset('template') }}/assets/img/kaiadmin/logo_light.svg" alt="navbar brand"
-                    class="navbar-brand" height="20" />
-                <!--logo masukin sini sama nama -->
+            <a href="/home" class="logo d-flex align-items-center">
+                <img src="{{ asset('template/assets/img/SIGMA.png') }}" alt="SIGMA" class="navbar-brand" height="40" />
+
+                <span class="text-white fw-bold ms-2" style="font-size: 18px; letter-spacing: 1px;">
+                    SIGMA
+                </span>
             </a>
+
             <div class="nav-toggle">
                 <button class="btn btn-toggle toggle-sidebar">
                     <i class="gg-menu-right"></i>
@@ -19,7 +22,6 @@
                 <i class="gg-more-vertical-alt"></i>
             </button>
         </div>
-        <!-- End Logo Header -->
     </div>
     <div class="sidebar-wrapper scrollbar scrollbar-inner">
         <div class="sidebar-content">

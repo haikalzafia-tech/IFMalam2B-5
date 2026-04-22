@@ -3,11 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class KategoriProduk extends Model
 {
-    // app/Models/KategoriProduk.php
-
     protected $table = 'kategori_produks';
     protected $fillable = ['nama_kategori'];
+
+    /**
+     * Relasi ke model Produk
+     */
+    public function produks(): HasMany
+    {
+        return $this->hasMany(Produk::class, 'kategori_id');
+
+    }
+    
 }
