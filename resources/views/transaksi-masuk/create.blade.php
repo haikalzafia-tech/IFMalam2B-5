@@ -44,7 +44,7 @@
             <thead>
                 <tr>
                     <th class="text-center" style="width: 15px">No</th>
-                    <th>Produk</th>
+                    <th>Barang</th>
                     <th>Batch</th>
                     <th>Qty</th>
                     <th>Harga</th>
@@ -79,7 +79,7 @@ $(document).ready(function() {
     let selectedProduk = [];
 
     $('#select-produk').select2({
-        placeholder: 'Pilih Produk',
+        placeholder: 'Pilih Barang',
         delay: 250,
         allowClear: true,
         theme: 'bootstrap-5',
@@ -195,7 +195,7 @@ $(document).ready(function() {
         });
 
         if (selectedProduk.length === 0) {
-            tableBody.append(`<tr><td colspan="7" class="text-center">Tidak ada data produk</td></tr>`)
+            tableBody.append(`<tr><td colspan="7" class="text-center">Tidak ada data barang</td></tr>`)
         }
 
         let grandTotal = selectedProduk.reduce((total, item) => total + item.subTotal, 0);
@@ -210,7 +210,7 @@ $(document).ready(function() {
             swal({
                 icon: 'Warning',
                 title: 'Perhatian',
-                text: 'Wajib menuliskan 1 produk yang akan di catat',
+                text: 'Wajib menuliskan 1 barang yang akan di catat',
                 timer: 3000
             })
             return;

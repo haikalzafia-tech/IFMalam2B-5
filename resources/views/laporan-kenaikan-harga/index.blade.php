@@ -8,7 +8,7 @@
                 <tr>
                     <th>No</th>
                     <th>Nomor Transaksi</th>
-                    <th>Produk</th>
+                    <th>Barang</th>
                     <th>Nomor Batch</th>
                     <th>Harga Lama</th>
                     <th>Harga Beli</th>

@@ -21,7 +21,7 @@
                             </div>
                             <div class="col col-stats ms-3 ms-sm-0">
                                 <div class="numbers">
-                                    <p class="card-category">Master Produk</p>
+                                    <p class="card-category">Master Barang</p>
                                     <h4 class="card-title">{{ $totalProduk }}</h4>
                                 </div>
                             </div>
@@ -106,7 +106,7 @@
     <div class="col-md-4">
         <div class="card border-0 shadow-sm" style="border-radius: 15px;">
             <div class="card-body">
-                <h5 class="fw-bold mb-3">Produk per Kategori</h5>
+                <h5 class="fw-bold mb-3">Barang per Kategori</h5>
                 <div style="height: 300px;">
                     <canvas id="pieChart"></canvas>
                 </div>
@@ -196,7 +196,7 @@
             }
         });
 
-        // 2. Logika Doughnut Chart (Produk per Kategori)
+        // 2. Logika Doughnut Chart (Barang per Kategori)
         const ctxPie = document.getElementById('pieChart').getContext('2d');
         new Chart(ctxPie, {
             type: 'doughnut',

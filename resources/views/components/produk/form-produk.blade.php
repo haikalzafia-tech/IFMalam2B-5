@@ -5,7 +5,7 @@
         @if($id)
         <i class="fas fa-edit"></i>
         @else
-        <span>Produk Baru</span>
+        <span>Barang Baru</span>
         @endif
     </button>
 
@@ -20,12 +20,12 @@
                     @method('PUT')
                     @endif
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="formKategoriLabel">Form Produk</h1>
+                        <h1 class="modal-title fs-5" id="formKategoriLabel">Form Barang</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="kategori_produk_id" class="form-label">Kategori Produk</label>
+                            <label for="kategori_produk_id" class="form-label">Kategori Barang</label>
                             <select name="kategori_produk_id" id="kategori_produk_id" class="form-control">
                                 <option value="">Pilih Kategori</option>
                                 @foreach($kategori as $item)
@@ -39,7 +39,7 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="nama_produk" class="form-label">Nama Produk</label>
+                            <label for="nama_produk" class="form-label">Nama Barang</label>
                             <input type="text" name="nama_produk" id="nama_produk" class="form-control"
                                 value="{{ old('nama_produk', $nama_produk ?? '') }}">
                             @error('nama_produk')

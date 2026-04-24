@@ -13,7 +13,7 @@
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="kartuStokModalLabel">Kartu Stok</h1>
+                    <h1 class="modal-title fs-5" id="kartuStokModalLabel">Detail Stok</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -112,8 +112,8 @@ $(document).ready(function() {
 
                         paginationHtml += `
                         <li class = "page-item">
-                            <a class= "page-link ${link.active ? 'bg-dark text-white' : ''}"href="${link.url}" >${link.label} 
-                            </a> 
+                            <a class= "page-link ${link.active ? 'bg-dark text-white' : ''}"href="${link.url}" >${link.label}
+                            </a>
                         </li>
                         `
                     })

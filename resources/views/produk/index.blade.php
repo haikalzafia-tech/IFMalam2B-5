@@ -10,7 +10,7 @@
                     <x-per-page-option />
                 </div>
                 <div class="col-9">
-                    <x-filter-by-field term="search" placeholder="Cari Produk" />
+                    <x-filter-by-field term="search" placeholder="Cari Barang" />
                 </div>
                 <div class="col-1">
                     <x-button-reset-filter route="master-data.produk.index" />
@@ -25,7 +25,7 @@
             <thead>
                 <tr>
                     <th class="text-center" style="width: 15px">NO</th>
-                    <th>Produk</th>
+                    <th>Barang</th>
                     <th>Kategori</th>
                     <th class="text-center" style="width: 100px">Opsi</th>
                 </tr>
@@ -49,7 +49,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="4" class="text-center">Data produk tidak tersedia</td>
+                    <td colspan="4" class="text-center">Data barang tidak tersedia</td>
                 </tr>
                 @endforelse
             </tbody>

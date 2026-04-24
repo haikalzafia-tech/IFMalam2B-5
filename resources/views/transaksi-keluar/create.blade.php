@@ -22,7 +22,7 @@
             </div>
             <div class="row mt-5">
                 <div class="col-4">
-                    <label for="select-produk" class="form-label">Pilih Produk</label>
+                    <label for="select-produk" class="form-label">Pilih Barang</label>
                     <select id="select-produk" class="form-control w-100"></select>
                 </div>
                 <div class="col-2">
@@ -48,7 +48,7 @@
             <thead>
                 <tr>
                     <th class="text-center" style="width: 15px">No</th>
-                    <th>Produk</th>
+                    <th>Barang</th>
                     <th>Qty</th>
                     <th>Harga</th>
                     <th>Sub Total</th>
@@ -82,7 +82,7 @@ $(document).ready(function() {
     let selectedProduk = [];
 
     $('#select-produk').select2({
-        placeholder: 'Pilih Produk',
+        placeholder: 'Pilih Barang',
         delay: 250,
         allowClear: true,
         theme: 'bootstrap-5',
@@ -197,7 +197,7 @@ $(document).ready(function() {
         });
 
         if (selectedProduk.length === 0) {
-            tableBody.append(`<tr><td colspan="7" class="text-center">Tidak ada data produk</td></tr>`)
+            tableBody.append(`<tr><td colspan="7" class="text-center">Tidak ada data barang</td></tr>`)
         }
 
         let grandTotal = selectedProduk.reduce((total, item) => total + item.subTotal, 0);
@@ -212,7 +212,7 @@ $(document).ready(function() {
             swal({
                 icon: 'Warning',
                 title: 'Perhatian',
-                text: 'Wajib menuliskan 1 produk yang akan di catat',
+                text: 'Wajib menuliskan 1 Barang yang akan di catat',
                 timer: 3000
             })
             return;

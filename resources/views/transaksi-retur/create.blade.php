@@ -24,7 +24,7 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Produk</th>
+                        <th>Barang</th>
                         <th>Nomor Batch</th>
                         <th>Qty</th>
                         <th>Harga</th>
@@ -39,9 +39,9 @@
                 {{-- form --}}
                 <div class="col-4">
                     <div>
-                        <label for="produk" class="form-label">Pilih Produk</label>
+                        <label for="Barang" class="form-label">Pilih Barang</label>
                         <select class="form-control" id="select-transaksi-items">
-                            <option value="" selected>Pilih Produk</option>
+                            <option value="" selected>Pilih Barang</option>
                         </select>
                     </div>
                     <div class="mt-2">
@@ -64,7 +64,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Produk</th>
+                                <th>Barang</th>
                                 <th>Note</th>
                                 <th>Qty</th>
                                 <th>Harga</th>
@@ -164,7 +164,7 @@
                         }
                     })
                     $("#select-transaksi-items").select2({
-                        placeholder: "Pilih Produk",
+                        placeholder: "Pilih Barang",
                         allowClear: true,
                         themes: "bootstrap-5",
                         data: items
