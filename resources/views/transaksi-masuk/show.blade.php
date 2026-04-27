@@ -1,3 +1,4 @@
+
 @extends('layouts.kai')
 @section('page_title', $pageTitle)
 @section('content')
