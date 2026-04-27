@@ -278,7 +278,7 @@
             }
         });
 
-        // 2. Doughnut Chart
+        // 2. Logika Doughnut Chart (Barang per Kategori)
         const ctxPie = document.getElementById('pieChart').getContext('2d');
         new Chart(ctxPie, {
             type: 'doughnut',

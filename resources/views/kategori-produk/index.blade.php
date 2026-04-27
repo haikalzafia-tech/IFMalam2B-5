@@ -1,4 +1,3 @@
-2. kategori produk 3D
 @extends('layouts.kai')
 @section('page_title', $pageTitle)
 @section('content')
