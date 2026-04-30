@@ -3,214 +3,198 @@
 @section('content')
 
 <style>
-    /* Latar belakang halaman agar efek 3D menonjol */
-    .page-inner {
-        background: #f1f3f7;
-        perspective: 1000px;
-    }
-
-    /* Card Utama dengan efek Terapung 3D */
+    /* Card Utama - Mengikuti image_f3da37.png */
     .card-3d {
-        background: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
         border: none;
-        border-radius: 20px;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-        transition: transform 0.4s ease, box-shadow 0.4s ease;
-        border: 1px solid rgba(255,255,255,0.6);
         overflow: hidden;
-    }
-
-    .card-3d:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        background: #fff;
     }
 
     .header-3d {
         background: #1a2035;
         color: #fff;
-        padding: 25px;
-        border-bottom: 4px solid #e91e63; /* Warna pink/merah untuk Transaksi Keluar */
+        padding: 20px 25px;
+        border-bottom: 5px solid #e91e63; /* Accent Keluar */
     }
 
-    /* Bagian Form bergaya 'Inset' (Masuk ke dalam) */
-    .form-group-3d {
-        background: #fbfcfe;
+    /* Group Form Identitas - Efek Inset seperti di gambar */
+    .form-identitas-wrapper {
+        background: #fff;
         border-radius: 15px;
         padding: 25px;
-        box-shadow: inset 0 2px 10px rgba(0,0,0,0.03);
-        border: 1px solid #e9ecef;
+        border: 1px solid #edf2f7;
+        margin-bottom: 35px;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
     }
 
-    .label-3d {
+    .label-custom {
         font-weight: 800;
-        color: #495057;
+        color: #4a5568;
         text-transform: uppercase;
-        letter-spacing: 1px;
         font-size: 0.75rem;
-        margin-bottom: 8px;
+        letter-spacing: 0.5px;
+        margin-bottom: 10px;
+        display: block;
     }
 
-    /* Input Modern */
-    .input-3d, .select2-container--bootstrap-5 .select2-selection {
+    .input-3d {
         border-radius: 10px !important;
-        border: 1px solid #ced4da !important;
+        border: 1px solid #e2e8f0 !important;
         padding: 12px 15px !important;
-        transition: all 0.3s !important;
-        background-color: #f8fafc !important;
+        background: #f8fafc !important;
+        transition: all 0.3s;
     }
 
-    .input-3d[readonly] {
-        background-color: #e9ecef !important;
-        cursor: not-allowed;
-    }
-
-    .input-3d:focus:not([readonly]) {
-        border-color: #4e73df !important;
-        background-color: #fff !important;
-        box-shadow: 0 0 15px rgba(78, 115, 223, 0.2) !important;
-        transform: translateY(-1px);
-    }
-
-    /* Tombol 'Tambah' 3D */
-    .btn-3d-add {
-        background: linear-gradient(145deg, #1d253c, #161c2e);
+    /* Tombol Tambah - Mengikuti desain solid di image_f3da37.png */
+    .btn-tambah-solid {
+        background: #1a2035;
         color: white;
         border: none;
         border-radius: 10px;
-        padding: 12px;
+        padding: 12px 25px;
         font-weight: 800;
+        text-transform: uppercase;
         width: 100%;
-        transition: all 0.2s;
-        box-shadow: 0 6px 0 #000;
+        letter-spacing: 1px;
     }
 
-    .btn-3d-add:active {
-        transform: translateY(6px);
-        box-shadow: 0 0 0 #000;
-    }
-
-    /* Tabel Rapi */
-    .table-container-3d {
-        border-radius: 15px;
+    /* Styling Tabel - Mengikuti image_f3da37.png */
+    .table-wrapper {
+        border: 1px solid #edf2f7;
+        border-radius: 12px;
         overflow: hidden;
-        border: 1px solid #e9ecef;
-        background: white;
+        margin-top: 20px;
     }
 
-    .table-3d thead { background: #f8f9fa; }
-    .table-3d th { border: none !important; padding: 15px; font-size: 11px; font-weight: 800; color: #6c757d; }
-    .table-3d td { padding: 15px; vertical-align: middle; }
+    .table-custom thead {
+        background: #f8fafc;
+    }
 
-    /* Perapian kolom Angka */
-    .text-end-custom { text-align: right !important; padding-right: 25px !important; }
+    .table-custom th {
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        font-weight: 800;
+        color: #718096;
+        padding: 15px !important;
+        border: none !important;
+    }
 
-    /* Box Grand Total */
-    .total-box-3d {
+    /* Footer Section */
+    .btn-simpan-custom {
+        background: #3b5bdb;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 15px 35px;
+        font-weight: 700;
+        box-shadow: 0 8px 20px rgba(59, 91, 219, 0.3);
+    }
+
+    .grand-total-box {
         background: #1a2035;
         color: #fff;
-        padding: 25px;
+        padding: 20px 30px;
         border-radius: 15px;
-        box-shadow: 10px 10px 25px rgba(0,0,0,0.1);
-        border-left: 6px solid #e91e63;
-    }
-
-    .btn-3d-save {
-        background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
-        border: none;
-        border-radius: 12px;
-        padding: 15px 40px;
-        font-weight: 800;
-        color: white;
-        box-shadow: 0 10px 20px rgba(78, 115, 223, 0.3);
-        transition: 0.3s;
-    }
-
-    @media (max-width: 768px) {
-        .row > div { margin-bottom: 15px; }
-        .total-box-3d { width: 100%; text-align: center; }
+        border-left: 5px solid #ff9800;
+        min-width: 280px;
     }
 </style>
 
 <div class="card card-3d">
-    <div class="header-3d">
-        <h4 class="mb-0 fw-bold"><i class="fas fa-file-upload me-2"></i> Transaksi Barang Keluar</h4>
+    <div class="header-3d d-flex align-items-center">
+        <i class="fas fa-shipping-fast fa-lg me-3"></i>
+        <h4 class="mb-0 fw-bold">Transaksi Barang Keluar</h4>
     </div>
 
     <div class="card-body p-4 p-md-5">
-        <div class="alert alert-danger" id="alert-danger" style="display:none; border-radius:12px;"></div>
+        <div class="alert alert-danger" id="alert-danger" style="display:none; border-radius:10px;"></div>
 
-        <form id="form-add-produk">
-            <div class="form-group-3d mb-5">
-                <div class="row">
-                    <div class="col-md-4">
-                        <label class="label-3d">Nama Penerima</label>
-                        <input type="text" name="penerima" id="penerima" class="form-control input-3d" placeholder="Nama Penerima...">
-                    </div>
-                    <div class="col-md-4">
-                        <label class="label-3d">Kontak</label>
-                        <input type="text" name="kontak" id="kontak" class="form-control input-3d" placeholder="No. HP / Email...">
-                    </div>
-                    <div class="col-md-4">
-                        <label class="label-3d">Keterangan</label>
-                        <textarea name="keterangan" id="keterangan" rows="1" class="form-control input-3d" placeholder="Catatan..."></textarea>
-                    </div>
+        <!-- Bagian 1: Identitas Penerima (Mengikuti Row 1 di Gambar) -->
+        <div class="form-identitas-wrapper">
+            <div class="row g-4 text-start">
+                <div class="col-md-4">
+                    <label class="label-custom">Nama Penerima</label>
+                    <input type="text" id="penerima" class="form-control input-3d" placeholder="Nama Penerima...">
+                </div>
+                <div class="col-md-4">
+                    <label class="label-custom">Kontak / HP</label>
+                    <input type="text" id="kontak" class="form-control input-3d" placeholder="0812xxxx">
+                </div>
+                <div class="col-md-4">
+                    <label class="label-custom">Keterangan</label>
+                    <input type="text" id="keterangan" class="form-control input-3d" placeholder="Opsional (Contoh: Urgent)">
                 </div>
             </div>
+        </div>
 
-            <h6 class="fw-bold mb-3">Input Item Keluar</h6>
-            <div class="row g-3 align-items-end">
-                <div class="col-lg-4">
-                    <label class="label-3d">Cari Barang</label>
-                    <select id="select-produk" class="form-control w-100 input-3d"></select>
+        <!-- Bagian 2: Input Item -->
+        <div class="mb-4">
+            <h6 class="fw-bold d-flex align-items-center text-primary mb-3">
+                <i class="fas fa-plus-circle me-2"></i> Input Item Barang
+            </h6>
+            <form id="form-add-produk">
+                <div class="row g-3 align-items-end text-start">
+                    <div class="col-lg-3">
+                        <label class="label-custom">Pilih Barang</label>
+                        <select id="select-produk" class="form-control input-3d w-100"></select>
+                    </div>
+                    <div class="col-lg-2">
+                        <label class="label-custom">Stok Tersedia</label>
+                        <input type="number" id="stok" class="form-control input-3d" readonly placeholder="0">
+                    </div>
+                    <div class="col-lg-2">
+                        <label class="label-custom">Jumlah Keluar</label>
+                        <input type="number" id="qty" class="form-control input-3d" placeholder="0">
+                    </div>
+                    <div class="col-lg-2">
+                        <label class="label-custom">Harga Satuan (Rp)</label>
+                        <input type="number" id="harga" class="form-control input-3d" readonly placeholder="0">
+                    </div>
+                    <div class="col-lg-3">
+                        <button type="submit" class="btn-tambah-solid">TAMBAH</button>
+                    </div>
                 </div>
-                <div class="col-lg-2 col-6">
-                    <label class="label-3d">Stok Tersedia</label>
-                    <input type="number" id="stok" class="form-control input-3d" readonly>
-                </div>
-                <div class="col-lg-2 col-6">
-                    <label class="label-3d">Qty Keluar</label>
-                    <input type="number" id="qty" class="form-control input-3d" placeholder="0">
-                </div>
-                <div class="col-lg-2">
-                    <label class="label-3d">Harga (Rp)</label>
-                    <input type="number" id="harga" class="form-control input-3d" readonly>
-                </div>
-                <div class="col-lg-2">
-                    <button type="submit" class="btn-3d-add">TAMBAHKAN</button>
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
 
-        <div class="table-container-3d mt-5">
+        <!-- Tabel Item (Sesuai image_f3da37.png) -->
+        <div class="table-wrapper">
             <div class="table-responsive">
-                <table class="table table-hover table-3d mb-0" id="table-produk">
-                    <thead>
-                        <tr class="text-center">
+                <table class="table table-hover table-custom mb-0" id="table-produk">
+                    <thead class="text-center">
+                        <tr>
                             <th width="50">NO</th>
-                            <th class="text-start">BARANG</th>
+                            <th class="text-start">NAMA BARANG</th>
                             <th>QTY</th>
-                            <th class="text-end-custom">HARGA</th>
-                            <th class="text-end-custom">SUB TOTAL</th>
-                            <th width="80">AKSI</th>
+                            <th class="text-end">HARGA SATUAN</th>
+                            <th class="text-end">SUB TOTAL</th>
+                            <th width="100">AKSI</th>
                         </tr>
                     </thead>
-                    <tbody class="align-middle"></tbody>
+                    <tbody class="align-middle">
+                        <tr id="empty-row">
+                            <td colspan="6" class="text-center py-5 text-muted font-italic">
+                                Belum ada barang yang ditambahkan.
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
 
+        <!-- Footer: Simpan & Grand Total -->
         <div class="row mt-5 align-items-center">
-            <div class="col-md-6 order-2 order-md-1">
-                <form id="form-transaksi">
-                    <button type="submit" class="btn-3d-save">
-                        <i class="fas fa-save me-2"></i> SIMPAN TRANSAKSI
-                    </button>
-                </form>
+            <div class="col-md-6 text-start">
+                <button type="button" id="btn-simpan-transaksi" class="btn-simpan-custom">
+                    <i class="fas fa-save me-2"></i> SIMPAN TRANSAKSI
+                </button>
             </div>
-            <div class="col-md-6 order-1 order-md-2 d-flex justify-content-md-end mb-4 mb-md-0">
-                <div class="total-box-3d">
-                    <span class="small opacity-75 d-block fw-bold mb-1">GRAND TOTAL</span>
-                    <h2 class="mb-0 fw-bold text-warning">Rp <span id="grand-total">0</span></h2>
+            <div class="col-md-6 d-flex justify-content-md-end mt-4 mt-md-0">
+                <div class="grand-total-box text-start">
+                    <span class="small opacity-75 fw-bold d-block mb-1">GRAND TOTAL</span>
+                    <h2 class="mb-0 fw-bold" style="color: #ff9800;">Rp <span id="grand-total">0</span></h2>
                 </div>
             </div>
         </div>
@@ -221,153 +205,134 @@
 
 @push('script')
 <script>
+// Script Anda tetap berfungsi dengan ID yang sudah disesuaikan di atas
 $(document).ready(function() {
-    $("#alert-danger").hide();
-    const numberFormat = new Intl.NumberFormat('id-ID')
-    let selectedOption = {};
+    const numberFormat = new Intl.NumberFormat('id-ID');
     let selectedProduk = [];
+    let currentData = null;
 
     $('#select-produk').select2({
-        placeholder: 'Pilih Barang',
-        delay: 250,
-        allowClear: true,
+        placeholder: 'Pilih Barang...',
         theme: 'bootstrap-5',
         ajax: {
             url: "{{ route('get-data.varian-produk') }}",
             dataType: 'json',
             delay: 250,
-            data: function(params) {
-                return { search: params.term };
-            },
-            processResults: function(data) {
-                return {
-                    results: data.map((item) => {
-                        return {
-                            id: item.id,
-                            text: item.text,
-                            harga: item.harga,
-                            stok: item.stok,
-                            nomor_sku: item.nomor_sku
-                        }
-                    })
-                }
-            }
+            data: params => ({ search: params.term }),
+            processResults: data => ({
+                results: data.map(item => ({
+                    id: item.id,
+                    text: item.text,
+                    harga: item.harga,
+                    stok: item.stok,
+                    nomor_sku: item.nomor_sku
+                }))
+            })
         }
     });
 
     $('#select-produk').on('select2:select', function(e) {
-        let data = e.params.data;
-        $('#harga').val(data.harga);
-        $('#stok').val(data.stok);
-        selectedOption = data;
+        currentData = e.params.data;
+        $('#harga').val(currentData.harga);
+        $('#stok').val(currentData.stok);
     });
 
     $("#form-add-produk").on("submit", function(e) {
         e.preventDefault();
         let qty = parseInt($("#qty").val());
-        let harga = parseInt($("#harga").val());
-        let stokTersedia = parseInt($("#stok").val());
+        let stok = parseInt($("#stok").val());
 
-        if (!selectedOption.id || !qty || !harga) {
-            swal({ icon: 'warning', title: 'Perhatian', text: 'Input Belum Lengkap' });
+        if (!currentData || isNaN(qty) || qty <= 0) {
+            swal("Perhatian", "Lengkapi input barang dan jumlah!", "warning");
             return;
         }
 
-        if (qty > stokTersedia) {
-            swal({ icon: 'error', title: 'Stok Kurang', text: 'Stok hanya tersedia: ' + stokTersedia });
+        if (qty > stok) {
+            swal("Stok Kurang", "Stok tersedia hanya " + stok, "error");
             return;
         }
 
-        let existingItem = selectedProduk.find(item => item.nomor_sku === selectedOption.nomor_sku);
-        if (existingItem) {
-            existingItem.qty = parseInt(existingItem.qty) + parseInt(qty);
-            existingItem.subTotal = existingItem.qty * existingItem.harga;
+        let existing = selectedProduk.find(i => i.nomor_sku === currentData.nomor_sku);
+        if (existing) {
+            if ((existing.qty + qty) > stok) {
+                swal("Stok Kurang", "Total qty melebihi stok!", "error");
+                return;
+            }
+            existing.qty += qty;
+            existing.subTotal = existing.qty * existing.harga;
         } else {
             selectedProduk.push({
-                text: selectedOption.text,
-                nomor_sku: selectedOption.nomor_sku,
+                text: currentData.text,
+                nomor_sku: currentData.nomor_sku,
                 qty: qty,
-                harga: harga,
-                subTotal: qty * harga,
+                harga: currentData.harga,
+                subTotal: qty * currentData.harga
             });
         }
 
-        $("#select-produk").val(null).trigger('change');
-        $("#qty, #stok, #harga").val('');
+        $("#qty").val('');
+        $('#select-produk').val(null).trigger('change');
+        $('#harga, #stok').val('');
+        currentData = null;
         renderTable();
     });
 
     function renderTable() {
-        let tableBody = $("#table-produk tbody");
-        tableBody.empty();
+        let html = "";
+        let grandTotal = 0;
 
         if (selectedProduk.length === 0) {
-            tableBody.append(`<tr><td colspan="6" class="text-center py-5 text-muted fw-bold">Belum ada barang dipilih.</td></tr>`);
+            html = `<tr><td colspan="6" class="text-center py-5 text-muted font-italic">Belum ada barang yang ditambahkan.</td></tr>`;
         } else {
             selectedProduk.forEach((item, index) => {
-                tableBody.append(`
+                grandTotal += item.subTotal;
+                html += `
                     <tr class="text-center">
                         <td>${index + 1}</td>
-                        <td class="text-start fw-bold text-dark">${item.text}</td>
-                        <td><span class="badge bg-primary px-3 rounded-pill">${item.qty}</span></td>
-                        <td class="text-end-custom font-monospace">${numberFormat.format(item.harga)}</td>
-                        <td class="text-end-custom fw-bold text-primary fs-6 font-monospace">${numberFormat.format(item.subTotal)}</td>
+                        <td class="text-start fw-bold">${item.text}</td>
+                        <td><span class="badge bg-secondary px-3">${item.qty}</span></td>
+                        <td class="text-end">${numberFormat.format(item.harga)}</td>
+                        <td class="text-end fw-bold">${numberFormat.format(item.subTotal)}</td>
                         <td>
-                            <button class="btn btn-link text-danger btn-delete" data-nomor-sku="${item.nomor_sku}">
+                            <button class="btn btn-link text-danger btn-delete" data-sku="${item.nomor_sku}">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </td>
-                    </tr>
-                `);
+                    </tr>`;
             });
         }
-
-        let grandTotal = selectedProduk.reduce((total, item) => total + item.subTotal, 0);
+        $("#table-produk tbody").html(html);
         $("#grand-total").text(numberFormat.format(grandTotal));
     }
 
     $(document).on("click", ".btn-delete", function() {
-        let nomorSku = $(this).data('nomor-sku');
-        selectedProduk = selectedProduk.filter(item => item.nomor_sku !== nomorSku);
+        let sku = $(this).data('sku');
+        selectedProduk = selectedProduk.filter(i => i.nomor_sku !== sku);
         renderTable();
     });
 
-    $("#form-transaksi").on("submit", function(e) {
-        e.preventDefault();
+    $("#btn-simpan-transaksi").on("click", function() {
         if (selectedProduk.length === 0) {
-            swal({ icon: 'warning', title: 'Perhatian', text: 'Pilih minimal 1 barang.' });
+            swal("Kosong", "Pilih minimal satu barang!", "warning");
             return;
         }
 
         $.ajax({
-            method: "POST",
             url: "{{ route('transaksi-keluar.store') }}",
+            method: "POST",
             data: {
                 _token: "{{ csrf_token() }}",
-                items: selectedProduk,
                 penerima: $("#penerima").val(),
                 kontak: $("#kontak").val(),
                 keterangan: $("#keterangan").val(),
+                items: selectedProduk
             },
-            success: function(response) {
-                if (response.success) window.location.href = response.redirect_url;
-            },
-            error: function(xhr) {
-                const errors = xhr.responseJSON?.errors;
-                if (errors) renderError(errors);
+            success: res => res.success && (window.location.href = res.redirect_url),
+            error: xhr => {
+                $("#alert-danger").empty().show().append(`<p class="mb-0 small">${xhr.responseJSON.message}</p>`);
             }
         });
     });
-
-    function renderError(errors) {
-        let alertBox = $("#alert-danger");
-        alertBox.empty().show();
-        Object.values(errors).forEach(err => {
-            err.forEach(msg => alertBox.append(`<p class="mb-0 small">• ${msg}</p>`));
-        });
-    }
-
-    renderTable();
 });
 </script>
 @endpush

@@ -124,7 +124,7 @@
                                 <i class="fas fa-arrow-down text-success"></i>
                             </div>
                             <div class="ms-3">
-                                <p class="text-muted mb-0 small fw-bold">Trx Masuk</p>
+                                <p class="text-muted mb-0 small fw-bold">Transaksi Masuk</p>
                                 <h3 class="fw-bold mb-0" style="color: var(--sigma-blue-dark)">{{ $totalMasuk ?? '0' }}</h3>
                             </div>
                         </div>
@@ -140,7 +140,7 @@
                                 <i class="fas fa-arrow-up text-info"></i>
                             </div>
                             <div class="ms-3">
-                                <p class="text-muted mb-0 small fw-bold">Trx Keluar</p>
+                                <p class="text-muted mb-0 small fw-bold">Transaksi Keluar</p>
                                 <h3 class="fw-bold mb-0" style="color: var(--sigma-blue-dark)">{{ $totalKeluar ?? '0' }}</h3>
                             </div>
                         </div>

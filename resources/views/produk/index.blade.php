@@ -44,11 +44,13 @@
         transition: all 0.3s ease;
     }
 
-    .custom-table tbody tr:hover {
-        background: #ffffff !important;
-        transform: translateY(-3px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-    }
+   /* Pastikan baris tidak bergerak jika mengganggu elemen di dalamnya */
+.custom-table tbody tr:hover {
+    background: #ffffff !important;
+    /* Hilangkan atau kurangi translateY jika menyebabkan flickering */
+    transform: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
 
     .custom-table td {
         padding: 18px 15px !important;

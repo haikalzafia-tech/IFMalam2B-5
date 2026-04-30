@@ -74,6 +74,9 @@
         font-weight: bold;
         color: #1a73e8;
     }
+
+    nav p { display: none !important; }
+
 </style>
 
 <div class="container-fluid"> <div class="page-inner py-4">
@@ -153,8 +156,13 @@
                     </table>
                 </div>
 
-                <div class="mt-4">
-                    {{ $produk->links() }}
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 px-2">
+                    <p class="text-muted small mb-3 mb-md-0">
+                        Menampilkan {{ $produk->firstItem() }} sampai {{ $produk->lastItem() }} dari {{ $produk->total() }} produk
+                    </p>
+                    <div>
+                        {{ $produk->links('pagination::bootstrap-5') }}
+                    </div>
                 </div>
             </div>
         </div>

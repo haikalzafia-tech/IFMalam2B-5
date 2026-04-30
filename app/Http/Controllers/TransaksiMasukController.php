@@ -125,7 +125,7 @@ class TransaksiMasukController extends Controller
                     'nomor_batch' => $item['nomor_batch'],
                     'qty'         => $item['qty'],
                     'harga'       => $item['harga'],
-                    'subTotal'    => $item['subTotal'],
+                    'sub_total'    => $item['subTotal'],
                     'nomor_sku'   => $item['nomor_sku']
                 ]);
 

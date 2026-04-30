@@ -110,7 +110,7 @@ class TransaksiKeluarController extends Controller
                     'varian'      => $namaVarian,
                     'qty'         => $item['qty'],
                     'harga'       => $varian->harga_varian, // Ambil harga dari varian untuk memastikan konsistensi
-                    'subTotal'    => $varian->harga_varian * $item['qty'], // Hitung subTotal berdasarkan harga varian
+                    'sub_total'    => $varian->harga_varian * $item['qty'], // Hitung subTotal berdasarkan harga varian
                     'nomor_sku'   => $item['nomor_sku']
                 ]);
 

@@ -73,7 +73,7 @@ class ExportBasicLaporanTransaksi implements FromCollection, WithHeadings, WithC
                 // periode tanggal berapa s/d berapa
                 $periode = '-';
                 if($this->tanggalAwal && $this->tanggalAkhir){
-                    $periode = date('d M Y', strtotime($this->tanggalAwal)) . 's/d' . date('d M Y', strtotime($this->tanggalAkhir));
+                    $periode = date('d M Y', strtotime($this->tanggalAwal)) . ' s/d ' . date('d M Y', strtotime($this->tanggalAkhir));
                 }
 
                 $event->sheet->mergeCells('A2:I2');

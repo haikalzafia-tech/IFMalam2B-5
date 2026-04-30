@@ -13,6 +13,7 @@ class Transaksi extends Model
         'total_harga',
         'keterangan',
         'petugas',
+        'penerima',
         'pengirim',
         'kontak'
     ];
@@ -21,7 +22,7 @@ class Transaksi extends Model
     {
         return $this->hasMany(TransaksiItems::class, 'transaksi_id');
     }
-    
+
     public static function generateNomorTransaksi($jenisTransaksi){
         $prefix = $jenisTransaksi === 'pemasukan' ? 'PM' : 'PG';
         $date = date('Ymd');

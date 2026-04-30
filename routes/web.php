@@ -14,11 +14,23 @@ use App\Http\Controllers\VarianProdukController;
 use App\Models\PeriodeStokOpname;
 use Illuminate\Support\Facades\Auth; // Tambahkan baris ini!
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LandingController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController; // Pastikan controller ini ada
 
-
-Route::get('/', function () {
-    return view('auth.login');
+Route::middleware(['auth', 'can:isManager'])->group(function () {
+    // Route untuk menampilkan daftar admin dan form buat admin
+    Route::get('/kelola-admin', [UserController::class, 'index'])->name('users.index');
+    Route::post('/kelola-admin', [UserController::class, 'store'])->name('users.store');
+    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 });
+
+
+
+// Route::get('/', function () {
+//     return view('auth.login');
+// });
+Route::get('/', [LandingController::class, 'index'])->name('landing');
 
 Auth::routes();
 
@@ -35,6 +47,12 @@ Route::middleware('auth')->group(function() {
         Route::get('/transaksi-keluar/{nomor_transaksi}', [TransaksiKeluarController::class, 'getTransaksiKeluarItems'])->name('transaksi-keluar-items');
     });
 
+    // URL-nya adalah '/profile', bukan '/profile.blade.php'
+Route::get('/profile', function () {
+    // Ini merujuk ke folder resources/views/auth/passwords/profile.blade.php
+    return view('auth.passwords.profile');
+})->name('profile.show');
+
     Route::post('export-laporan-transaksi', [ExportLaporanTransaksiControler::class, 'exportLaporanTransaksi'])->name('export-laporan-transaksi');
 
     Route::resource('laporan-kenaikan-harga', LaporanKenaikanHargaController::class)->only(['index', 'update']);
@@ -46,6 +64,12 @@ Route::middleware('auth')->group(function() {
         Route::resource('varian-produk',VarianProdukController::class)->only(['store','update','destroy']);
         Route::resource('stok-barang', StokBarangController::class)->only(['index']);
     });
+
+    Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+});
 
     Route::get('/kartu-stok/{nomor_sku}', [KartuStokController::class, 'kartuStok'])->name('kartu-stok');
     Route::resource('transaksi-masuk', TransaksiMasukController::class)->only(['index', 'create', 'store', 'show']);

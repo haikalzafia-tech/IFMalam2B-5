@@ -38,9 +38,9 @@ class ExportCompletedLaporanTransaksi implements FromCollection, WithHeadings, W
                 'Kontak'              => $item->transaksi->kontak,
                 'Produk'              => $item->produk,
                 'Varian'              => $item->varian,
-                'Qty'                 => $item->qty,
+                'Jumlah Produk'       => $item->qty,
                 'Harga'               => number_format($item->harga),
-                'Sub Total'         => number_format($item->subTotal),
+                'Sub Total'           => number_format($item->sub_total),
 
             ];
         }
@@ -56,7 +56,7 @@ class ExportCompletedLaporanTransaksi implements FromCollection, WithHeadings, W
             'Kontak',
             'Produk',
             'Varian',
-            'Qty',
+            'Jumlah Produk',
             'Harga',
             'Sub Total'
         ];
@@ -76,7 +76,7 @@ class ExportCompletedLaporanTransaksi implements FromCollection, WithHeadings, W
 
                 $periode = '-';
                 if($this->tanggalAwal && $this->tanggalAkhir){
-                    $periode = date('d M Y', strtotime($this->tanggalAwal)) . 's/d' . date('d M Y', strtotime($this->tanggalAkhir));
+                    $periode = date(' d M Y', strtotime($this->tanggalAwal)) . ' s/d ' . date('d M Y', strtotime($this->tanggalAkhir));
                 }
 
                 $event->sheet->mergeCells('A2:J2');
