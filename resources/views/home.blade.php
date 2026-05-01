@@ -6,7 +6,9 @@
         --sigma-blue-dark: #1E3A8A;   /* Biru Tua Logo */
         --sigma-blue-main: #2b59c3;   /* Biru Utama Logo */
         --sigma-blue-light: #40A9FF;  /* Biru Muda Logo */
-        --sigma-bg: #e0e5ec;          /* Warna dasar Neumorphism */
+        /* Warna background disesuaikan agar senada dengan biru logo (Biru sangat pucat) */
+        --sigma-bg: #f0f4f9;
+        --white: #ffffff;
     }
 
     .page-inner {
@@ -14,23 +16,24 @@
         min-height: 100vh;
     }
 
-    /* Card Utama dengan Efek 3D Timbul (Neumorphism) */
+    /* Card Utama dengan Efek Neumorphism yang Senada dengan BG */
     .card-3d {
         background: var(--sigma-bg) !important;
         border-radius: 20px !important;
         border: none !important;
-        box-shadow: 8px 8px 16px #bebebe,
+        /* Shadow disesuaikan dengan tone warna bg baru */
+        box-shadow: 8px 8px 16px #d1d9e6,
                    -8px -8px 16px #ffffff !important;
         transition: all 0.3s ease-in-out;
     }
 
     .card-3d:hover {
         transform: translateY(-5px);
-        box-shadow: 12px 12px 20px #bebebe,
+        box-shadow: 12px 12px 20px #d1d9e6,
                    -12px -12px 20px #ffffff !important;
     }
 
-    /* Wadah Icon dengan Efek Cekung (Inset 3D) */
+    /* Wadah Icon dengan Efek Inset yang konsisten */
     .icon-box-3d {
         width: 55px;
         height: 55px;
@@ -39,17 +42,17 @@
         justify-content: center;
         border-radius: 15px;
         background: var(--sigma-bg);
-        box-shadow: inset 5px 5px 10px #bebebe,
+        box-shadow: inset 5px 5px 10px #d1d9e6,
                     inset -5px -5px 10px #ffffff;
         color: var(--sigma-blue-main);
     }
 
-    /* Card untuk Tabel & Chart dengan Efek Glassmorphism */
+    /* Card Glassmorphism dengan warna biru tipis */
     .glass-card {
-        background: rgba(255, 255, 255, 0.6) !important;
+        background: rgba(255, 255, 255, 0.7) !important;
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        border: 1px solid rgba(255, 255, 255, 0.4) !important;
         border-radius: 20px !important;
         box-shadow: 0 10px 30px rgba(30, 58, 138, 0.05) !important;
     }
@@ -65,9 +68,9 @@
     }
 
     .badge-sigma {
-        background: white;
+        background: var(--white);
         color: var(--sigma-blue-dark);
-        box-shadow: 3px 3px 6px #bebebe, -3px -3px 6px #ffffff;
+        box-shadow: 3px 3px 6px #d1d9e6, -3px -3px 6px #ffffff;
         border: none;
         padding: 8px 12px;
         border-radius: 8px;
@@ -79,11 +82,12 @@
         <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-4 pb-4">
             <div>
                 <h2 class="fw-bold mb-1" style="color: var(--sigma-blue-dark)">Dashboard Gudang</h2>
-                <h6 class="op-7">Selamat datang kembali, <strong class="text-primary">{{ Auth::user()->name }}</strong>.</h6>
+                <h6 class="op-7">Selamat datang kembali, <strong style="color: var(--sigma-blue-main)">{{ Auth::user()->name }}</strong>.</h6>
             </div>
         </div>
 
         <div class="row">
+            <!-- Master Barang -->
             <div class="col-sm-6 col-md-3 mb-4">
                 <div class="card card-3d">
                     <div class="card-body">
@@ -100,11 +104,12 @@
                 </div>
             </div>
 
+            <!-- Stok Menipis -->
             <div class="col-sm-6 col-md-3 mb-4">
-                <div class="card card-3d" style="background: #f8d7da66 !important;">
+                <div class="card card-3d" style="background: rgba(239, 68, 68, 0.05) !important;">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
-                            <div class="icon-box-3d" style="box-shadow: inset 4px 4px 8px #d1b3b5, inset -4px -4px 8px #ffffff;">
+                            <div class="icon-box-3d" style="box-shadow: inset 4px 4px 8px #e2cfcf, inset -4px -4px 8px #ffffff;">
                                 <i class="fas fa-exclamation-triangle text-danger"></i>
                             </div>
                             <div class="ms-3">
@@ -116,6 +121,7 @@
                 </div>
             </div>
 
+            <!-- Transaksi Masuk -->
             <div class="col-sm-6 col-md-3 mb-4">
                 <div class="card card-3d">
                     <div class="card-body">
@@ -132,6 +138,7 @@
                 </div>
             </div>
 
+            <!-- Transaksi Keluar -->
             <div class="col-sm-6 col-md-3 mb-4">
                 <div class="card card-3d">
                     <div class="card-body">
@@ -154,7 +161,7 @@
                 <div class="card glass-card h-100">
                     <div class="card-body">
                         <h5 class="fw-bold mb-4" style="color: var(--sigma-blue-dark)">
-                            <i class="fas fa-chart-line me-2 text-primary"></i>Tren Transaksi (7 Hari)
+                            <i class="fas fa-chart-line me-2" style="color: var(--sigma-blue-main)"></i>Tren Transaksi (7 Hari)
                         </h5>
                         <div style="height: 300px;">
                             <canvas id="lineChart"></canvas>
@@ -167,7 +174,7 @@
                 <div class="card glass-card h-100">
                     <div class="card-body">
                         <h5 class="fw-bold mb-4" style="color: var(--sigma-blue-dark)">
-                            <i class="fas fa-chart-pie me-2 text-primary"></i>Kategori Barang
+                            <i class="fas fa-chart-pie me-2" style="color: var(--sigma-blue-main)"></i>Kategori Barang
                         </h5>
                         <div style="height: 300px;">
                             <canvas id="pieChart"></canvas>
@@ -177,12 +184,13 @@
             </div>
         </div>
 
+        <!-- Tabel Aktivitas -->
         <div class="row mt-2">
             <div class="col-md-12">
                 <div class="card glass-card">
                     <div class="card-header bg-transparent border-0 pt-4 px-4">
                         <h5 class="fw-bold mb-0" style="color: var(--sigma-blue-dark)">
-                            <i class="fas fa-history me-2 text-primary"></i>Aktivitas Transaksi Terakhir
+                            <i class="fas fa-history me-2" style="color: var(--sigma-blue-main)"></i>Aktivitas Transaksi Terakhir
                         </h5>
                     </div>
                     <div class="card-body p-4">
@@ -203,14 +211,14 @@
                                         <td><span class="badge-sigma fw-bold">{{ $trx->nomor_transaksi }}</span></td>
                                         <td>
                                             @if($trx->jenis_transaksi == 'pemasukan')
-                                                <span class="badge badge-success rounded-pill px-3">Masuk</span>
+                                                <span class="badge bg-success rounded-pill px-3">Masuk</span>
                                             @else
-                                                <span class="badge badge-info rounded-pill px-3">Keluar</span>
+                                                <span class="badge bg-info rounded-pill px-3">Keluar</span>
                                             @endif
                                         </td>
                                         <td class="fw-bold text-dark">{{ $trx->jumlah_barang }}</td>
                                         <td>
-                                            <span class="text-primary fw-bold">Rp {{ number_format($trx->total_harga, 0, ',', '.') }}</span>
+                                            <span class="fw-bold" style="color: var(--sigma-blue-main)">Rp {{ number_format($trx->total_harga, 0, ',', '.') }}</span>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center">
@@ -233,12 +241,10 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Warna dari Logo SIGMA
         const sigmaBlue = '#2b59c3';
         const sigmaLight = '#40A9FF';
         const sigmaDark = '#1E3A8A';
 
-        // 1. Line Chart
         const ctxLine = document.getElementById('lineChart').getContext('2d');
         new Chart(ctxLine, {
             type: 'line',
@@ -251,9 +257,7 @@
                         borderColor: sigmaBlue,
                         backgroundColor: 'rgba(43, 89, 195, 0.1)',
                         fill: true,
-                        tension: 0.4,
-                        pointRadius: 4,
-                        pointBackgroundColor: sigmaBlue
+                        tension: 0.4
                     },
                     {
                         label: 'Keluar',
@@ -261,24 +265,21 @@
                         borderColor: sigmaLight,
                         backgroundColor: 'rgba(64, 169, 255, 0.1)',
                         fill: true,
-                        tension: 0.4,
-                        pointRadius: 4,
-                        pointBackgroundColor: sigmaLight
+                        tension: 0.4
                     }
                 ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { position: 'top' } },
+                plugins: { legend: { display: true } },
                 scales: {
-                    y: { beginAtZero: true, grid: { display: false } },
+                    y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.03)' } },
                     x: { grid: { display: false } }
                 }
             }
         });
 
-        // 2. Logika Doughnut Chart (Barang per Kategori)
         const ctxPie = document.getElementById('pieChart').getContext('2d');
         new Chart(ctxPie, {
             type: 'doughnut',
@@ -286,7 +287,7 @@
                 labels: {!! json_encode($catLabels) !!},
                 datasets: [{
                     data: {!! json_encode($catValues) !!},
-                    backgroundColor: [sigmaBlue, sigmaLight, sigmaDark, '#00D2FF', '#A5B4FC', '#6366F1'],
+                    backgroundColor: [sigmaBlue, sigmaLight, sigmaDark, '#6366F1', '#A5B4FC'],
                     borderWidth: 0
                 }]
             },

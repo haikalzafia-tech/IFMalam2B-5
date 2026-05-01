@@ -6911,3 +6911,82 @@ body {
     font-size: 18px !important; } }
 
 /*# sourceMappingURL=kaiadmin.css.map */
+
+:root {
+    /* Identitas Warna SIGMA */
+    --sigma-blue-dark: #1E3A8A;   /* Biru Tua Logo */
+    --sigma-blue-main: #2b59c3;   /* Biru Utama Logo */
+    --sigma-blue-light: #40A9FF;  /* Biru Muda Logo */
+
+    /* Background & Shadow (3D Neumorphism) */
+    --sigma-bg: #f0f4f9;          /* Biru pucat agar kontras dengan logo */
+    --sigma-shadow-dark: #d1d9e6; /* Bayangan gelap */
+    --sigma-shadow-light: #ffffff;/* Bayangan terang */
+    --white: #ffffff;
+}
+
+/* Layout Utama */
+.page-inner {
+    background: var(--sigma-bg);
+    min-height: 100vh;
+}
+
+/* Efek Card Timbul (3D) */
+.card-3d {
+    background: var(--sigma-bg) !important;
+    border-radius: 20px !important;
+    border: none !important;
+    box-shadow: 8px 8px 16px var(--sigma-shadow-dark),
+               -8px -8px 16px var(--sigma-shadow-light) !important;
+    transition: all 0.3s ease-in-out;
+}
+
+.card-3d:hover {
+    transform: translateY(-5px);
+    box-shadow: 12px 12px 20px var(--sigma-shadow-dark),
+               -12px -12px 20px var(--sigma-shadow-light) !important;
+}
+
+/* Wadah Icon dengan Efek Inset (Cekung) */
+.icon-box-3d {
+    width: 55px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    background: var(--sigma-bg);
+    box-shadow: inset 5px 5px 10px var(--sigma-shadow-dark),
+                inset -5px -5px 10px var(--sigma-shadow-light);
+    color: var(--sigma-blue-main);
+}
+
+/* Sidebar Nav-Item Aktif (Cekung) */
+.sidebar .nav-item.active > a {
+    background: var(--sigma-bg) !important;
+    margin: 10px 15px !important;
+    border-radius: 12px !important;
+    color: var(--sigma-blue-main) !important;
+    box-shadow: inset 4px 4px 8px var(--sigma-shadow-dark),
+                inset -4px -4px 8px var(--sigma-shadow-light) !important;
+}
+
+/* Search Bar (Cekung) */
+.nav-search .input-group {
+    background: var(--sigma-bg) !important;
+    border-radius: 25px !important;
+    padding: 2px 10px !important;
+    box-shadow: inset 3px 3px 6px var(--sigma-shadow-dark),
+                inset -3px -3px 6px var(--sigma-shadow-light) !important;
+    border: none !important;
+}
+
+/* Glassmorphism untuk Tabel/Chart */
+.glass-card {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 10px 30px rgba(30, 58, 138, 0.05) !important;
+}

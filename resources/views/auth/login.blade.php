@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIGMA - Secure Login</title>
+    <title>SIGMA - Masuk Aman</title>
     <link rel="icon" href="{{ asset('template/assets/img/SIGMA.png') }}" type="image/x-icon" />
 
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -17,6 +17,18 @@
             --dark: #060b23;
         }
 
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 10px;
+        }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--dark);
@@ -25,10 +37,12 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            overflow: hidden;
+            /* Mengaktifkan skrol vertikal */
+            overflow-y: auto;
+            padding: 50px 20px;
         }
 
-        /* Background Animasi Berjalan */
+        /* Background Animasi */
         .bg-animate {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -50,7 +64,7 @@
             to { transform: translate(20%, 20%); }
         }
 
-        /* Card Container */
+        /* Card Container 3D Glassmorphism */
         .auth-card {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(20px);
@@ -62,6 +76,11 @@
             max-width: 440px;
             box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
             animation: fadeIn 0.8s ease-out;
+            transition: transform 0.3s ease;
+        }
+
+        .auth-card:hover {
+            transform: translateY(-5px);
         }
 
         @keyframes fadeIn {
@@ -113,6 +132,7 @@
             transform: translateY(-50%);
             color: var(--accent);
             opacity: 0.7;
+            z-index: 10;
         }
 
         .form-control-sigma {
@@ -120,7 +140,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
             padding: 14px 14px 14px 50px;
-            color: #fff;
+            color: #fff !important;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -128,7 +148,6 @@
             background: rgba(255, 255, 255, 0.1);
             border-color: var(--accent);
             box-shadow: 0 0 20px rgba(61, 181, 241, 0.2);
-            color: #fff;
             outline: none;
         }
 
@@ -168,7 +187,13 @@
 
         .footer-links a:hover {
             text-decoration: underline;
-            filter: brightness(1.2);
+        }
+
+        /* Responsif untuk Mobile */
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 2rem;
+            }
         }
     </style>
 </head>
@@ -185,47 +210,48 @@
         </div>
 
         <div class="text-center">
-            <h1 class="title">Welcome Back</h1>
-            <p class="subtitle">Please enter your credentials to access SIGMA.</p>
+            <h1 class="title">Selamat Datang</h1>
+            <p class="subtitle">Silakan masukkan akun Anda untuk mengakses SIGMA.</p>
         </div>
 
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
             <div class="mb-3">
-                <label class="form-label">Email Address</label>
+                <label class="form-label">Alamat Email</label>
                 <div class="input-group-custom">
                     <i class="fa-solid fa-envelope"></i>
-                    <input type="email" name="email" class="form-control form-control-sigma" placeholder="name@company.com" required autofocus>
+                    <input type="email" name="email" class="form-control form-control-sigma" placeholder="nama@perusahaan.com" required autofocus>
                 </div>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Password</label>
+                <label class="form-label">Kata Sandi</label>
                 <div class="input-group-custom">
                     <i class="fa-solid fa-lock"></i>
                     <input type="password" name="password" class="form-control form-control-sigma" placeholder="••••••••" required>
                 </div>
             </div>
 
-            <div class="d-flex justify-content-between mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="remember" name="remember">
                     <label class="form-check-label small text-white-50" for="remember">
-                        Remember me
+                        Ingat saya
                     </label>
                 </div>
-                <a href="#" class="small text-accent text-decoration-none">Forgot?</a>
+                {{-- <a href="#" class="small text-decoration-none" style="color: var(--accent);">Lupa Sandi?</a> --}}
             </div>
 
             <button type="submit" class="btn btn-sigma-primary">
-                Sign In <i class="fa-solid fa-right-to-bracket ms-2"></i>
+                Masuk <i class="fa-solid fa-right-to-bracket ms-2"></i>
             </button>
         </form>
 
         <div class="footer-links">
-            <p class="text-white-50">Don't have an account? <a href="{{ route('register') }}">Create Account</a></p>
-            <a href="/" class="text-white-50"><i class="fa-solid fa-house me-1"></i> Return to Landing</a>
+            <p class="text-white-50">Belum punya akun? <a href="{{ route('register') }}">Daftar Sekarang</a></p>
+            <hr style="border-color: rgba(255,255,255,0.1);">
+            <a href="/" class="text-white-50"><i class="fa-solid fa-house me-1"></i> Kembali ke Beranda</a>
         </div>
     </div>
 

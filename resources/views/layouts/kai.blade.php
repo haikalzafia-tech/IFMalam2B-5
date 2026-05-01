@@ -100,8 +100,8 @@
                                             <div class="u-text">
                                                 <h4>{{ Auth::user()->name }}</h4>
                                                 <p class="text-muted">{{ Auth::user()->email }}</p>
-                                                <a href="profile" class="btn btn-xs btn-secondary btn-sm">View
-                                                    Profile</a>
+                                                <a href="profile" class="btn btn-xs btn-secondary btn-sm">Lihat
+                                                    Profil</a>
                                                 </div>
                                             </div>
                                         </li>
@@ -116,7 +116,7 @@
                                             <div>
                                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                     document.getElementById('logout-form').submit();">
-                                                    {{ __('Logout') }}
+                                                    {{ __('Keluar') }}
                                                 </a>
 
                                                 <form id="logout-form" action="{{ route('logout') }}" method="POST"
@@ -131,6 +131,7 @@
                         </ul>
                     </div>
                 </nav>
+
                 <!-- End Navbar -->
             </div>
 
@@ -187,6 +188,8 @@
     <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"
         rel="stylesheet" />
     @stack('script')
+
+
 </body>
 
 </html>

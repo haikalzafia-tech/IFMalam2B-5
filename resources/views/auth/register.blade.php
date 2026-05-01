@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIGMA - Create Account</title>
+    <title>SIGMA - Daftar Akun Baru</title>
     <link rel="icon" href="{{ asset('template/assets/img/SIGMA.png') }}" type="image/x-icon" />
 
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -17,6 +17,18 @@
             --dark: #060b23;
         }
 
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 10px;
+        }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--dark);
@@ -25,11 +37,12 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            overflow-x: hidden;
-            padding: 20px 0;
+            /* Mengaktifkan skrol vertikal */
+            overflow-y: auto;
+            padding: 40px 20px;
         }
 
-        /* Animated Background */
+        /* Background Animasi */
         .bg-animate {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -51,7 +64,7 @@
             to { transform: translate(30%, 30%); }
         }
 
-        /* Card Styling */
+        /* Card Styling 3D Glassmorphism */
         .auth-card {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(25px);
@@ -62,6 +75,12 @@
             width: 100%;
             max-width: 500px;
             box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .logo-header { text-align: center; margin-bottom: 2rem; }
@@ -119,12 +138,14 @@
             color: #fff !important;
             padding: 12px 15px !important;
             font-size: 0.9rem;
+            transition: 0.3s;
         }
 
         .input-sigma:focus {
             background: rgba(255, 255, 255, 0.1) !important;
             border-color: var(--accent) !important;
             box-shadow: 0 0 15px rgba(61, 181, 241, 0.2) !important;
+            outline: none;
         }
 
         .btn-register {
@@ -144,6 +165,7 @@
         .btn-register:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(0, 70, 184, 0.4);
+            filter: brightness(1.1);
         }
 
         .footer-text {
@@ -167,62 +189,57 @@
             <img src="{{ asset('template/assets/img/SIGMA.png') }}" alt="SIGMA">
         </div>
 
-        <h1 class="title">New Identity</h1>
+        <h1 class="title">Identitas Baru</h1>
         <p class="subtitle">Daftarkan akun untuk mulai mengelola gudang.</p>
 
         <form method="POST" action="{{ route('register') }}">
             @csrf
 
-            <label class="form-label">Register As</label>
+            <label class="form-label">Daftar Sebagai</label>
             <div class="role-selector">
-                <div class="role-option">
-                    <input type="radio" id="admin" name="role" value="admin" required checked>
-                    <label for="admin" class="role-label">
-                        <i class="fa-solid fa-user-shield mb-1 d-block"></i> Admin
-                    </label>
-                </div>
                 <div class="role-option">
                     <input type="radio" id="manager" name="role" value="manager" required>
                     <label for="manager" class="role-label">
-                        <i class="fa-solid fa-user-tie mb-1 d-block"></i> Manager
+                        <i class="fa-solid fa-user-tie mb-1 d-block"></i> Manajer
                     </label>
                 </div>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Full Name</label>
-                <input type="text" name="name" class="form-control input-sigma @error('name') is-invalid @enderror" placeholder="Haikal Mubaroq" required value="{{ old('name') }}">
+                <label class="form-label">Nama Lengkap</label>
+                <input type="text" name="name" class="form-control input-sigma @error('name') is-invalid @enderror" placeholder="Contoh: Haikal Mubaroq" required value="{{ old('name') }}">
                 @error('name') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Email Address</label>
+                <label class="form-label">Alamat Email</label>
                 <input type="email" name="email" class="form-control input-sigma @error('email') is-invalid @enderror" placeholder="haikal@sigma.com" required value="{{ old('email') }}">
                 @error('email') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
 
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Password</label>
+                    <label class="form-label">Kata Sandi</label>
                     <input type="password" name="password" class="form-control input-sigma" placeholder="••••••••" required>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Confirm</label>
+                    <label class="form-label">Konfirmasi</label>
                     <input type="password" name="password_confirmation" class="form-control input-sigma" placeholder="••••••••" required>
                 </div>
             </div>
 
             <button type="submit" class="btn btn-register">
-                Create Account <i class="fa-solid fa-user-plus ms-2"></i>
+                Buat Akun <i class="fa-solid fa-user-plus ms-2"></i>
             </button>
         </form>
 
         <div class="footer-text">
-            Already have an account? <a href="{{ route('login') }}">Sign In</a>
+            Sudah punya akun? <a href="{{ route('login') }}">Masuk Sekarang</a>
             <br><br>
-            <a href="/" style="opacity: 0.6;"><i class="fa-solid fa-arrow-left"></i> Landing Page</a>
+            <a href="/" style="opacity: 0.6;"><i class="fa-solid fa-arrow-left"></i> Kembali ke Beranda</a>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
