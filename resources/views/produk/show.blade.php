@@ -3,7 +3,7 @@
 @section('content')
 
 <style>
-    /* Background Page Bergradien Halus untuk menonjolkan efek Glass */
+    /* Background Page Bergradien Halus */
     .page-inner {
         background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
         min-height: 100vh;
@@ -20,7 +20,7 @@
         overflow: hidden;
     }
 
-    /* Header Card yang Modern */
+    /* Header Card */
     .card-header-glass {
         background: rgba(255, 255, 255, 0.4) !important;
         border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
@@ -45,7 +45,7 @@
         box-shadow: 8px 8px 20px rgba(0,0,0,0.1);
     }
 
-    /* Wrapper Info Utama dengan Efek Depth */
+    /* Wrapper Info Utama */
     .info-block-3d {
         background: #ffffff;
         border-radius: 20px;
@@ -85,21 +85,17 @@
         gap: 25px;
     }
 
-    /* Perbaikan pada x-produk.card-varian (Asumsi struktur component) */
-    /* Kita tambahkan wrapper class di sekitar component untuk efek hover */
     .varian-item-wrapper {
         transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         border-radius: 20px;
         overflow: hidden;
     }
     .varian-item-wrapper:hover {
-        /* Efek mengangkat dan memiringkan (Tilt) */
         transform: translateY(-15px) rotateX(5deg) rotateY(-3deg);
         box-shadow: 25px 25px 50px rgba(0, 0, 0, 0.15);
         z-index: 10;
     }
 
-    /* Empty State yang Atraktif */
     .empty-variant-glass {
         background: rgba(255, 255, 255, 0.3);
         border-radius: 20px;
@@ -107,7 +103,6 @@
         backdrop-filter: blur(5px);
     }
 
-    /* Responsivitas Mobile */
     @media (max-width: 576px) {
         .page-inner { padding: 15px; }
         .detail-container-glass { border-radius: 20px !important; }
@@ -131,10 +126,11 @@
             </div>
 
             <div class="card-body p-5">
+                <!-- Bagian Informasi Produk -->
                 <div class="info-block-3d">
                     <div class="row g-4">
                         <div class="col-md-6">
-                            <x-meta-item label="Nama Produk" value="{{ $produk->nama_produk }}" />
+                            <x-meta-item label="Nama Barang" value="{{ $produk->nama_produk }}" />
                         </div>
                         <div class="col-md-6">
                             <x-meta-item label="Kategori" value="{{ $produk->kategori->nama_kategori ?? 'Tanpa Kategori' }}" />
@@ -146,25 +142,33 @@
                     </div>
                 </div>
 
+                <!-- Bagian Varian -->
                 <div class="mt-5">
                     <div class="d-flex justify-content-between align-items-center mb-4 pb-2">
                         <h4 class="variant-title m-0">Daftar Varian</h4>
-                        <button type="button" class="btn btn-primary btn-round px-4 py-2 shadow" style="background: linear-gradient(135deg, #1d7af3, #6861ce); border: none;" data-bs-toggle="modal"
-                            data-bs-target="#modalFormVarian" id="btnTambahVarian">
-                            <i class="fas fa-plus me-2"></i> Tambah Varian Baru
-                        </button>
+
+                        {{-- HANYA ADMIN: Tombol Tambah Varian --}}
+                        @if(Auth::check() && Auth::user()->role === 'admin')
+                            <button type="button" class="btn btn-primary btn-round px-4 py-2 shadow"
+                                style="background: linear-gradient(135deg, #1d7af3, #6861ce); border: none;"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalFormVarian" id="btnTambahVarian">
+                                <i class="fas fa-plus me-2"></i> Tambah Varian Baru
+                            </button>
+                        @endif
                     </div>
 
                     <div class="variant-grid">
                         @forelse ($produk->varian as $item)
                             <div class="varian-item-wrapper">
+                                {{-- Komponen Card Varian (Pastikan di dalamnya sudah ada proteksi role admin untuk Edit/Hapus) --}}
                                 <x-produk.card-varian :varian="$item" />
                             </div>
                         @empty
                             <div class="col-12 text-center py-5 empty-variant-glass">
                                 <i class="fas fa-layer-group fa-4x text-muted mb-3 opacity-25"></i>
-                                <h5 class="text-muted fw-bold">Belum ada varian produk.</h5>
-                                <p class="text-muted mb-0">Silakan tambahkan varian baru untuk produk ini.</p>
+                                <h5 class="text-muted fw-bold">Belum ada varian barang.</h5>
+                                <p class="text-muted mb-0">Silakan tambahkan varian baru untuk barang ini.</p>
                             </div>
                         @endforelse
                     </div>
@@ -174,7 +178,10 @@
     </div>
 </div>
 
-<x-produk.form-varian />
+{{-- HANYA ADMIN: Load Modal Form --}}
+@if(Auth::check() && Auth::user()->role === 'admin')
+    <x-produk.form-varian />
+@endif
 
 @endsection
 
@@ -182,70 +189,74 @@
 <script>
 $(document).ready(function() {
     let modalEl = $('#modalFormVarian');
-    let modal = new bootstrap.Modal(modalEl[0]);
-    let $form = $('#modalFormVarian form');
+    // Cek apakah modal ada (hanya admin yang merender modal ini)
+    if (modalEl.length > 0) {
+        let modal = new bootstrap.Modal(modalEl[0]);
+        let $form = $('#modalFormVarian form');
 
-    $("#btnTambahVarian").on('click', function() {
-        $form[0].reset();
-        $form.find('input[name="_method"]').remove();
-        $form.find('small.text-danger').text('');
-        $('#modalFormVarian .modal-title').text('Tambah Varian Baru');
-        modal.show();
-    });
-
-    $(document).on('click', ".btnEditVarian", function() {
-        let nama_Varian = $(this).data('nama-varian');
-        let harga_varian = $(this).data('harga-varian');
-        let stok_varian = $(this).data('stok-varian');
-        let action = $(this).data('action');
-
-        $form[0].reset();
-        $form.attr('action', action);
-
-        if($form.find('input[name="_method"]').length === 0){
-            $form.append('<input type="hidden" name="_method" value="PUT">');
-        }
-
-        $form.find('input[name="nama_varian"]').val(nama_Varian);
-        $form.find('input[name="harga_varian"]').val(harga_varian);
-        $form.find('input[name="stok_varian"]').val(stok_varian);
-        $form.find('small.text-danger').text('');
-        $('#modalFormVarian .modal-title').text('Edit Varian');
-        modal.show();
-    });
-
-    $form.submit(function(e) {
-        e.preventDefault();
-        let formData = new FormData(this);
-
-        $.ajax({
-            type: "POST",
-            url: $form.attr('action'),
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                swal({
-                    title: "Berhasil!",
-                    text: response.message,
-                    icon: "success",
-                    buttons: false,
-                    timer: 1500,
-                }).then(() => {
-                    location.reload();
-                })
-            },
-            error: function(xhr) {
-                let errors = xhr.responseJSON.errors;
-                $form.find('small.text-danger').text('');
-                $.each(errors, function(key, val) {
-                    $form.find('[name="' + key + '"]').next('small.text-danger').text(val[0]);
-                })
-            }
+        $("#btnTambahVarian").on('click', function() {
+            $form[0].reset();
+            $form.find('input[name="_method"]').remove();
+            $form.find('small.text-danger').text('');
+            $('#modalFormVarian .modal-title').text('Tambah Varian Baru');
+            modal.show();
         });
-    });
 
-    $(document).on('click', ".formDeleteVarian", function(e) {
+        $(document).on('click', ".btnEditVarian", function() {
+            let nama_Varian = $(this).data('nama-varian');
+            let harga_varian = $(this).data('harga-varian');
+            let stok_varian = $(this).data('stok-varian');
+            let action = $(this).data('action');
+
+            $form[0].reset();
+            $form.attr('action', action);
+
+            if($form.find('input[name="_method"]').length === 0){
+                $form.append('<input type="hidden" name="_method" value="PUT">');
+            }
+
+            $form.find('input[name="nama_varian"]').val(nama_Varian);
+            $form.find('input[name="harga_varian"]').val(harga_varian);
+            $form.find('input[name="stok_varian"]').val(stok_varian);
+            $form.find('small.text-danger').text('');
+            $('#modalFormVarian .modal-title').text('Edit Varian');
+            modal.show();
+        });
+
+        $form.submit(function(e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+
+            $.ajax({
+                type: "POST",
+                url: $form.attr('action'),
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    swal({
+                        title: "Berhasil!",
+                        text: response.message,
+                        icon: "success",
+                        buttons: false,
+                        timer: 1500,
+                    }).then(() => {
+                        location.reload();
+                    })
+                },
+                error: function(xhr) {
+                    let errors = xhr.responseJSON.errors;
+                    $form.find('small.text-danger').text('');
+                    $.each(errors, function(key, val) {
+                        $form.find('[name="' + key + '"]').next('small.text-danger').text(val[0]);
+                    })
+                }
+            });
+        });
+    }
+
+    // Handler Hapus (Tetap di luar if modal karena menggunakan form di card)
+    $(document).on('click', ".formDeleteVarian button", function(e) {
         e.preventDefault();
         const form = $(this).closest('form');
         swal({

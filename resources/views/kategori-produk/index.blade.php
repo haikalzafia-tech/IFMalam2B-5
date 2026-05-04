@@ -104,7 +104,7 @@
                                     <x-per-page-option />
                                 </div>
                                 <div class="col-6 col-md-9">
-                                    <x-filter-by-field term='search' placeholder="Cari kategori produk..." />
+                                    <x-filter-by-field term='search' placeholder="Cari kategori barang..." />
                                 </div>
                                 <div class="col-2 col-md-1">
                                     <x-button-reset-filter route="master-data.kategori-produk.index" />
@@ -140,7 +140,7 @@
                                 <td>
                                     <div class="action-btn-wrapper justify-content-center">
                                         <x-kategori-produk.form-kategori-produk id="{{ $item->id }}" />
-                                        <x-confirm-delete id="{{ $item->id }}" route="master-data.kategori-produk.destroy" />
+                                        {{-- <x-confirm-delete id="{{ $item->id }}" route="master-data.kategori-produk.destroy" /> --}}
                                     </div>
                                 </td>
                             </tr>

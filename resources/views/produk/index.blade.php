@@ -120,7 +120,7 @@
                                     <x-per-page-option />
                                 </div>
                                 <div class="col-6 col-md-9">
-                                    <x-filter-by-field term="search" placeholder="Cari nama produk..." />
+                                    <x-filter-by-field term="search" placeholder="Cari nama barang..." />
                                 </div>
                                 <div class="col-2 col-md-1">
                                     <x-button-reset-filter route="master-data.produk.index" />
@@ -138,7 +138,7 @@
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 80px">NO</th>
-                                <th>Produk</th>
+                                <th>Barang</th>
                                 <th>Kategori</th>
                                 <th class="text-center" style="width: 150px">Opsi</th>
                             </tr>
@@ -165,7 +165,7 @@
                                 <td>
                                     <div class="d-flex justify-content-center align-items-center gap-2">
                                         <x-produk.form-produk id="{{ $item->id }}" />
-                                        <x-confirm-delete id="{{ $item->id }}" route="master-data.produk.destroy" />
+                                        {{-- <x-confirm-delete id="{{ $item->id }}" route="master-data.produk.destroy" /> --}}
                                     </div>
                                 </td>
                             </tr>
@@ -173,7 +173,7 @@
                             <tr>
                                 <td colspan="4" class="text-center py-5">
                                     <i class="fas fa-boxes fa-3x text-light mb-3"></i>
-                                    <p class="text-muted">Data produk tidak tersedia</p>
+                                    <p class="text-muted">Data barang tidak tersedia</p>
                                 </td>
                             </tr>
                             @endforelse

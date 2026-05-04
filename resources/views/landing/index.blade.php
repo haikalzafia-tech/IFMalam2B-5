@@ -219,7 +219,7 @@
                             <i class="fa-solid fa-cube"></i>
                         </div>
                         <h4 class="fw-bold mb-3">Stok Akurat</h4>
-                        <p class="opacity-75">Pemantauan barang masuk dan keluar yang tercatat secara otomatis dengan presisi 100%.</p>
+                        <p class="opacity-75">Sistem mampu mencatat barang masuk dan keluar secara otomatis sehingga jumlah stok selalu ter-update tanpa perlu perhitungan manual. Ini mengurangi risiko kesalahan pencatatan dan meningkatkan efisiensi kerja.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -227,8 +227,8 @@
                         <div class="icon-3d-box mx-auto mb-4" style="background: linear-gradient(135deg, #6a11cb, #2575fc);">
                             <i class="fa-solid fa-bolt"></i>
                         </div>
-                        <h4 class="fw-bold mb-3">Respon Cepat</h4>
-                        <p class="opacity-75">Akses data inventaris kapan saja dan di mana saja melalui dashboard cloud yang responsif.</p>
+                        <h4 class="fw-bold mb-3">Monitoring Real-Time</h4>
+                        <p class="opacity-75">Dengan adanya laporan, histori transaksi, dan grafik pergerakan barang, admin maupun manajer dapat memantau kondisi stok kapan saja. Hal ini membantu memastikan ketersediaan barang tetap sesuai kebutuhan.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -236,8 +236,8 @@
                         <div class="icon-3d-box mx-auto mb-4" style="background: linear-gradient(135deg, #00b09b, #96c93d);">
                             <i class="fa-solid fa-vault"></i>
                         </div>
-                        <h4 class="fw-bold mb-3">Keamanan Berlapis</h4>
-                        <p class="opacity-75">Data gudang Anda dilindungi dengan enkripsi tingkat tinggi dan sistem manajemen hak akses.</p>
+                        <h4 class="fw-bold mb-3">Dukungan Keputusan</h4>
+                        <p class="opacity-75">Data laporan seperti stok, barang masuk, dan barang keluar memberikan informasi yang jelas dan akurat, sehingga memudahkan manajer dalam menganalisis kondisi gudang dan mengambil keputusan strategis terkait persediaan.</p>
                     </div>
                 </div>
             </div>
