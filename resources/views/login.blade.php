@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+~<!DOCTYPE html>
 <html>
 <head>
     <title>Login - Laravel 12</title>
