@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 5. stok-barang 3D
 @extends('layouts.kai')
 @section('page_title', $pageTitle)
@@ -164,6 +165,8 @@
 </div>
 
 =======
+=======
+>>>>>>> b6523496646496b5da26e83281d50c60580b52f5
 @extends('layouts.kai')
 @section('page_title', $pageTitle)
 @section('content')
@@ -228,5 +231,8 @@
         </div>
     </div>
 </div>
+<<<<<<< HEAD
+>>>>>>> b6523496646496b5da26e83281d50c60580b52f5
+=======
 >>>>>>> b6523496646496b5da26e83281d50c60580b52f5
 @endsection
