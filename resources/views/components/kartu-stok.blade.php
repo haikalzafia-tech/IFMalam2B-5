@@ -5,7 +5,7 @@
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-default btn-kartu-stok text-primary" data-bs-toggle="modal"
         data-bs-target="#kartuStokModal" data-nomor-sku="{{ $nomor_sku }}">
-        Kartu Stok
+        Detail Stok
     </button>
 
     <!-- Modal -->

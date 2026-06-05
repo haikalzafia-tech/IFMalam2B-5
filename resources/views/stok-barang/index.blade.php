@@ -120,7 +120,7 @@
                                 <th>Kategori</th>
                                 <th class="col-stok text-end">Stok</th>
                                 <th class="col-harga">Harga</th>
-                                <th class="text-center">Kartu Stok</th>
+                                <th class="text-center">Detail Stok</th>
                             </tr>
                         </thead>
                         <tbody>

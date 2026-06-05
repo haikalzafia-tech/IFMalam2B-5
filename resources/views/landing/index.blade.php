@@ -261,7 +261,7 @@
                         <div class="creator-avatar-wrapper me-4">
                             <!-- Ganti src dengan path foto Bunga -->
                             <div class="icon-3d-box mb-0" style="width: 90px; height: 90px; border-radius: 50%; overflow: hidden; padding: 0; background: linear-gradient(135deg, #FF4B2B, #FF416C);">
-                                <img src="{{ asset('assets/img/foto-bunga.jpg') }}" alt="Bunga" style="width: 100%; height: 100%; object-fit: cover;">
+                                <img src="{{ asset('template/assets/img/foro-bunga.jpeg') }}" alt="Haikal Mubaroq Zafia" style="width: 100%; height: 100%; object-fit: cover;">
                             </div>
                         </div>
                         <div class="creator-info">
@@ -285,7 +285,7 @@
                         <div class="creator-avatar-wrapper me-4">
                             <!-- Ganti src dengan path foto Haikal Fadhil -->
                             <div class="icon-3d-box mb-0" style="width: 90px; height: 90px; border-radius: 50%; overflow: hidden; padding: 0;">
-                                <img src="{{ asset('assets/img/foto-haikal-fadhil.jpg') }}" alt="Haikal Fadhil" style="width: 100%; height: 100%; object-fit: cover;">
+                               <img src="{{ asset('template/assets/img/foto-haikal-fadhil.jpeg') }}" alt="Haikal Mubaroq Zafia" style="width: 100%; height: 100%; object-fit: cover;">
                             </div>
                         </div>
                         <div class="creator-info">

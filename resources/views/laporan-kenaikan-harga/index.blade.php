@@ -7,7 +7,7 @@
 
     /* Card Utama */
     .card-3d {
-        background: #ffffff;
+        background: #ffffff; 
         border: none;
         border-radius: 20px;
         box-shadow: 0 15px 40px rgba(0,0,0,0.1);

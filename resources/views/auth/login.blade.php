@@ -15,6 +15,8 @@
             --primary: #0046b8;
             --accent: #3db5f1;
             --dark: #060b23;
+            --danger: #ff4b4b;
+            --success: #00b09b;
         }
 
         /* Custom Scrollbar */
@@ -37,7 +39,6 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            /* Mengaktifkan skrol vertikal */
             overflow-y: auto;
             padding: 50px 20px;
         }
@@ -86,6 +87,37 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Styling Alert Error & Success */
+        .alert-sigma {
+            background: rgba(255, 75, 75, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 75, 75, 0.3);
+            border-radius: 16px;
+            color: #ff8a8a;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+            animation: shakeX 0.5s;
+        }
+
+        .alert-sigma-success {
+            background: rgba(0, 176, 155, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 176, 155, 0.3);
+            border-radius: 16px;
+            color: #7effc0;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        @keyframes shakeX {
+            from, to { transform: translate3d(0, 0, 0); }
+            10%, 30%, 50%, 70%, 90% { transform: translate3d(-10px, 0, 0); }
+            20%, 40%, 60%, 80% { transform: translate3d(10px, 0, 0); }
         }
 
         .logo-wrapper {
@@ -189,11 +221,8 @@
             text-decoration: underline;
         }
 
-        /* Responsif untuk Mobile */
         @media (max-width: 480px) {
-            .auth-card {
-                padding: 2rem;
-            }
+            .auth-card { padding: 2rem; }
         }
     </style>
 </head>
@@ -211,8 +240,43 @@
 
         <div class="text-center">
             <h1 class="title">Selamat Datang</h1>
-            <p class="subtitle">Silakan masukkan akun Anda untuk mengakses SIGMA.</p>
+            <p class="subtitle">Silakan masuk untuk mengakses dashboard SIGMA.</p>
         </div>
+
+        <!-- NOTIFIKASI ERROR (BAHASA INDONESIA) -->
+        @if ($errors->any())
+            <div class="alert-sigma">
+                <div class="d-flex align-items-center">
+                    <i class="fa-solid fa-circle-exclamation me-3 fs-4"></i>
+                    <div>
+                        <ul class="mb-0 list-unstyled">
+                            @foreach ($errors->all() as $error)
+                                @php
+                                    $msg = $error;
+                                    if(str_contains($error, 'credentials') || str_contains($error, 'failed')) {
+                                        $msg = 'Email atau kata sandi salah.';
+                                    } elseif(str_contains($error, 'password')) {
+                                        $msg = 'Kata sandi tidak valid.';
+                                    } elseif(str_contains($error, 'email')) {
+                                        $msg = 'Format email tidak sesuai.';
+                                    } elseif(str_contains($error, 'throttle')) {
+                                        $msg = 'Terlalu banyak percobaan masuk. Coba lagi nanti.';
+                                    }
+                                @endphp
+                                <li>{{ $msg }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+        <!-- NOTIFIKASI STATUS -->
+        @if (session('status'))
+            <div class="alert-sigma-success">
+                <i class="fa-solid fa-circle-check me-2"></i> {{ session('status') }}
+            </div>
+        @endif
 
         <form method="POST" action="{{ route('login') }}">
             @csrf
@@ -221,7 +285,7 @@
                 <label class="form-label">Alamat Email</label>
                 <div class="input-group-custom">
                     <i class="fa-solid fa-envelope"></i>
-                    <input type="email" name="email" class="form-control form-control-sigma" placeholder="nama@perusahaan.com" required autofocus>
+                    <input type="email" name="email" class="form-control form-control-sigma" placeholder="user@polibatam.ac.id" value="{{ old('email') }}" required autofocus>
                 </div>
             </div>
 
@@ -240,11 +304,10 @@
                         Ingat saya
                     </label>
                 </div>
-                {{-- <a href="#" class="small text-decoration-none" style="color: var(--accent);">Lupa Sandi?</a> --}}
             </div>
 
             <button type="submit" class="btn btn-sigma-primary">
-                Masuk <i class="fa-solid fa-right-to-bracket ms-2"></i>
+                Masuk Sekarang <i class="fa-solid fa-right-to-bracket ms-2"></i>
             </button>
         </form>
 

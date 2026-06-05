@@ -113,7 +113,7 @@
                                 <i class="fas fa-exclamation-triangle text-danger"></i>
                             </div>
                             <div class="ms-3">
-                                <p class="text-danger mb-0 small fw-bold">Stok Menipis</p>
+                                <p class="text-danger mb-0 small fw-bold">Stok Menipis digudang</p>
                                 <h3 class="fw-bold mb-0 text-danger">{{ $stokMenipis ?? '0' }}</h3>
                             </div>
                         </div>
