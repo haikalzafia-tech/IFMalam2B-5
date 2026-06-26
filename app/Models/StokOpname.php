@@ -5,36 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class TransaksiRetur extends Model
+class StokOpname extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'nomor_retur',
-        'transaksi_id',
-        'supplier_id',
+        'nomor_opname',
         'gudang_id',
-        'jenis_retur',
-        'tanggal_retur',
+        'tanggal_opname',
         'status',
-        'alasan_retur',
         'petugas',
         'keterangan',
     ];
 
     protected $casts = [
-        'tanggal_retur' => 'date',
+        'tanggal_opname' => 'date',
     ];
-
-    public function transaksi()
-    {
-        return $this->belongsTo(Transaksi::class);
-    }
-
-    public function supplier()
-    {
-        return $this->belongsTo(Supplier::class);
-    }
 
     public function gudang()
     {
@@ -43,13 +29,13 @@ class TransaksiRetur extends Model
 
     public function items()
     {
-        return $this->hasMany(TransaksiReturItem::class);
+        return $this->hasMany(StokOpnameItem::class);
     }
 
     public static function generateNomor(): string
     {
         $date = now()->format('Ymd');
         $last = self::whereDate('created_at', today())->count() + 1;
-        return "RTR-{$date}-" . str_pad($last, 4, '0', STR_PAD_LEFT);
+        return "OPN-{$date}-" . str_pad($last, 4, '0', STR_PAD_LEFT);
     }
 }

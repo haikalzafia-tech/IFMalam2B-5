@@ -3,20 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class KategoriProduk extends Model
 {
-    protected $table = 'kategori_produks';
-    protected $fillable = ['nama_kategori'];
+    use HasFactory;
 
-    /**
-     * Relasi ke model Produk
-     */
-    public function produks(): HasMany
+    protected $fillable = [
+        'kode_kategori',
+        'nama_kategori',
+        'deskripsi',
+    ];
+
+    public function produks()
     {
-        return $this->hasMany(Produk::class, 'kategori_id');
-
+        return $this->hasMany(Produk::class);
     }
-    
 }

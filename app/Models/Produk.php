@@ -3,25 +3,41 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Produk extends Model
 {
-    // OOP Encapsulation: Mengamankan atribut yang boleh diisi secara massal (Mass Assignment)
+    use HasFactory;
+
     protected $fillable = [
+        'kategori_produk_id',
+        'kode_produk',
         'nama_produk',
+        'merek',
+        'satuan',
         'deskripsi_produk',
-        'kategori_produk_id'
+        'stok_minimum',
     ];
 
-    // Relasi OOP (Polymorphism/Association): Setiap produk memiliki satu kategori
-    public function Kategori()
+    public function kategoriProduk()
     {
-        return $this->belongsTo(KategoriProduk::class, 'kategori_produk_id');
+        return $this->belongsTo(KategoriProduk::class);
     }
 
-    // Relasi OOP (Association): Satu produk bisa memiliki banyak varian (1 to Many)
-    public function Varian()
+    public function varianProduks()
     {
         return $this->hasMany(VarianProduk::class);
+    }
+
+    // Total stok semua varian
+    public function getTotalStokAttribute(): int
+    {
+        return $this->varianProduks()->sum('stok_varian');
+    }
+
+    // Cek apakah stok di bawah minimum
+    public function getIsBawahMinimumAttribute(): bool
+    {
+        return $this->total_stok < $this->stok_minimum;
     }
 }

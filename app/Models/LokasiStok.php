@@ -5,32 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class KartuStok extends Model
+class LokasiStok extends Model
 {
     use HasFactory;
 
+    protected $table = 'lokasi_stoks';
+
     protected $fillable = [
         'varian_produk_id',
-        'gudang_id',
         'rak_id',
-        'nomor_transaksi',
-        'jenis_transaksi',
-        'nomor_batch',
-        'jumlah_masuk',
-        'jumlah_keluar',
-        'stok_akhir',
-        'petugas',
-        'keterangan',
+        'qty',
     ];
 
     public function varianProduk()
     {
         return $this->belongsTo(VarianProduk::class);
-    }
-
-    public function gudang()
-    {
-        return $this->belongsTo(Gudang::class);
     }
 
     public function rak()

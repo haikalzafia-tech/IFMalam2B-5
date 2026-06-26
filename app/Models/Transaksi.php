@@ -3,34 +3,62 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Transaksi extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'nomor_transaksi',
         'jenis_transaksi',
+        'gudang_id',
+        'supplier_id',
         'jumlah_barang',
-        'total_harga',
+        'nomor_po',
+        'nomor_surat_jalan',
+        'tanggal_transaksi',
+        'tanggal_kadaluarsa_po',
+        'status',
         'keterangan',
         'petugas',
         'penerima',
-        'pengirim',
-        'kontak'
+        'tujuan',
     ];
+
+    protected $casts = [
+        'tanggal_transaksi' => 'date',
+        'tanggal_kadaluarsa_po' => 'date',
+    ];
+
+    public function gudang()
+    {
+        return $this->belongsTo(Gudang::class);
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
+    }
 
     public function items()
     {
-        return $this->hasMany(TransaksiItems::class, 'transaksi_id');
+        return $this->hasMany(TransaksiItem::class);
     }
 
-    public static function generateNomorTransaksi($jenisTransaksi){
-        $prefix = $jenisTransaksi === 'pemasukan' ? 'PM' : 'PG';
-        $date = date('Ymd');
-        $lastTransaksi = self::where('nomor_transaksi', 'like', $prefix . $date . '%')
-        ->orderBy('nomor_transaksi', 'desc')
-        ->first();
-        $nomor = $lastTransaksi ? (int) substr($lastTransaksi->nomor_transaksi, -6) + 1 : 1;
-        $nomor = str_pad($nomor, 6, '0', STR_PAD_LEFT);
-        return $prefix . $date . $nomor;
+    public function returs()
+    {
+        return $this->hasMany(TransaksiRetur::class);
+    }
+
+    // Auto-generate nomor transaksi
+    public static function generateNomor(string $jenis): string
+    {
+        $prefix = $jenis === 'pemasukan' ? 'TM' : 'TK';
+        $date = now()->format('Ymd');
+        $last = self::where('jenis_transaksi', $jenis)
+            ->whereDate('created_at', today())
+            ->count() + 1;
+        return "{$prefix}-{$date}-" . str_pad($last, 4, '0', STR_PAD_LEFT);
     }
 }

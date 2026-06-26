@@ -2,113 +2,131 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\storeVarianProdukRequest;
-use App\Http\Requests\updateVarianProdukRequest;
-use App\Models\KartuStok;
-use App\Models\LaporanKenaikanHarga;
+use App\Models\Produk;
+use App\Models\Rak;
 use App\Models\VarianProduk;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class VarianProdukController extends Controller
-
 {
-    public function store(storeVarianProdukRequest $request)
+    public function store(Request $request)
     {
-        $fileName = time() . '.' . $request->file('gambar_varian')->getClientOriginalExtension();
-        Storage::disk('public')->putFileAs('varian-produk', $request->file('gambar_varian'), $fileName);
-        VarianProduk::create([
-            'produk_id' => $request->produk_id,
-            'nomor_sku' => VarianProduk::generateNomorSKU(),
-            'nama_varian' => $request->nama_varian,
-            'harga_varian' => $request->harga_varian,
-            'stok_varian' => $request->stok_varian,
-            'gambar_varian' => $fileName,
+        $request->validate([
+            'produk_id'    => 'required|exists:produks,id',
+            'nama_varian'  => 'required|string|max:255',
+            'rak_id'       => 'nullable|exists:raks,id',
+            'stok_varian'  => 'required|integer|min:0',
+            'berat'        => 'nullable|string|max:50',
+            'dimensi'      => 'nullable|string|max:100',
+            'gambar_varian' => 'nullable|image|max:2048',
         ]);
 
+        $varian = DB::transaction(function () use ($request) {
+            $data = $request->only(['produk_id', 'nama_varian', 'rak_id', 'stok_varian', 'berat', 'dimensi']);
+            $data['nomor_sku'] = $this->generateSku($request->produk_id);
 
+            if ($request->hasFile('gambar_varian')) {
+                $path = $request->file('gambar_varian')->store('varian-produk', 'public');
+                $data['gambar_varian'] = basename($path);
+            }
 
-        return response()->json(['message' => 'Varian produk berhasil ditambahkan'
-        ]);
-    }
+            $varian = VarianProduk::create($data);
 
+            // Sinkronkan kapasitas rak dengan stok awal
+            if ($request->rak_id && $request->stok_varian > 0) {
+                Rak::find($request->rak_id)->increment('kapasitas_terpakai', $request->stok_varian);
+            }
 
-    public function update(updateVarianProdukRequest $request, $varian_produk)
-    {
-        $isAdjusment = false;
-        $varian = VarianProduk::findOrFail($varian_produk);
-        $existKenaikanHarga = LaporanKenaikanHarga::where('nomor_sku', $varian->nomor_sku)->where('is_confirmed', false)->first
-            ();
-        if ($request->stok_varian != $varian->stok_varian){
-            $isAdjusment = true;
-        }
-
-        $fileName = $varian->gambar_varian;
-
-
-        if ($request->file('gambar_varian')) {
-            Storage::disk('public')->delete('varian-produk/' . $varian->gambar_varian);
-            $fileName = time() . '.' . $request->file('gambar_varian')->getClientOriginalExtension();
-            Storage::disk('public')->putFileAs('varian-produk', $request->file('gambar_varian'), $fileName);
-        }
-        $varian->update([
-            'nama_varian'   => $request->nama_varian,
-            'harga_varian'  => $request->harga_varian,
-            'stok_varian'   => $request->stok_varian,
-            'gambar_varian' => $fileName,
-        ]);
-
-        if ($existKenaikanHarga && $request->harga_varian >= $existKenaikanHarga->harga_beli) {
-            $existKenaikanHarga->update([
-                'is_confirmed' => true
-            ]);
-        }
-
-        if ($isAdjusment){
-        KartuStok::create([
-            'jenis_transaksi' => 'adjustment',
-            'nomor_sku'       => $varian->nomor_sku,
-            'stok_akhir'      => $varian->stok_varian,
-            'petugas'         => Auth::user()->name
-        ]);
-}
-
-        return response()->json(['message' => 'Varian produk berhasil diperbarui']);
-
-    }
-
-    public function destroy($varian_produk)
-    {
-        $varian = VarianProduk::findOrFail($varian_produk);
-        Storage::disk('public')->delete('varian-produk/' . $varian->gambar_varian);
-        $varian->delete();
-        toast()->success('Varian produk berhasil dihapus');
-        return redirect()->route('master-data.produk.show', $varian->produk_id);
-    }
-
-    public function getAllVarianJson()
-    {
-        // Konsistensi denganspasi di antara operator
-        $search = request()->query('search');
-        $varians = VarianProduk::with('produk')
-        ->where(function ($query) use ($search) {
-            $query->where('nama_varian', 'like', '%' . $search . '%')
-            ->orWhere('nomor_sku', 'like', '%' . $search . '%')
-            ->orWhereHas('produk', function ($query) use ($search) {
-                $query->where('nama_produk', 'like', '%' . $search . '%');
-            });
-            })->get()->map(function ($q) {
-            return [
-                'id'    => $q->id,
-                'text'  => $q->produk->nama_produk . " - " . $q->nama_varian,
-                'harga' => $q->harga_varian,
-                'stok'  => $q->stok_varian,
-                'nomor_sku' => $q->nomor_sku
-
-            ];
+            return $varian;
         });
-        return response()->json($varians);
+
+        return response()->json(['message' => 'Varian berhasil ditambahkan.', 'data' => $varian]);
+    }
+
+    public function update(Request $request, VarianProduk $varianProduk)
+    {
+        $request->validate([
+            'nama_varian'  => 'required|string|max:255',
+            'rak_id'       => 'nullable|exists:raks,id',
+            'stok_varian'  => 'required|integer|min:0',
+            'berat'        => 'nullable|string|max:50',
+            'dimensi'      => 'nullable|string|max:100',
+            'gambar_varian' => 'nullable|image|max:2048',
+        ]);
+
+        DB::transaction(function () use ($request, $varianProduk) {
+            // Simpan nilai lama sebelum diubah, untuk sinkronisasi kapasitas rak
+            $rakLamaId   = $varianProduk->rak_id;
+            $stokLama    = $varianProduk->stok_varian;
+
+            $rakBaruId = $request->rak_id;
+            $stokBaru  = (int) $request->stok_varian;
+
+            $data = $request->only(['nama_varian', 'rak_id', 'stok_varian', 'berat', 'dimensi']);
+
+            if ($request->hasFile('gambar_varian')) {
+                $path = $request->file('gambar_varian')->store('varian-produk', 'public');
+                $data['gambar_varian'] = basename($path);
+            }
+
+            $varianProduk->update($data);
+
+            // --- Sinkronisasi kapasitas rak ---
+            if ($rakLamaId == $rakBaruId) {
+                // Rak sama, hanya selisih stok yang disesuaikan
+                $selisih = $stokBaru - $stokLama;
+                if ($rakBaruId && $selisih != 0) {
+                    Rak::find($rakBaruId)->increment('kapasitas_terpakai', $selisih);
+                }
+            } else {
+                // Rak berubah: kurangi rak lama, tambah rak baru
+                if ($rakLamaId) {
+                    Rak::find($rakLamaId)?->decrement('kapasitas_terpakai', $stokLama);
+                }
+                if ($rakBaruId) {
+                    Rak::find($rakBaruId)?->increment('kapasitas_terpakai', $stokBaru);
+                }
+            }
+        });
+
+        return response()->json(['message' => 'Varian berhasil diperbarui.', 'data' => $varianProduk->fresh()]);
+    }
+
+    public function destroy(VarianProduk $varianProduk)
+    {
+        if ($varianProduk->transaksiItems()->exists()) {
+            return back()->with('error', 'Varian tidak bisa dihapus karena sudah memiliki riwayat transaksi.');
+        }
+
+        DB::transaction(function () use ($varianProduk) {
+            // Lepaskan kapasitas rak sebelum menghapus
+            if ($varianProduk->rak_id && $varianProduk->stok_varian > 0) {
+                Rak::find($varianProduk->rak_id)?->decrement('kapasitas_terpakai', $varianProduk->stok_varian);
+            }
+            $varianProduk->delete();
+        });
+
+        return redirect()->back()->with('success', 'Varian berhasil dihapus.');
+    }
+
+    // API untuk dropdown di form transaksi
+    public function getAllVarianJson(Request $request)
+    {
+        $varianProduks = VarianProduk::with('produk', 'rak.zona.gudang')
+            ->when($request->search, fn($q) => $q->where('nomor_sku', 'like', '%' . $request->search . '%')
+                ->orWhereHas('produk', fn($q2) => $q2->where('nama_produk', 'like', '%' . $request->search . '%')))
+            ->get();
+
+        return response()->json($varianProduks);
+    }
+
+    private function generateSku(int $produkId): string
+    {
+        $produk = Produk::find($produkId);
+        $prefix = Str::upper(Str::substr(Str::slug($produk->nama_produk), 0, 3));
+        $count = VarianProduk::where('produk_id', $produkId)->count() + 1;
+        return $prefix . '-' . $produk->id . '-' . str_pad($count, 3, '0', STR_PAD_LEFT);
     }
 }

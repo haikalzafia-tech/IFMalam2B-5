@@ -2,74 +2,70 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\storeKategoriProdukRequest;
-use App\Http\Requests\updateKategoriProdukRequest;
 use App\Models\KategoriProduk;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // Tambahkan ini
 
 class KategoriProdukController extends Controller
 {
-    public $pageTitle = 'Kategori Produk';
 
-    public function __construct()
+    public function index(Request $request)
     {
-        // Middleware ini akan mencegat user non-admin sebelum masuk ke fungsi store, update, dan destroy
-        $this->middleware(function ($request, $next) {
-            if (Auth::user() && Auth::user()->role === 'admin') {
-                return $next($request);
-            }
+        $perPage = 10;
 
-            // Jika bukan admin, tendang balik atau kasih error 403
-            abort(403, 'Akses Ditolak: Hanya Admin yang boleh memodifikasi Kategori Produk.');
-        })->only(['store', 'update', 'destroy']);
-        // Index tetap bisa dilihat semua orang (Staff/Admin)
+        $kategori = KategoriProduk::withCount('produks')
+            ->when($request->search, fn($q) => $q->where('nama_kategori', 'like', '%' . $request->search . '%'))
+            ->latest()
+            ->paginate($perPage)
+            ->withQueryString();
+
+        $pageTitle = 'Kategori Barang';
+
+        return view('kategori-produk.index', compact('kategori', 'pageTitle'));
     }
 
-    public function index()
+    public function store(Request $request)
     {
-        $pageTitle = $this->pageTitle;
-        $parPage = request()->query('perPage') ?? 10;
-        $search = request()->query('search');
-        $query = KategoriProduk::query();
-
-        if ($search){
-            $query->where('nama_kategori', 'like', '%'. $search . '%');
-        }
-
-        $kategori = $query->paginate($parPage)->appends(request()->query());
-
-        // SweetAlert Confirm Delete
-        confirmDelete('Hapus Kategori', 'Tidak dapat menghapus kategori produk sebelum menghapus data produk');
-
-        return view('kategori-produk.index', compact('pageTitle','kategori'));
-    }
-
-    public function store(storeKategoriProdukRequest $request)
-    {
-        // Keamanan tambahan: Pastikan data yang masuk benar-benar nama_kategori
-        KategoriProduk::create([
-            'nama_kategori' => $request->nama_kategori
+        $request->validate([
+            'nama_kategori' => 'required|string|max:255|unique:kategori_produks,nama_kategori',
+            'deskripsi'     => 'nullable|string',
         ]);
 
-        toast()->success('Kategori Produk Berhasil Ditambahkan');
-        return redirect()->route('master-data.kategori-produk.index');
+        KategoriProduk::create([
+            'kode_kategori' => $this->generateKode(),
+            'nama_kategori' => $request->nama_kategori,
+            'deskripsi'     => $request->deskripsi,
+        ]);
+
+        return redirect()->route('master-data.kategori-produk.index')->with('success', 'Kategori berhasil ditambahkan.');
     }
 
-    public function update(updateKategoriProdukRequest $request, KategoriProduk $kategori_produk)
+    public function update(Request $request, KategoriProduk $kategoriProduk)
     {
-        $kategori_produk->nama_kategori = $request->nama_kategori;
-        $kategori_produk->save();
+        $request->validate([
+            'nama_kategori' => 'required|string|max:255|unique:kategori_produks,nama_kategori,' . $kategoriProduk->id,
+            'deskripsi'     => 'nullable|string',
+        ]);
 
-        toast()->success('Kategori Produk Berhasil diubah');
-        return redirect()->route('master-data.kategori-produk.index');
+        $kategoriProduk->update($request->only(['nama_kategori', 'deskripsi']));
+
+        return redirect()->route('master-data.kategori-produk.index')->with('success', 'Kategori berhasil diperbarui.');
     }
 
-    public function destroy(KategoriProduk $kategori_produk)
+    public function destroy(KategoriProduk $kategoriProduk)
     {
-        $kategori_produk->delete();
+        if ($kategoriProduk->produks()->exists()) {
+            return back()->with('error', 'Kategori tidak bisa dihapus karena masih digunakan oleh barang.');
+        }
 
-        toast()->success('Kategori produk berhasil dihapus');
-        return redirect()->route('master-data.kategori-produk.index');
+        $kategoriProduk->delete();
+
+        return redirect()->route('master-data.kategori-produk.index')->with('success', 'Kategori berhasil dihapus.');
+    }
+
+    private function generateKode(): string
+    {
+        $last = KategoriProduk::latest()->first();
+        $num = $last ? (int) substr($last->kode_kategori, 4) + 1 : 1;
+        return 'KTG-' . str_pad($num, 3, '0', STR_PAD_LEFT);
     }
 }

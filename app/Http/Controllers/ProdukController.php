@@ -2,79 +2,90 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProdukRequest;
-use App\Http\Requests\updateProdukRequest;
-use App\Models\Produk;
 use App\Models\KategoriProduk;
+use App\Models\Produk;
+use App\Models\Rak;
 use Illuminate\Http\Request;
 
 class ProdukController extends Controller
 {
-    // OOP Property (Encapsulation): Judul halaman yang dibungkus dalam properti class
-    public $pageTitle = 'Data barang';
 
-    // [R] - READ: Menampilkan daftar produk dengan relasi, pencarian, dan paginasi
-    public function index()
+    public function index(Request $request)
     {
-        $query = Produk::query();
-        $perPage = request()->query('perPage') ?? 10;
-        $search = request()->query('search');
-        $pageTitle = $this->pageTitle;
+        $perPage = 10;
 
-        // Mengambil data kategori untuk dikirim ke modal "Tambah Produk"
-        $kategori = KategoriProduk::all();
+        $produk = Produk::with('kategoriProduk', 'varianProduks')
+            ->when($request->search, fn($q) => $q->where('nama_produk', 'like', '%' . $request->search . '%'))
+            ->latest()
+            ->paginate($perPage)
+            ->withQueryString();
 
-        // OOP Association (Eager Loading): Mengambil data produk beserta kategori relasinya
-        $query->with('kategori:id,nama_kategori');
+        $pageTitle = 'Data Barang';
 
-        // Fitur Pencarian Data
-        if($search) {
-            $query->where('nama_produk', 'like', '%' . $search . '%');
-        }
-
-        $produk = $query->orderBy('created_at','DESC')->paginate($perPage)->appends(request()->query());
-
-        // Integrasi SweetAlert OOP Component untuk konfirmasi hapus data
-        confirmDelete('Menghapus data produk akan menghapus semua varian yang ada, lanjutkan?');
-
-        return view('produk.index', compact('pageTitle', 'produk', 'kategori'));
+        return view('produk.index', compact('produk', 'pageTitle'));
     }
 
-    // [C] - CREATE: Menyimpan produk baru setelah lolos validasi OOP Form Request
-    public function store(StoreProdukRequest $request)
+    public function store(Request $request)
     {
-        $Produk = Produk::create([
-            'nama_produk' => $request->nama_produk,
-            'deskripsi_produk' => $request->deskripsi_produk,
-            'kategori_produk_id' => $request->kategori_produk_id
+        $request->validate([
+            'kategori_produk_id' => 'nullable|exists:kategori_produks,id',
+            'nama_produk'        => 'required|string|max:255',
+            'merek'              => 'nullable|string|max:255',
+            'satuan'             => 'required|string|max:50',
+            'stok_minimum'       => 'required|integer|min:0',
+            'deskripsi_produk'   => 'nullable|string',
         ]);
 
-        toast()->success('Produk berhasil ditambahkan');
-        return redirect()->route('master-data.produk.show', $Produk->id);
+        $data = $request->all();
+        $data['kode_produk'] = $this->generateKodeProduk();
+
+        Produk::create($data);
+
+        return redirect()->route('master-data.produk.index')->with('success', 'Barang berhasil ditambahkan.');
     }
 
-    // [U] - UPDATE: Memperbarui data menggunakan Dependency Injection (Produk $produk)
-    public function update(updateProdukRequest $request, Produk $produk){
-        $produk->update([
-            'nama_produk' => $request->nama_produk,
-            'deskripsi_produk' => $request->deskripsi_produk,
-            'kategori_produk_id' => $request->kategori_produk_id
-        ]);
-        toast()->success('Produk berhasil diubah');
-        return redirect()->route('master-data.produk.index');
-    }
-
-    // [R] - READ DETAIL: Menampilkan spesifikasi tunggal produk
     public function show(Produk $produk)
     {
-        $pageTitle = $this->pageTitle;
-        return view('produk.show', compact('produk', 'pageTitle'));
+        $produk->load('kategoriProduk', 'varianProduks.rak.zona.gudang');
+        $pageTitle = 'Detail Barang';
+
+        // Untuk dropdown rak di form tambah/edit varian
+        $raks = Rak::with('zona.gudang')->where('status', '!=', 'nonaktif')->get();
+
+        return view('produk.show', compact('produk', 'pageTitle', 'raks'));
     }
 
-    // [D] - DELETE: Menghapus produk menggunakan rute model binding
-    public function destroy(Produk $produk){
+    public function update(Request $request, Produk $produk)
+    {
+        $request->validate([
+            'kategori_produk_id' => 'nullable|exists:kategori_produks,id',
+            'nama_produk'        => 'required|string|max:255',
+            'merek'              => 'nullable|string|max:255',
+            'satuan'             => 'required|string|max:50',
+            'stok_minimum'       => 'required|integer|min:0',
+            'deskripsi_produk'   => 'nullable|string',
+        ]);
+
+        $produk->update($request->all());
+
+        return redirect()->route('master-data.produk.index')->with('success', 'Barang berhasil diperbarui.');
+    }
+
+    public function destroy(Produk $produk)
+    {
+        if ($produk->varianProduks()->exists()) {
+            return back()->with('error', 'Barang tidak bisa dihapus karena masih memiliki varian.');
+        }
+
         $produk->delete();
-        toast()->success('Produk berhasil dihapus');
-        return redirect()->route('master-data.produk.index');
+
+        return redirect()->route('master-data.produk.index')->with('success', 'Barang berhasil dihapus.');
+    }
+
+    private function generateKodeProduk(): string
+    {
+        $last = Produk::latest()->first();
+        $num = $last ? (int) substr($last->kode_produk, 4) + 1 : 1;
+        return 'PRD-' . str_pad($num, 4, '0', STR_PAD_LEFT);
     }
 }
