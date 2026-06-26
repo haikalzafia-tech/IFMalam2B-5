@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>{{ env('APP_NAME') }}</title>
+    <title><?php echo e(env('APP_NAME')); ?></title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
     <link rel="icon" href="{{ asset('template') }}/assets/img/SIGMA.png" type="image/x-icon" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
@@ -37,6 +37,9 @@
 
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link rel="stylesheet" href="{{ asset('template') }}/assets/css/demo.css" />
+
+    <!-- Sistem Notifikasi 3D Terpusat -->
+    <link rel="stylesheet" href="{{ asset('template') }}/assets/css/sigma-notif.css" />
 </head>
 
 <body>
@@ -107,12 +110,6 @@
                                         </li>
                                         <li>
                                             <div class="dropdown-divider"></div>
-                                            {{-- <a class="dropdown-item" href="#">My Profile</a> --}}
-                                            {{-- <a class="dropdown-item" href="#">My Balance</a> --}}
-                                            {{-- <a class="dropdown-item" href="#">Inbox</a> --}}
-                                            {{-- <div class="dropdown-divider"></div> --}}
-                                            {{-- <a class="dropdown-item" href="#">Account Setting</a> --}}
-                                            {{-- <div class="dropdown-divider"></div> --}}
                                             <div>
                                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                     document.getElementById('logout-form').submit();">
@@ -187,6 +184,17 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"
         rel="stylesheet" />
+
+    <!-- Sistem Notifikasi 3D Terpusat -->
+    <script src="{{ asset('template') }}/assets/js/sigma-notif.js"></script>
+    <script>
+        // Kirim pesan flash dari Laravel session ke JS, untuk ditampilkan sebagai toast
+        window.SIGMA_FLASH = {
+            success: @json(session('success')),
+            error: @json(session('error')),
+        };
+    </script>
+
     @stack('script')
 
 

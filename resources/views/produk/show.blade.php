@@ -62,6 +62,18 @@
         border-radius: 20px 20px 0 0;
     }
 
+    /* Badge Stok Total */
+    .stok-total-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #f8f9fa;
+        padding: 8px 18px;
+        border-radius: 50px;
+        box-shadow: 3px 3px 8px #d1d9e6, -3px -3px 8px #ffffff;
+        font-weight: 700;
+    }
+
     /* Judul Bagian Varian */
     .variant-title {
         font-weight: 800;
@@ -133,11 +145,33 @@
                             <x-meta-item label="Nama Barang" value="{{ $produk->nama_produk }}" />
                         </div>
                         <div class="col-md-6">
-                            <x-meta-item label="Kategori" value="{{ $produk->kategori->nama_kategori ?? 'Tanpa Kategori' }}" />
+                            <x-meta-item label="Kategori" value="{{ $produk->kategoriProduk->nama_kategori ?? 'Tanpa Kategori' }}" />
+                        </div>
+                        <div class="col-md-4">
+                            <x-meta-item label="Kode Produk" value="{{ $produk->kode_produk }}" />
+                        </div>
+                        <div class="col-md-4">
+                            <x-meta-item label="Merek" value="{{ $produk->merek ?: '-' }}" />
+                        </div>
+                        <div class="col-md-4">
+                            <x-meta-item label="Satuan" value="{{ $produk->satuan }}" />
                         </div>
                         <div class="col-12">
                             <div class="meta-divider" style="height: 1px; background: #eee; margin: 15px 0;"></div>
                             <x-meta-item label="Deskripsi" value="{{ $produk->deskripsi_produk ?: '-' }}" />
+                        </div>
+                        <div class="col-12">
+                            <div class="meta-divider" style="height: 1px; background: #eee; margin: 15px 0;"></div>
+                            @php $totalStok = $produk->varianProduks->sum('stok_varian'); @endphp
+                            <div class="d-flex align-items-center gap-3 flex-wrap">
+                                <span class="stok-total-badge text-{{ $totalStok < $produk->stok_minimum ? 'danger' : 'success' }}">
+                                    <i class="fas fa-cubes"></i> Total Stok: {{ number_format($totalStok) }} {{ $produk->satuan }}
+                                </span>
+                                <span class="text-muted small">Batas minimum: {{ number_format($produk->stok_minimum) }} {{ $produk->satuan }}</span>
+                                @if($totalStok < $produk->stok_minimum)
+                                <span class="badge bg-danger"><i class="fas fa-exclamation-triangle me-1"></i> Di bawah minimum</span>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -159,9 +193,8 @@
                     </div>
 
                     <div class="variant-grid">
-                        @forelse ($produk->varian as $item)
+                        @forelse ($produk->varianProduks as $item)
                             <div class="varian-item-wrapper">
-                                {{-- Komponen Card Varian (Pastikan di dalamnya sudah ada proteksi role admin untuk Edit/Hapus) --}}
                                 <x-produk.card-varian :varian="$item" />
                             </div>
                         @empty
@@ -180,7 +213,7 @@
 
 {{-- HANYA ADMIN: Load Modal Form --}}
 @if(Auth::check() && Auth::user()->role === 'admin')
-    <x-produk.form-varian />
+    <x-produk.form-varian :raks="$raks" :produk_id="$produk->id" />
 @endif
 
 @endsection
@@ -189,23 +222,26 @@
 <script>
 $(document).ready(function() {
     let modalEl = $('#modalFormVarian');
-    // Cek apakah modal ada (hanya admin yang merender modal ini)
     if (modalEl.length > 0) {
         let modal = new bootstrap.Modal(modalEl[0]);
         let $form = $('#modalFormVarian form');
+        let defaultAction = $form.attr('action');
 
         $("#btnTambahVarian").on('click', function() {
             $form[0].reset();
+            $form.attr('action', defaultAction);
             $form.find('input[name="_method"]').remove();
             $form.find('small.text-danger').text('');
-            $('#modalFormVarian .modal-title').text('Tambah Varian Baru');
+            $('#modalFormVarianLabel').text('Tambah Varian Baru');
             modal.show();
         });
 
         $(document).on('click', ".btnEditVarian", function() {
-            let nama_Varian = $(this).data('nama-varian');
-            let harga_varian = $(this).data('harga-varian');
-            let stok_varian = $(this).data('stok-varian');
+            let namaVarian = $(this).data('nama-varian');
+            let rakId = $(this).data('rak-id');
+            let stokVarian = $(this).data('stok-varian');
+            let berat = $(this).data('berat');
+            let dimensi = $(this).data('dimensi');
             let action = $(this).data('action');
 
             $form[0].reset();
@@ -215,11 +251,13 @@ $(document).ready(function() {
                 $form.append('<input type="hidden" name="_method" value="PUT">');
             }
 
-            $form.find('input[name="nama_varian"]').val(nama_Varian);
-            $form.find('input[name="harga_varian"]').val(harga_varian);
-            $form.find('input[name="stok_varian"]').val(stok_varian);
+            $form.find('select[name="rak_id"]').val(rakId);
+            $form.find('input[name="nama_varian"]').val(namaVarian);
+            $form.find('input[name="stok_varian"]').val(stokVarian);
+            $form.find('input[name="berat"]').val(berat);
+            $form.find('input[name="dimensi"]').val(dimensi);
             $form.find('small.text-danger').text('');
-            $('#modalFormVarian .modal-title').text('Edit Varian');
+            $('#modalFormVarianLabel').text('Edit Varian');
             modal.show();
         });
 
@@ -240,6 +278,7 @@ $(document).ready(function() {
                         icon: "success",
                         buttons: false,
                         timer: 1500,
+                        className: "swal-toast-3d",
                     }).then(() => {
                         location.reload();
                     })
@@ -255,16 +294,21 @@ $(document).ready(function() {
         });
     }
 
-    // Handler Hapus (Tetap di luar if modal karena menggunakan form di card)
+    // Handler Hapus
     $(document).on('click', ".formDeleteVarian button", function(e) {
         e.preventDefault();
         const form = $(this).closest('form');
         swal({
-            title: "Hapus Varian?",
-            text: "Data ini tidak bisa dikembalikan!",
-            icon: "warning",
-            buttons: ["Batal", "Ya, Hapus"],
-            dangerMode: true,
+    title: "Hapus Varian?",
+    text: "Data ini tidak bisa dikembalikan!",
+    icon: "warning",
+    buttons: {
+        batal: { text: "Batal", value: false, className: "swal-btn-cancel-3d" },
+        hapus: { text: "Ya, Hapus", value: true, className: "swal-btn-danger-3d" },
+    },
+    className: "swal-modal-3d",
+    dangerMode: true,
+
         }).then((willDelete) => {
             if (willDelete) {
                 form.submit();

@@ -44,13 +44,11 @@
         transition: all 0.3s ease;
     }
 
-   /* Pastikan baris tidak bergerak jika mengganggu elemen di dalamnya */
-.custom-table tbody tr:hover {
-    background: #ffffff !important;
-    /* Hilangkan atau kurangi translateY jika menyebabkan flickering */
-    transform: none;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-}
+    .custom-table tbody tr:hover {
+        background: #ffffff !important;
+        transform: none;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
 
     .custom-table td {
         padding: 18px 15px !important;
@@ -95,6 +93,14 @@
         border: 1px solid #dee2e6;
     }
 
+    /* Badge Stok */
+    .stok-pill {
+        padding: 5px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
     /* Responsivitas HP */
     @media (max-width: 768px) {
         .filter-wrapper .row > div {
@@ -110,14 +116,12 @@
         <div class="card main-card-3d">
             <div class="card-body">
 
-
-
                 <div class="filter-wrapper">
                     <div class="row align-items-center">
                         <div class="col-12 col-md-9">
                             <div class="row g-2">
                                 <div class="col-4 col-md-2">
-                                    <x-per-page-option />
+                                 {{-- <x-per-page-option /> --}}
                                 </div>
                                 <div class="col-6 col-md-9">
                                     <x-filter-by-field term="search" placeholder="Cari nama barang..." />
@@ -128,6 +132,9 @@
                             </div>
                         </div>
                         <div class="col-12 col-md-3 text-md-end text-center mt-3 mt-md-0">
+                            <a href="{{ route('export.produk') }}" class="btn btn-success" title="Export ke Excel">
+                                <i class="fas fa-file-excel me-1"></i> Export
+                            </a>
                             <x-produk.form-produk />
                         </div>
                     </div>
@@ -140,11 +147,16 @@
                                 <th class="text-center" style="width: 80px">NO</th>
                                 <th>Barang</th>
                                 <th>Kategori</th>
+                                <th class="text-center">Total Stok</th>
                                 <th class="text-center" style="width: 150px">Opsi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($produk as $index => $item)
+                            @php
+                                $totalStok = $item->varianProduks->sum('stok_varian');
+                                $statusStok = $totalStok <= 0 ? 'danger' : ($totalStok < $item->stok_minimum ? 'warning' : 'success');
+                            @endphp
                             <tr>
                                 <td class="text-center">
                                     <div class="badge-number mx-auto">
@@ -155,23 +167,28 @@
                                     <a href="{{ route('master-data.produk.show', $item->id) }}" class="product-link">
                                         {{ $item->nama_produk }}
                                     </a>
+                                    <br><small class="text-muted">{{ $item->kode_produk }}</small>
                                 </td>
                                 <td>
                                     <span class="category-label">
                                         <i class="fas fa-tag me-1 small"></i>
-                                        {{ $item->kategori?->nama_kategori ?? 'Tanpa Kategori' }}
+                                        {{ $item->kategoriProduk?->nama_kategori ?? 'Tanpa Kategori' }}
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="stok-pill bg-{{ $statusStok }}-subtle text-{{ $statusStok }}">
+                                        {{ number_format($totalStok) }} {{ $item->satuan }}
                                     </span>
                                 </td>
                                 <td>
                                     <div class="d-flex justify-content-center align-items-center gap-2">
                                         <x-produk.form-produk id="{{ $item->id }}" />
-                                        {{-- <x-confirm-delete id="{{ $item->id }}" route="master-data.produk.destroy" /> --}}
                                     </div>
                                 </td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="4" class="text-center py-5">
+                                <td colspan="5" class="text-center py-5">
                                     <i class="fas fa-boxes fa-3x text-light mb-3"></i>
                                     <p class="text-muted">Data barang tidak tersedia</p>
                                 </td>

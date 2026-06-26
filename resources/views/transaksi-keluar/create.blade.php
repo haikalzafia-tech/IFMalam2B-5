@@ -1,338 +1,186 @@
 @extends('layouts.kai')
-@section('page_title', $pageTitle)
+@section('page_title', 'Transaksi Keluar Baru')
+
 @section('content')
-
-<style>
-    /* Card Utama - Mengikuti image_f3da37.png */
-    .card-3d {
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-        border: none;
-        overflow: hidden;
-        background: #fff;
-    }
-
-    .header-3d {
-        background: #1a2035;
-        color: #fff;
-        padding: 20px 25px;
-        border-bottom: 5px solid #e91e63; /* Accent Keluar */
-    }
-
-    /* Group Form Identitas - Efek Inset seperti di gambar */
-    .form-identitas-wrapper {
-        background: #fff;
-        border-radius: 15px;
-        padding: 25px;
-        border: 1px solid #edf2f7;
-        margin-bottom: 35px;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-    }
-
-    .label-custom {
-        font-weight: 800;
-        color: #4a5568;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        letter-spacing: 0.5px;
-        margin-bottom: 10px;
-        display: block;
-    }
-
-    .input-3d {
-        border-radius: 10px !important;
-        border: 1px solid #e2e8f0 !important;
-        padding: 12px 15px !important;
-        background: #f8fafc !important;
-        transition: all 0.3s;
-    }
-
-    /* Tombol Tambah - Mengikuti desain solid di image_f3da37.png */
-    .btn-tambah-solid {
-        background: #1a2035;
-        color: white;
-        border: none;
-        border-radius: 10px;
-        padding: 12px 25px;
-        font-weight: 800;
-        text-transform: uppercase;
-        width: 100%;
-        letter-spacing: 1px;
-    }
-
-    /* Styling Tabel - Mengikuti image_f3da37.png */
-    .table-wrapper {
-        border: 1px solid #edf2f7;
-        border-radius: 12px;
-        overflow: hidden;
-        margin-top: 20px;
-    }
-
-    .table-custom thead {
-        background: #f8fafc;
-    }
-
-    .table-custom th {
-        text-transform: uppercase;
-        font-size: 0.7rem;
-        font-weight: 800;
-        color: #718096;
-        padding: 15px !important;
-        border: none !important;
-    }
-
-    /* Footer Section */
-    .btn-simpan-custom {
-        background: #3b5bdb;
-        color: white;
-        border: none;
-        border-radius: 10px;
-        padding: 15px 35px;
-        font-weight: 700;
-        box-shadow: 0 8px 20px rgba(59, 91, 219, 0.3);
-    }
-
-    .grand-total-box {
-        background: #1a2035;
-        color: #fff;
-        padding: 20px 30px;
-        border-radius: 15px;
-        border-left: 5px solid #ff9800;
-        min-width: 280px;
-    }
-</style>
-
-<div class="card card-3d">
-    <div class="header-3d d-flex align-items-center">
-        <i class="fas fa-shipping-fast fa-lg me-3"></i>
-        <h4 class="mb-0 fw-bold">Transaksi Barang Keluar</h4>
-    </div>
-
-    <div class="card-body p-4 p-md-5">
-        <div class="alert alert-danger" id="alert-danger" style="display:none; border-radius:10px;"></div>
-
-        <!-- Bagian 1: Identitas Penerima (Mengikuti Row 1 di Gambar) -->
-        <div class="form-identitas-wrapper">
-            <div class="row g-4 text-start">
-                <div class="col-md-4">
-                    <label class="label-custom">Nama Penerima</label>
-                    <input type="text" id="penerima" class="form-control input-3d" placeholder="Nama Penerima...">
-                </div>
-                <div class="col-md-4">
-                    <label class="label-custom">Kontak / HP</label>
-                    <input type="text" id="kontak" class="form-control input-3d" placeholder="0812xxxx">
-                </div>
-                <div class="col-md-4">
-                    <label class="label-custom">Keterangan</label>
-                    <input type="text" id="keterangan" class="form-control input-3d" placeholder="Opsional (Contoh: Urgent)">
-                </div>
+<div class="row justify-content-center">
+    <div class="col-md-11">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="card-title">Form Transaksi Barang Keluar</h4>
+                <a href="{{ route('transaksi-keluar.index') }}" class="btn btn-sm btn-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Kembali
+                </a>
             </div>
-        </div>
-
-        <!-- Bagian 2: Input Item -->
-        <div class="mb-4">
-            <h6 class="fw-bold d-flex align-items-center text-primary mb-3">
-                <i class="fas fa-plus-circle me-2"></i> Input Item Barang
-            </h6>
-            <form id="form-add-produk">
-                <div class="row g-3 align-items-end text-start">
-                    <div class="col-lg-3">
-                        <label class="label-custom">Pilih Barang</label>
-                        <select id="select-produk" class="form-control input-3d w-100"></select>
-                    </div>
-                    <div class="col-lg-2">
-                        <label class="label-custom">Stok Tersedia</label>
-                        <input type="number" id="stok" class="form-control input-3d" readonly placeholder="0">
-                    </div>
-                    <div class="col-lg-2">
-                        <label class="label-custom">Jumlah Keluar</label>
-                        <input type="number" id="qty" class="form-control input-3d" placeholder="0">
-                    </div>
-                    <div class="col-lg-2">
-                        <label class="label-custom">Harga Satuan (Rp)</label>
-                        <input type="number" id="harga" class="form-control input-3d" readonly placeholder="0">
-                    </div>
-                    <div class="col-lg-3">
-                        <button type="submit" class="btn-tambah-solid">TAMBAH</button>
-                    </div>
+            <div class="card-body">
+                @if($errors->any())
+                <div class="alert alert-danger">
+                    <ul class="mb-0">@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
                 </div>
-            </form>
-        </div>
+                @endif
+                @if(session('error'))
+                <div class="alert alert-danger">{{ session('error') }}</div>
+                @endif
 
-        <!-- Tabel Item (Sesuai image_f3da37.png) -->
-        <div class="table-wrapper">
-            <div class="table-responsive">
-                <table class="table table-hover table-custom mb-0" id="table-produk">
-                    <thead class="text-center">
-                        <tr>
-                            <th width="50">NO</th>
-                            <th class="text-start">NAMA BARANG</th>
-                            <th>QTY</th>
-                            <th class="text-end">HARGA SATUAN</th>
-                            <th class="text-end">SUB TOTAL</th>
-                            <th width="100">AKSI</th>
-                        </tr>
-                    </thead>
-                    <tbody class="align-middle">
-                        <tr id="empty-row">
-                            <td colspan="6" class="text-center py-5 text-muted font-italic">
-                                Belum ada barang yang ditambahkan.
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                <form action="{{ route('transaksi-keluar.store') }}" method="POST" id="form-keluar">
+                    @csrf
 
-        <!-- Footer: Simpan & Grand Total -->
-        <div class="row mt-5 align-items-center">
-            <div class="col-md-6 text-start">
-                <button type="button" id="btn-simpan-transaksi" class="btn-simpan-custom">
-                    <i class="fas fa-save me-2"></i> SIMPAN TRANSAKSI
-                </button>
-            </div>
-            <div class="col-md-6 d-flex justify-content-md-end mt-4 mt-md-0">
-                <div class="grand-total-box text-start">
-                    <span class="small opacity-75 fw-bold d-block mb-1">GRAND TOTAL</span>
-                    <h2 class="mb-0 fw-bold" style="color: #ff9800;">Rp <span id="grand-total">0</span></h2>
-                </div>
+                    <h6 class="text-muted mb-3"><i class="fas fa-info-circle me-1"></i> Informasi Transaksi</h6>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Gudang Asal <span class="text-danger">*</span></label>
+                            <select name="gudang_id" id="gudang_id" class="form-select" required>
+                                <option value="">-- Pilih Gudang --</option>
+                                @foreach($gudangs as $g)
+                                <option value="{{ $g->id }}">{{ $g->nama_gudang }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Penerima <span class="text-danger">*</span></label>
+                            <input type="text" name="penerima" class="form-control" placeholder="Nama penerima barang" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Tujuan</label>
+                            <input type="text" name="tujuan" class="form-control" placeholder="Tujuan pengiriman (opsional)">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Tanggal Transaksi <span class="text-danger">*</span></label>
+                            <input type="date" name="tanggal_transaksi" class="form-control" value="{{ date('Y-m-d') }}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Nomor Surat Jalan</label>
+                            <input type="text" name="nomor_surat_jalan" class="form-control" placeholder="Opsional">
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label fw-bold">Keterangan</label>
+                            <input type="text" name="keterangan" class="form-control" placeholder="Keterangan tambahan (opsional)">
+                        </div>
+                    </div>
+
+                    <h6 class="text-muted mb-3"><i class="fas fa-boxes me-1"></i> Daftar Barang Keluar</h6>
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="table-items">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="min-width:240px">Barang (SKU)</th>
+                                    <th style="min-width:160px">Rak Asal</th>
+                                    <th style="width:100px">Stok Tersedia</th>
+                                    <th style="width:90px">Qty Keluar</th>
+                                    <th style="width:140px">Catatan</th>
+                                    <th style="width:40px"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="items-body"></tbody>
+                        </table>
+                    </div>
+                    <button type="button" id="btn-add-row" class="btn btn-sm btn-outline-primary mb-4">
+                        <i class="fas fa-plus me-1"></i> Tambah Barang
+                    </button>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Simpan Transaksi</button>
+                        <button type="button" class="btn btn-secondary" onclick="SigmaNotif.konfirmasiBatal('{{ route('transaksi-keluar.index') }}')">Batal</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
 
-@endsection
-
-@push('script')
-<script>
-// Script Anda tetap berfungsi dengan ID yang sudah disesuaikan di atas
-$(document).ready(function() {
-    const numberFormat = new Intl.NumberFormat('id-ID');
-    let selectedProduk = [];
-    let currentData = null;
-
-    $('#select-produk').select2({
-        placeholder: 'Pilih Barang...',
-        theme: 'bootstrap-5',
-        ajax: {
-            url: "{{ route('get-data.varian-produk') }}",
-            dataType: 'json',
-            delay: 250,
-            data: params => ({ search: params.term }),
-            processResults: data => ({
-                results: data.map(item => ({
-                    id: item.id,
-                    text: item.text,
-                    harga: item.harga,
-                    stok: item.stok,
-                    nomor_sku: item.nomor_sku
-                }))
-            })
-        }
-    });
-
-    $('#select-produk').on('select2:select', function(e) {
-        currentData = e.params.data;
-        $('#harga').val(currentData.harga);
-        $('#stok').val(currentData.stok);
-    });
-
-    $("#form-add-produk").on("submit", function(e) {
-        e.preventDefault();
-        let qty = parseInt($("#qty").val());
-        let stok = parseInt($("#stok").val());
-
-        if (!currentData || isNaN(qty) || qty <= 0) {
-            swal("Perhatian", "Lengkapi input barang dan jumlah!", "warning");
-            return;
-        }
-
-        if (qty > stok) {
-            swal("Stok Kurang", "Stok tersedia hanya " + stok, "error");
-            return;
-        }
-
-        let existing = selectedProduk.find(i => i.nomor_sku === currentData.nomor_sku);
-        if (existing) {
-            if ((existing.qty + qty) > stok) {
-                swal("Stok Kurang", "Total qty melebihi stok!", "error");
-                return;
-            }
-            existing.qty += qty;
-            existing.subTotal = existing.qty * existing.harga;
-        } else {
-            selectedProduk.push({
-                text: currentData.text,
-                nomor_sku: currentData.nomor_sku,
-                qty: qty,
-                harga: currentData.harga,
-                subTotal: qty * currentData.harga
-            });
-        }
-
-        $("#qty").val('');
-        $('#select-produk').val(null).trigger('change');
-        $('#harga, #stok').val('');
-        currentData = null;
-        renderTable();
-    });
-
-    function renderTable() {
-        let html = "";
-        let grandTotal = 0;
-
-        if (selectedProduk.length === 0) {
-            html = `<tr><td colspan="6" class="text-center py-5 text-muted font-italic">Belum ada barang yang ditambahkan.</td></tr>`;
-        } else {
-            selectedProduk.forEach((item, index) => {
-                grandTotal += item.subTotal;
-                html += `
-                    <tr class="text-center">
-                        <td>${index + 1}</td>
-                        <td class="text-start fw-bold">${item.text}</td>
-                        <td><span class="badge bg-secondary px-3">${item.qty}</span></td>
-                        <td class="text-end">${numberFormat.format(item.harga)}</td>
-                        <td class="text-end fw-bold">${numberFormat.format(item.subTotal)}</td>
-                        <td>
-                            <button class="btn btn-link text-danger btn-delete" data-sku="${item.nomor_sku}">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </td>
-                    </tr>`;
-            });
-        }
-        $("#table-produk tbody").html(html);
-        $("#grand-total").text(numberFormat.format(grandTotal));
+@php
+    $varianListData = [];
+    foreach ($varianProduks as $v) {
+        $varianListData[] = [
+            'id' => $v->id,
+            'label' => $v->nomor_sku . ' - ' . $v->produk->nama_produk . ' (' . $v->nama_varian . ')',
+            'stok' => $v->stok_varian,
+            'rak_id' => $v->rak_id,
+            'rak_nama' => $v->rak ? $v->rak->kode_rak . ' - ' . $v->rak->nama_rak : '-',
+        ];
     }
+@endphp
+<script>
+const VARIAN_LIST = @json($varianListData);
 
-    $(document).on("click", ".btn-delete", function() {
-        let sku = $(this).data('sku');
-        selectedProduk = selectedProduk.filter(i => i.nomor_sku !== sku);
-        renderTable();
+let rowIndex = 0;
+
+function buatRowHTML(index) {
+    let options = '<option value="">-- Pilih Barang --</option>';
+    VARIAN_LIST.forEach(v => {
+        options += `<option value="${v.id}" data-stok="${v.stok}" data-rak="${v.rak_id ?? ''}" data-rak-nama="${v.rak_nama}">${v.label}</option>`;
     });
 
-    $("#btn-simpan-transaksi").on("click", function() {
-        if (selectedProduk.length === 0) {
-            swal("Kosong", "Pilih minimal satu barang!", "warning");
-            return;
+    return `
+    <tr data-row="${index}">
+        <td>
+            <select name="items[${index}][varian_produk_id]" class="form-select form-select-sm varian-select" required>
+                ${options}
+            </select>
+        </td>
+        <td>
+            <input type="text" class="form-control form-control-sm rak-display" readonly placeholder="-">
+            <input type="hidden" name="items[${index}][rak_id]" class="rak-hidden">
+        </td>
+        <td>
+            <span class="badge bg-info stok-display">-</span>
+        </td>
+        <td><input type="number" name="items[${index}][qty]" class="form-control form-control-sm qty-input" min="1" required></td>
+        <td><input type="text" name="items[${index}][catatan]" class="form-control form-control-sm" placeholder="Opsional"></td>
+        <td class="text-center">
+            <button type="button" class="btn btn-xs btn-danger btn-remove-row"><i class="fas fa-times"></i></button>
+        </td>
+    </tr>`;
+}
+
+function tambahRow() {
+    const tbody = document.getElementById('items-body');
+    tbody.insertAdjacentHTML('beforeend', buatRowHTML(rowIndex));
+    rowIndex++;
+}
+
+document.getElementById('btn-add-row').addEventListener('click', tambahRow);
+
+document.getElementById('items-body').addEventListener('click', function(e) {
+    if (e.target.closest('.btn-remove-row')) {
+        const row = e.target.closest('tr');
+        if (document.querySelectorAll('#items-body tr').length > 1) {
+            row.remove();
+        } else {
+            alert('Minimal harus ada 1 barang.');
         }
-
-        $.ajax({
-            url: "{{ route('transaksi-keluar.store') }}",
-            method: "POST",
-            data: {
-                _token: "{{ csrf_token() }}",
-                penerima: $("#penerima").val(),
-                kontak: $("#kontak").val(),
-                keterangan: $("#keterangan").val(),
-                items: selectedProduk
-            },
-            success: res => res.success && (window.location.href = res.redirect_url),
-            error: xhr => {
-                $("#alert-danger").empty().show().append(`<p class="mb-0 small">${xhr.responseJSON.message}</p>`);
-            }
-        });
-    });
+    }
 });
+
+// Saat pilih varian, otomatis isi rak & stok tersedia
+document.getElementById('items-body').addEventListener('change', function(e) {
+    if (e.target.classList.contains('varian-select')) {
+        const selected = e.target.options[e.target.selectedIndex];
+        const row = e.target.closest('tr');
+        const stok = selected.dataset.stok || 0;
+        const rakId = selected.dataset.rak || '';
+        const rakNama = selected.dataset.rakNama || '-';
+
+        row.querySelector('.stok-display').textContent = stok;
+        row.querySelector('.rak-display').value = rakNama;
+        row.querySelector('.rak-hidden').value = rakId;
+        row.querySelector('.qty-input').max = stok;
+    }
+});
+
+// Validasi qty tidak boleh lebih dari stok
+document.getElementById('form-keluar').addEventListener('submit', function(e) {
+    const rows = document.querySelectorAll('#items-body tr');
+    for (const row of rows) {
+        const qty = parseInt(row.querySelector('.qty-input').value || 0);
+        const stok = parseInt(row.querySelector('.stok-display').textContent || 0);
+        if (qty > stok) {
+            e.preventDefault();
+            alert('Qty keluar tidak boleh lebih dari stok tersedia!');
+            return false;
+        }
+    }
+});
+
+tambahRow();
 </script>
-@endpush
+@endsection

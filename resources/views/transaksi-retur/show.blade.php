@@ -1,54 +1,89 @@
 @extends('layouts.kai')
-@section('page_title', $pageTitle)
-@section('content')
-<div class="card">
-    <div class="card-header d-flex align-items-center justify-content-between">
-        <h4 class="card-title">Nomor Retur: {{ $transaksi->nomor_retur }}</h4>
-        <a href="{{ route('transaksi-retur.index') }}" class="btn btn-secondary">Kembali</a>
-    </div>
-    <div class="card-body">
-        <x-meta-item label="Pengirim" value="{{ $transaksi->transaksi->pengirim }}" />
-        <x-meta-item label="Kontak" value="{{ $transaksi->transaksi->kontak }}" />
-        <x-meta-item label="Nomor Transaksi" value="{{ $transaksi->nomor_transaksi }}" />
-        <x-meta-item label="Jumlah Harga" value="Rp. {{ number_format($transaksi->jumlah_harga) }}" />
-        <x-meta-item label="Jumlah Barang" value="{{ number_format($transaksi->jumlah_barang) }} pcs" />
-        <x-meta-item label="Petugas" value="{{ $transaksi->petugas }}" />
-        <x-meta-item label="Tanggal Retur" value="{{ $transaksi->tanggal_retur }}" />
+@section('page_title', 'Detail Transaksi Retur')
 
-            <div class="mt-5">
-            <h6>Detail Retur</h6>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Nama Barang</th>
-                        <th>Nomor Batch</th>
-                        <th>Jumlah</th>
-                        <th>Harga Satuan</th>
-                        <th>Sub Total</th>
-                        <th>Note</th>
+@section('content')
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="card-title">Info Retur</h4>
+                <a href="{{ route('transaksi-retur.index') }}" class="btn btn-sm btn-secondary"><i class="fas fa-arrow-left"></i></a>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless table-sm">
+                    <tr><td class="text-muted">No. Retur</td><td><span class="badge bg-danger">{{ $transaksiRetur->nomor_retur }}</span></td></tr>
+                    <tr><td class="text-muted">Tanggal</td><td>{{ $transaksiRetur->tanggal_retur->format('d/m/Y') }}</td></tr>
+                    <tr><td class="text-muted">Transaksi Asal</td>
+                        <td>
+                            <a href="{{ route('transaksi-masuk.show', $transaksiRetur->transaksi) }}">
+                                {{ $transaksiRetur->transaksi->nomor_transaksi }}
+                            </a>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach ($transaksi->items as $index => $item)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $item->produk }} {{ $item->varian }}</td>
-                            <td>{{ $item->nomor_batch }}</td>
-                            <td>{{ number_format($item->qty) }} pcs</td>
-                            <td>Rp. {{ number_format($item->harga) }}</td>
-                            <td>Rp. {{ number_format($item->subTotal) }}</td>
-                            <td>{{ $item->note }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th colspan="5" class="text-right"> Grand Total:</th>
-                        <th>Rp. {{ number_format($transaksi->jumlah_harga) }}</th>
+                    <tr><td class="text-muted">Jenis</td>
+                        <td>
+                            <span class="badge bg-{{ $transaksiRetur->jenis_retur == 'retur_masuk' ? 'success' : 'warning' }}">
+                                {{ $transaksiRetur->jenis_retur == 'retur_masuk' ? 'Masuk ke Gudang' : 'Keluar ke Supplier' }}
+                            </span>
+                        </td>
                     </tr>
-                </tfoot>
-            </table>
+                    <tr><td class="text-muted">Gudang</td><td>{{ $transaksiRetur->gudang->nama_gudang }}</td></tr>
+                    <tr><td class="text-muted">Supplier</td><td>{{ $transaksiRetur->supplier->nama_supplier ?? '-' }}</td></tr>
+                    <tr><td class="text-muted">Petugas</td><td>{{ $transaksiRetur->petugas }}</td></tr>
+                    <tr><td class="text-muted">Status</td>
+                        <td>
+                            @php $statusColor = ['pending'=>'secondary','diproses'=>'warning','selesai'=>'success','dibatalkan'=>'danger']; @endphp
+                            <span class="badge bg-{{ $statusColor[$transaksiRetur->status] }}">{{ ucfirst($transaksiRetur->status) }}</span>
+                        </td>
+                    </tr>
+                </table>
+                <hr>
+                <small class="text-muted">Alasan Retur:</small>
+                <p>{{ $transaksiRetur->alasan_retur }}</p>
+                @if($transaksiRetur->keterangan)
+                <small class="text-muted">Keterangan:</small>
+                <p>{{ $transaksiRetur->keterangan }}</p>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header"><h4 class="card-title">Daftar Barang Retur</h4></div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>SKU</th>
+                                <th>Barang</th>
+                                <th>No. Batch</th>
+                                <th>Qty Retur</th>
+                                <th>Kondisi</th>
+                                <th>Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($transaksiRetur->items as $item)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td><span class="badge bg-secondary">{{ $item->varianProduk->nomor_sku }}</span></td>
+                                <td>{{ $item->varianProduk->produk->nama_produk }} - {{ $item->varianProduk->nama_varian }}</td>
+                                <td>{{ $item->nomor_batch ?? '-' }}</td>
+                                <td><strong>{{ $item->qty_retur }}</strong></td>
+                                <td>
+                                    @php $kondisiColor = ['baik'=>'success','rusak'=>'danger','cacat'=>'warning','kadaluarsa'=>'dark']; @endphp
+                                    <span class="badge bg-{{ $kondisiColor[$item->kondisi_barang] }}">{{ ucfirst($item->kondisi_barang) }}</span>
+                                </td>
+                                <td>{{ $item->keterangan_kondisi ?? '-' }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

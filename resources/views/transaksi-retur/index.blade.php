@@ -1,168 +1,109 @@
-
 @extends('layouts.kai')
-@section('page_title', $pageTitle)
+@section('page_title', 'Transaksi Retur')
+
 @section('content')
-
-<style>
-    /* Reset & Base */
-    .page-inner { background: #f4f7fa; min-height: 100vh; padding: 2rem 1.5rem; }
-
-    /* Modern Card */
-    .sigma-container {
-        background: #ffffff;
-        border-radius: 16px;
-        border: 1px solid rgba(226, 232, 240, 0.8);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-        padding: 1.5rem;
-    }
-
-    /* Header Section */
-    .header-title { color: #1e293b; font-size: 1.25rem; font-weight: 800; letter-spacing: -0.5px; }
-    .accent-bar { width: 35px; height: 5px; background: #f59e0b; border-radius: 10px; margin-bottom: 8px; }
-
-    /* Filter Panel - Clean & Integrated */
-    .filter-box {
-        background: #f8fafc;
-        border-radius: 12px;
-        padding: 1.25rem;
-        margin-bottom: 2rem;
-        border: 1px solid #edf2f7;
-    }
-    .filter-label { font-size: 0.7rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 0.5rem; display: block; }
-
-    /* Input & Select Custom */
-    .form-sigma {
-        border-radius: 8px !important;
-        border: 1.5px solid #e2e8f0 !important;
-        background: #ffffff !important;
-        font-weight: 500;
-        color: #334155;
-        transition: all 0.2s;
-    }
-    .form-sigma:focus { border-color: #f59e0b !important; box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1) !important; }
-
-    /* Table Typography */
-    .table-sigma thead th {
-        background: transparent;
-        color: #64748b;
-        font-weight: 700;
-        text-transform: uppercase;
-        font-size: 0.7rem;
-        letter-spacing: 0.05em;
-        padding: 1rem;
-        border-bottom: 2px solid #f1f5f9;
-    }
-    .table-sigma tbody td { padding: 1.25rem 1rem; vertical-align: middle; color: #334155; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; }
-
-    /* Code-style Badge */
-    .badge-code {
-        font-family: 'JetBrains Mono', 'Fira Code', monospace;
-        background: #fffbeb;
-        color: #b45309;
-        padding: 4px 10px;
-        border-radius: 6px;
-        border: 1px solid #fef3c7;
-        font-weight: 600;
-        font-size: 0.85rem;
-    }
-
-    /* Price Label */
-    .price-text { font-weight: 700; color: #1e293b; }
-
-    /* Empty State */
-    .empty-state { padding: 4rem 0; color: #94a3b8; text-align: center; }
-</style>
-
-<div class="container-fluid">
-    <div class="page-inner">
-        <div class="sigma-container">
-
-            <div class="d-flex justify-content-between align-items-end mb-4">
-                <div>
-                    <div class="accent-bar"></div>
-                    <h1 class="header-title m-0">Data Retur Barang</h1>
-                    <p class="text-muted small m-0">Kelola pengembalian barang dari pengirim/supplier</p>
-                </div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="card-title">Daftar Transaksi Retur</h4>
                 <div class="d-flex gap-2">
-                    </div>
+                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalExport">
+                        <i class="fas fa-file-excel me-1"></i> Export
+                    </button>
+                    <a href="{{ route('transaksi-retur.create') }}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus me-1"></i> Retur Baru
+                    </a>
+                </div>
             </div>
-
-            <div class="filter-box">
-                <form action="{{ route('transaksi-retur.index') }}" method="GET" class="row g-3 align-items-end">
+            <div class="card-body">
+                <form method="GET" class="row g-2 mb-3">
                     <div class="col-md-2">
-                        <span class="filter-label">Tampilkan</span>
-                        <x-per-page-option class="form-sigma"/>
+                        <x-per-page-option />
                     </div>
-                    <div class="col-md-8">
-                        <span class="filter-label">Pencarian Cepat</span>
-                        <x-filter-by-field term="search" placeholder="Cari No. Retur, Transaksi, atau Pengirim..." class="form-sigma"/>
+                    <div class="col-md-3">
+                        <input type="text" name="search" class="form-control form-control-sm"
+                            placeholder="Cari nomor retur..." value="{{ request('search') }}">
                     </div>
-                    <div class="col-md-2 text-end">
-                        <x-button-reset-filter route="transaksi-retur.index" class="btn btn-light w-100 fw-bold shadow-sm" style="height: 42px; border-radius: 8px;"/>
+                    <div class="col-md-3">
+                        <select name="jenis_retur" class="form-select form-select-sm">
+                            <option value="">-- Semua Jenis --</option>
+                            <option value="retur_masuk" {{ request('jenis_retur') == 'retur_masuk' ? 'selected' : '' }}>Retur Masuk (ke Gudang)</option>
+                            <option value="retur_keluar" {{ request('jenis_retur') == 'retur_keluar' ? 'selected' : '' }}>Retur Keluar (ke Supplier)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select name="gudang_id" class="form-select form-select-sm">
+                            <option value="">-- Semua Gudang --</option>
+                            @foreach($gudangs as $g)
+                            <option value="{{ $g->id }}" {{ request('gudang_id') == $g->id ? 'selected' : '' }}>{{ $g->nama_gudang }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select name="status" class="form-select form-select-sm">
+                            <option value="">-- Semua Status --</option>
+                            <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="diproses" {{ request('status') == 'diproses' ? 'selected' : '' }}>Diproses</option>
+                            <option value="selesai" {{ request('status') == 'selesai' ? 'selected' : '' }}>Selesai</option>
+                            <option value="dibatalkan" {{ request('status') == 'dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-sm btn-secondary w-100">Filter</button>
                     </div>
                 </form>
-            </div>
 
-            <div class="table-responsive">
-                <table class="table table-sigma">
-                    <thead>
-                        <tr>
-                            <th width="50" class="text-center">#</th>
-                            <th>No. Retur</th>
-                            <th>Referensi Transaksi</th>
-                            <th>Nama Pengirim</th>
-                            <th>Item</th>
-                            <th class="text-end">Total Harga</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($retur as $index => $item)
-                        <tr>
-                            <td class="text-center text-muted fw-bold">{{ $index + 1 }}</td>
-                            <td>
-                                <a href="{{ route('transaksi-retur.show', $item->nomor_retur) }}" class="text-decoration-none">
-                                    <span class="badge-code">{{ $item->nomor_retur }}</span>
-                                </a>
-                            </td>
-                            <td>
-                                <span class="text-muted small fw-bold">{{ $item->nomor_transaksi }}</span>
-                            </td>
-                            <td>
-                                <div class="fw-bold">{{ $item->transaksi->pengirim }}</div>
-                            </td>
-                            <td>
-                                <span class="fw-bold">{{ number_format($item->jumlah_barang, 0) }}</span>
-                                <span class="text-muted small">pcs</span>
-                            </td>
-                            <td class="text-end">
-                                <span class="price-text text-dark">Rp{{ number_format($item->jumlah_harga, 0, ',', '.') }}</span>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="6">
-                                <div class="empty-state">
-                                    <i class="fas fa-search fa-2x mb-3 opacity-25"></i>
-                                    <p class="m-0">Tidak ada data retur yang ditemukan.</p>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="mt-4 d-flex justify-content-between align-items-center">
-                <div class="text-muted small">
-                    Menampilkan {{ $retur->count() }} data dari total {{ $retur->total() }}
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>No. Retur</th>
+                                <th>Tanggal</th>
+                                <th>Transaksi Asal</th>
+                                <th>Jenis</th>
+                                <th>Gudang</th>
+                                <th>Alasan</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($returs as $r)
+                            <tr>
+                                <td>{{ $returs->firstItem() + $loop->index }}</td>
+                                <td><span class="badge bg-danger">{{ $r->nomor_retur }}</span></td>
+                                <td>{{ $r->tanggal_retur->format('d/m/Y') }}</td>
+                                <td>{{ $r->transaksi->nomor_transaksi }}</td>
+                                <td>
+                                    <span class="badge bg-{{ $r->jenis_retur == 'retur_masuk' ? 'success' : 'warning' }}">
+                                        {{ $r->jenis_retur == 'retur_masuk' ? 'Masuk ke Gudang' : 'Keluar ke Supplier' }}
+                                    </span>
+                                </td>
+                                <td>{{ $r->gudang->nama_gudang }}</td>
+                                <td>{{ Str::limit($r->alasan_retur, 30) }}</td>
+                                <td>
+                                    @php $statusColor = ['pending'=>'secondary','diproses'=>'warning','selesai'=>'success','dibatalkan'=>'danger']; @endphp
+                                    <span class="badge bg-{{ $statusColor[$r->status] }}">{{ ucfirst($r->status) }}</span>
+                                </td>
+                                <td>
+                                    <a href="{{ route('transaksi-retur.show', $r) }}" class="btn btn-xs btn-info">
+                                        <i class="fas fa-eye"></i> Detail
+                                    </a>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr><td colspan="9" class="text-center text-muted">Belum ada transaksi retur.</td></tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
-                <div>
-                    {{ $retur->links() }}
-                </div>
+                {{ $returs->links() }}
             </div>
-
         </div>
     </div>
 </div>
 
+<x-export-modal route="export.transaksi-retur" judul="Export Transaksi Retur" />
 @endsection

@@ -27,28 +27,35 @@
             @endif
         </div>
 
-
         <div class="modal fade" id="formKategori{{ $id ?? '' }}" data-bs-backdrop="static" data-bs-keyboard="false"
             tabindex="-1" aria-labelledby="formKategori" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form action="{{ $action }}" method="POST">
+                    <form action="{{ $action ?? route('master-data.kategori-produk.store') }}" method="POST">
                         @csrf
                         @if ($id)
                             @method('PUT')
                         @endif
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="formKategoriLabel">
-                                {{ $id ? 'Edit Kategori barang' : 'Tambah Kategori Barang' }}
+                                {{ $id ? 'Edit Kategori Barang' : 'Tambah Kategori Barang' }}
                             </h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-start">
-                            <div class="form-group">
+                            <div class="form-group mb-3">
                                 <label for="nama_kategori" class="form-label fw-bold">Nama Kategori</label>
                                 <input type="text" name="nama_kategori" id="nama_kategori" class="form-control"
                                     value="{{ old('nama_kategori', $nama_kategori ?? '') }}" placeholder="Masukkan nama kategori" required>
                                 @error('nama_kategori')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="deskripsi" class="form-label fw-bold">Deskripsi</label>
+                                <textarea name="deskripsi" id="deskripsi" class="form-control" rows="3"
+                                    placeholder="Deskripsi singkat kategori (opsional)">{{ old('deskripsi', $deskripsi ?? '') }}</textarea>
+                                @error('deskripsi')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
@@ -63,12 +70,10 @@
         </div>
 
    @else
-        {{-- Pesan untuk Staff/User Biasa: Hanya bisa melihat data --}}
         <span class="badge bg-info text-white"><i class="fas fa-lock me-1"></i> Khusus (Admin)</span>
     @endif
 </div>
 
-{{-- SCRIPT SWEETALERT (Taruh di bawah atau di file master layout) --}}
 @push('script')
 <script>
     function confirmDelete(id) {

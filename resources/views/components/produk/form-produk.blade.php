@@ -7,10 +7,8 @@
             data-bs-toggle="modal"
             data-bs-target="#formProduk{{ $id ?? '' }}">
             @if($id)
-                {{-- Ini tombol Edit --}}
                 <i class="fas fa-edit"></i>
             @else
-                {{-- Ini tombol Barang Baru --}}
                 <i class="fas fa-plus me-1"></i>
                 <span>Barang Baru</span>
             @endif
@@ -56,10 +54,35 @@
                                     value="{{ old('nama_produk', $nama_produk ?? '') }}" required>
                             </div>
 
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group mb-3">
+                                        <label for="merek" class="form-label fw-bold">Merek</label>
+                                        <input type="text" name="merek" id="merek" class="form-control"
+                                            value="{{ old('merek', $merek ?? '') }}">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group mb-3">
+                                        <label for="satuan" class="form-label fw-bold">Satuan</label>
+                                        <input type="text" name="satuan" id="satuan" class="form-control"
+                                            placeholder="pcs, kg, karton, dll" value="{{ old('satuan', $satuan ?? '') }}" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Stok Minimum --}}
+                            <div class="form-group mb-3">
+                                <label for="stok_minimum" class="form-label fw-bold">Stok Minimum</label>
+                                <input type="number" name="stok_minimum" id="stok_minimum" class="form-control"
+                                    placeholder="Batas minimum untuk alert stok menipis"
+                                    value="{{ old('stok_minimum', $stok_minimum ?? 0) }}" required>
+                            </div>
+
                             {{-- Deskripsi --}}
                             <div class="form-group mb-3">
                                 <label for="deskripsi_produk" class="form-label fw-bold">Deskripsi</label>
-                                <textarea name="deskripsi_produk" id="deskripsi_produk" cols="30" rows="5"
+                                <textarea name="deskripsi_produk" id="deskripsi_produk" cols="30" rows="4"
                                     class="form-control">{{ old('deskripsi_produk', $deskripsi_produk ?? '') }}</textarea>
                             </div>
                         </div>
@@ -73,16 +96,15 @@
             </div>
         </div>
 
-        {{-- 3. TOMBOL HAPUS (Hanya Admin yang punya akses) --}}
+        {{-- 3. TOMBOL HAPUS --}}
         @if($id)
             <x-confirm-delete
-                route="master-data.kategori-produk.destroy"
+                route="master-data.produk.destroy"
                 :id="$id"
             />
         @endif
 
     @else
-        {{-- Pesan untuk Staff/User Biasa: Hanya bisa melihat data --}}
         <span class="badge bg-info text-white"><i class="fas fa-lock me-1"></i> Khusus (Admin)</span>
     @endif
 </div>

@@ -1,373 +1,194 @@
 @extends('layouts.kai')
-@section('page_title', $pageTitle)
+@section('page_title', 'Transaksi Masuk Baru')
+
 @section('content')
-
-<style>
-    /* Latar belakang & Efek 3D */
-    .page-inner {
-        background: #f1f3f7;
-        perspective: 1000px;
-    }
-
-    .card-3d {
-        background: #ffffff;
-        border: none;
-        border-radius: 20px;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-        transition: transform 0.4s ease;
-        border: 1px solid rgba(255,255,255,0.6);
-        overflow: hidden;
-    }
-
-    .header-3d {
-        background: #1a2035;
-        color: #fff;
-        padding: 25px;
-        border-bottom: 4px solid #f99f2a;
-    }
-
-    /* Form Styling */
-    .form-group-3d {
-        background: #fbfcfe;
-        border-radius: 15px;
-        padding: 25px;
-        box-shadow: inset 0 2px 10px rgba(0,0,0,0.03);
-        border: 1px solid #e9ecef;
-    }
-
-    .label-3d {
-        font-weight: 800;
-        color: #495057;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-size: 0.72rem;
-        margin-bottom: 8px;
-        display: block;
-    }
-
-    .input-3d {
-        border-radius: 10px !important;
-        border: 1px solid #ced4da !important;
-        padding: 12px 15px !important;
-        background-color: #f8fafc !important;
-        transition: all 0.3s;
-    }
-
-    .input-3d:focus {
-        border-color: #4e73df !important;
-        background-color: #fff !important;
-        box-shadow: 0 0 12px rgba(78, 115, 223, 0.15) !important;
-    }
-
-    /* Tombol-tombol */
-    .btn-3d-add {
-        background: linear-gradient(145deg, #1d253c, #161c2e);
-        color: white;
-        border: none;
-        border-radius: 10px;
-        padding: 12px;
-        font-weight: 800;
-        width: 100%;
-        box-shadow: 0 4px 0 #000;
-        transition: all 0.1s;
-    }
-
-    .btn-3d-add:active {
-        transform: translateY(4px);
-        box-shadow: 0 0 0 #000;
-    }
-
-    .btn-3d-save {
-        background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
-        border: none;
-        border-radius: 12px;
-        padding: 15px 40px;
-        font-weight: 800;
-        color: white;
-        box-shadow: 0 10px 20px rgba(78, 115, 223, 0.3);
-        transition: 0.3s;
-    }
-
-    .btn-3d-save:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 25px rgba(78, 115, 223, 0.4);
-        color: white;
-    }
-
-    /* Tabel Styling */
-    .table-container-3d {
-        border-radius: 15px;
-        overflow: hidden;
-        border: 1px solid #e9ecef;
-        background: white;
-    }
-
-    .table-3d thead th {
-        background: #f8f9fa;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        color: #6c757d;
-        padding: 15px;
-        border: none;
-    }
-
-    /* Summary Box */
-    .total-box-3d {
-        background: #1a2035;
-        color: #fff;
-        padding: 20px 30px;
-        border-radius: 15px;
-        border-left: 6px solid #f99f2a;
-        min-width: 280px;
-    }
-
-    .font-mono { font-family: 'Courier New', Courier, monospace; }
-</style>
-
-<div class="card card-3d">
-    <div class="header-3d">
-        <h4 class="mb-0 fw-bold"><i class="fas fa-truck-loading me-2"></i> Transaksi Barang Masuk</h4>
-    </div>
-
-    <div class="card-body p-4 p-md-5">
-        <!-- Section: Data Header -->
-        <div class="form-group-3d mb-5">
-            <div class="row g-3">
-                <div class="col-md-4">
-                    <label class="label-3d">Nama Pengirim</label>
-                    <input type="text" id="pengirim" class="form-control input-3d" placeholder="PT. Nama Supplier">
+<div class="row justify-content-center">
+    <div class="col-md-11">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="card-title">Form Transaksi Barang Masuk</h4>
+                <a href="{{ route('transaksi-masuk.index') }}" class="btn btn-sm btn-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Kembali
+                </a>
+            </div>
+            <div class="card-body">
+                @if($errors->any())
+                <div class="alert alert-danger">
+                    <ul class="mb-0">@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
                 </div>
-                <div class="col-md-4">
-                    <label class="label-3d">Kontak / HP</label>
-                    <input type="text" id="kontak" class="form-control input-3d" placeholder="0812xxxx">
-                </div>
-                <div class="col-md-4">
-                    <label class="label-3d">Keterangan</label>
-                    <input type="text" id="keterangan" class="form-control input-3d" placeholder="Opsional (Contoh: Urgent)">
-                </div>
-            </div>
-        </div>
+                @endif
 
-        <!-- Section: Input Item -->
-        <h6 class="fw-bold mb-3"><i class="fas fa-plus-circle text-primary me-1"></i> Input Item Barang</h6>
-        <form id="form-add-produk" class="row g-3 align-items-end">
-            <div class="col-lg-4">
-                <label class="label-3d">Pilih Barang</label>
-                <select id="select-produk" class="form-control w-100"></select>
-            </div>
-            <div class="col-lg-2">
-                <label class="label-3d">Nomor Batch</label>
-                <input type="text" id="nomor_batch" class="form-control input-3d" placeholder="BCH-001">
-            </div>
-            <div class="col-lg-2">
-                <label class="label-3d">Jumlah Barang</label>
-                <input type="number" id="qty" class="form-control input-3d" placeholder="0" min="1">
-            </div>
-            <div class="col-lg-2">
-                <label class="label-3d">Harga Satuan (Rp)</label>
-                <input type="number" id="harga" class="form-control input-3d" placeholder="0">
-            </div>
-            <div class="col-lg-2">
-                <button type="submit" class="btn-3d-add">TAMBAH</button>
-            </div>
-        </form>
+                <form action="{{ route('transaksi-masuk.store') }}" method="POST" id="form-masuk">
+                    @csrf
 
-        <!-- Section: Tabel List -->
-        <div class="table-container-3d mt-5">
-            <div class="table-responsive">
-                <table class="table table-hover table-3d mb-0" id="table-produk">
-                    <thead>
-                        <tr class="text-center">
-                            <th width="60">NO</th>
-                            <th class="text-start">NAMA BARANG</th>
-                            <th>BATCH</th>
-                            <th>JUMLAH</th>
-                            <th class="text-end">HARGA SATUAN</th>
-                            <th class="text-end">SUB TOTAL</th>
-                            <th width="80">AKSI</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Data diisi via JS -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                    {{-- Info Transaksi --}}
+                    <h6 class="text-muted mb-3"><i class="fas fa-info-circle me-1"></i> Informasi Transaksi</h6>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Gudang Tujuan <span class="text-danger">*</span></label>
+                            <select name="gudang_id" id="gudang_id" class="form-select" required>
+                                <option value="">-- Pilih Gudang --</option>
+                                @foreach($gudangs as $g)
+                                <option value="{{ $g->id }}">{{ $g->nama_gudang }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Supplier</label>
+                            <select name="supplier_id" class="form-select select2">
+                                <option value="">-- Tanpa Supplier --</option>
+                                @foreach($suppliers as $s)
+                                <option value="{{ $s->id }}">{{ $s->kode_supplier }} - {{ $s->nama_supplier }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Tanggal Transaksi <span class="text-danger">*</span></label>
+                            <input type="date" name="tanggal_transaksi" class="form-control" value="{{ date('Y-m-d') }}" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Nomor PO</label>
+                            <input type="text" name="nomor_po" class="form-control" placeholder="Opsional">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Nomor Surat Jalan</label>
+                            <input type="text" name="nomor_surat_jalan" class="form-control" placeholder="Opsional">
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label fw-bold">Keterangan</label>
+                            <input type="text" name="keterangan" class="form-control" placeholder="Keterangan tambahan (opsional)">
+                        </div>
+                    </div>
 
-        <!-- Section: Footer & Simpan -->
-        <div class="row mt-5 align-items-center">
-            <div class="col-md-6 order-2 order-md-1">
-                <button type="button" id="btn-save-transaksi" class="btn-3d-save">
-                    <i class="fas fa-save me-2"></i> SIMPAN TRANSAKSI
-                </button>
-            </div>
-            <div class="col-md-6 order-1 order-md-2 d-flex justify-content-md-end mb-4 mb-md-0">
-                <div class="total-box-3d">
-                    <span class="small opacity-75 d-block fw-bold mb-1">GRAND TOTAL</span>
-                    <h2 class="mb-0 fw-bold text-warning font-mono">Rp <span id="grand-total">0</span></h2>
-                </div>
+                    {{-- Items Barang --}}
+                    <h6 class="text-muted mb-3"><i class="fas fa-boxes me-1"></i> Daftar Barang Masuk</h6>
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="table-items">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="min-width:220px">Barang (SKU)</th>
+                                    <th style="min-width:160px">Rak Tujuan</th>
+                                    <th style="width:90px">Qty</th>
+                                    <th style="min-width:140px">No. Batch</th>
+                                    <th style="min-width:140px">Tgl Produksi</th>
+                                    <th style="min-width:140px">Tgl Kadaluarsa</th>
+                                    <th style="width:110px">Kondisi</th>
+                                    <th style="width:40px"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="items-body">
+                                {{-- Row template akan di-clone via JS --}}
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" id="btn-add-row" class="btn btn-sm btn-outline-primary mb-4">
+                        <i class="fas fa-plus me-1"></i> Tambah Barang
+                    </button>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Simpan Transaksi</button>
+                        <button type="button" class="btn btn-secondary" onclick="SigmaNotif.konfirmasiBatal('{{ route('transaksi-masuk.index') }}')">Batal</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
 
-@endsection
-
-@push('script')
+{{-- Data varian produk untuk dropdown, di-render sebagai JSON --}}
 <script>
-$(document).ready(function() {
-    const numberFormat = new Intl.NumberFormat('id-ID');
-    let selectedOption = {};
-    let selectedProduk = [];
+const VARIAN_LIST = @json($varianProduks->map(fn($v) => [
+    'id' => $v->id,
+    'label' => $v->nomor_sku . ' - ' . $v->produk->nama_produk . ' (' . $v->nama_varian . ')',
+    'rak_id' => $v->rak_id,
+]));
 
-    // 1. Inisialisasi Select2 Modern
-    $('#select-produk').select2({
-        placeholder: 'Pilih Barang...',
-        theme: 'bootstrap-5',
-        ajax: {
-            url: "{{ route('get-data.varian-produk') }}",
-            dataType: 'json',
-            delay: 250,
-            data: function(params) { return { search: params.term }; },
-            processResults: function(data) {
-                return {
-                    results: data.map((item) => ({
-                        id: item.id,
-                        text: item.text,
-                        nomor_sku: item.nomor_sku
-                    }))
-                }
-            }
-        }
+let rowIndex = 0;
+
+function buatRowHTML(index) {
+    let options = '<option value="">-- Pilih Barang --</option>';
+    VARIAN_LIST.forEach(v => {
+        options += `<option value="${v.id}">${v.label}</option>`;
     });
 
-    $('#select-produk').on('select2:select', function(e) {
-        selectedOption = e.params.data;
-    });
+    return `
+    <tr data-row="${index}">
+        <td>
+            <select name="items[${index}][varian_produk_id]" class="form-select form-select-sm" required>
+                ${options}
+            </select>
+        </td>
+        <td>
+            <select name="items[${index}][rak_id]" class="form-select form-select-sm rak-select" required>
+                <option value="">-- Pilih Gudang Dulu --</option>
+            </select>
+        </td>
+        <td><input type="number" name="items[${index}][qty]" class="form-control form-control-sm" min="1" required></td>
+        <td><input type="text" name="items[${index}][nomor_batch]" class="form-control form-control-sm" placeholder="Opsional"></td>
+        <td><input type="date" name="items[${index}][tanggal_produksi]" class="form-control form-control-sm"></td>
+        <td><input type="date" name="items[${index}][tanggal_kadaluarsa]" class="form-control form-control-sm"></td>
+        <td>
+            <select name="items[${index}][kondisi]" class="form-select form-select-sm">
+                <option value="baik">Baik</option>
+                <option value="rusak">Rusak</option>
+                <option value="cacat">Cacat</option>
+            </select>
+        </td>
+        <td class="text-center">
+            <button type="button" class="btn btn-xs btn-danger btn-remove-row"><i class="fas fa-times"></i></button>
+        </td>
+    </tr>`;
+}
 
-    // 2. Logika Tambah Item ke Array & Tabel
-    $("#form-add-produk").on("submit", function(e) {
-        e.preventDefault();
+function tambahRow() {
+    const tbody = document.getElementById('items-body');
+    tbody.insertAdjacentHTML('beforeend', buatRowHTML(rowIndex));
+    rowIndex++;
+    updateRakOptions();
+}
 
-        let qty = parseInt($("#qty").val()) || 0;
-        let harga = parseInt($("#harga").val()) || 0;
-        let batch = $("#nomor_batch").val().trim().toUpperCase();
+function updateRakOptions() {
+    loadRakByGudang();
+}
 
-        if (!selectedOption.id || qty <= 0 || harga <= 0 || batch === "") {
-            swal({ icon: 'warning', title: 'Data Tidak Lengkap', text: 'Harap isi Barang, Batch, Jumlah, dan Harga!' });
-            return;
-        }
+// Karena rak terkait ke zona (bukan langsung gudang), kita ambil semua rak by gudang via endpoint:
+async function loadRakByGudang() {
+    const gudangId = document.getElementById('gudang_id').value;
+    const rakSelects = document.querySelectorAll('.rak-select');
 
-        // Cek jika barang & batch yang sama sudah diinput
-        let existingItem = selectedProduk.find(item =>
-            item.nomor_sku === selectedOption.nomor_sku && item.nomor_batch === batch
-        );
-
-        if (existingItem) {
-            existingItem.qty += qty;
-            existingItem.subTotal = existingItem.qty * existingItem.harga;
-        } else {
-            selectedProduk.push({
-                text: selectedOption.text,
-                nomor_sku: selectedOption.nomor_sku,
-                qty: qty,
-                harga: harga,
-                nomor_batch: batch,
-                subTotal: qty * harga,
-            });
-        }
-
-        // Reset Input Form
-        $("#select-produk").val(null).trigger('change');
-        $("#qty, #harga, #nomor_batch").val('');
-        selectedOption = {};
-        renderTable();
-    });
-
-    // 3. Render Tabel HTML
-    function renderTable() {
-        let tableBody = $("#table-produk tbody");
-        tableBody.empty();
-
-        if (selectedProduk.length === 0) {
-            tableBody.append(`<tr><td colspan="7" class="text-center py-5 text-muted fw-bold">Belum ada barang yang ditambahkan.</td></tr>`);
-        } else {
-            selectedProduk.forEach((item, index) => {
-                tableBody.append(`
-                    <tr class="text-center align-middle">
-                        <td class="text-muted font-mono small">${index + 1}</td>
-                        <td class="text-start">
-                            <div class="fw-bold text-dark">${item.text}</div>
-                            <small class="text-muted font-mono">${item.nomor_sku}</small>
-                        </td>
-                        <td><span class="badge bg-light text-dark border font-mono px-2">${item.nomor_batch}</span></td>
-                        <td><span class="badge bg-primary px-3 rounded-pill">${item.qty}</span></td>
-                        <td class="text-end font-mono">Rp ${numberFormat.format(item.harga)}</td>
-                        <td class="text-end fw-bold text-primary font-mono">Rp ${numberFormat.format(item.subTotal)}</td>
-                        <td>
-                            <button type="button" class="btn btn-sm btn-link text-danger btn-delete"
-                                    data-sku="${item.nomor_sku}" data-batch="${item.nomor_batch}">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `);
-            });
-        }
-
-        let grandTotal = selectedProduk.reduce((total, item) => total + item.subTotal, 0);
-        $("#grand-total").text(numberFormat.format(grandTotal));
+    if (!gudangId) {
+        rakSelects.forEach(sel => sel.innerHTML = '<option value="">-- Pilih Gudang Dulu --</option>');
+        return;
     }
 
-    // 4. Hapus Item
-    $(document).on("click", ".btn-delete", function() {
-        let sku = $(this).data('sku');
-        let batch = $(this).data('batch');
-        selectedProduk = selectedProduk.filter(item =>
-            !(item.nomor_sku === sku && item.nomor_batch === batch)
-        );
-        renderTable();
-    });
-
-    // 5. Simpan ke Database via AJAX
-    $("#btn-save-transaksi").on("click", function() {
-        if (selectedProduk.length === 0) {
-            swal({ icon: 'error', title: 'Gagal', text: 'Wajib mengisi minimal 1 barang!' });
-            return;
-        }
-
-        let btn = $(this);
-        btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Proses...');
-
-        $.ajax({
-            method: "POST",
-            url: "{{ route('transaksi-masuk.store') }}",
-            data: {
-                _token: "{{ csrf_token() }}",
-                items: selectedProduk,
-                pengirim: $("#pengirim").val(),
-                kontak: $("#kontak").val(),
-                keterangan: $("#keterangan").val(),
-            },
-            success: function(response) {
-                if (response.success) {
-                    swal({ icon: 'success', title: 'Berhasil', text: 'Transaksi berhasil disimpan!' })
-                    .then(() => window.location.href = response.redirect_url);
-                } else {
-                    swal({ icon: 'error', title: 'Gagal', text: response.message });
-                    btn.prop('disabled', false).html('<i class="fas fa-save me-2"></i> SIMPAN TRANSAKSI');
-                }
-            },
-            error: function(xhr) {
-                let errorMsg = xhr.responseJSON ? xhr.responseJSON.message : "Kesalahan server.";
-                swal({ icon: 'error', title: 'Error', text: errorMsg });
-                btn.prop('disabled', false).html('<i class="fas fa-save me-2"></i> SIMPAN TRANSAKSI');
-            }
+    try {
+        const res = await fetch(`{{ route('master-data.rak.by-gudang') }}?gudang_id=${gudangId}`);
+        const raks = await res.json();
+        let opts = '<option value="">-- Pilih Rak --</option>';
+        raks.forEach(r => {
+            opts += `<option value="${r.id}">${r.kode_rak} - ${r.nama_rak} (sisa: ${r.sisa_kapasitas})</option>`;
         });
-    });
+        rakSelects.forEach(sel => sel.innerHTML = opts);
+    } catch (e) {
+        console.error('Gagal load rak', e);
+    }
+}
 
-    renderTable();
+document.getElementById('gudang_id').addEventListener('change', loadRakByGudang);
+document.getElementById('btn-add-row').addEventListener('click', tambahRow);
+
+document.getElementById('items-body').addEventListener('click', function(e) {
+    if (e.target.closest('.btn-remove-row')) {
+        const row = e.target.closest('tr');
+        if (document.querySelectorAll('#items-body tr').length > 1) {
+            row.remove();
+        } else {
+            alert('Minimal harus ada 1 barang.');
+        }
+    }
 });
+
+// Inisialisasi 1 row pertama
+tambahRow();
 </script>
-@endpush
+@endsection

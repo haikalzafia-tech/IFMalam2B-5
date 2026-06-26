@@ -3,10 +3,9 @@
 @section('content')
 <style>
     :root {
-        --sigma-blue-dark: #1E3A8A;   /* Biru Tua Logo */
-        --sigma-blue-main: #2b59c3;   /* Biru Utama Logo */
-        --sigma-blue-light: #40A9FF;  /* Biru Muda Logo */
-        /* Warna background disesuaikan agar senada dengan biru logo (Biru sangat pucat) */
+        --sigma-blue-dark: #1E3A8A;
+        --sigma-blue-main: #2b59c3;
+        --sigma-blue-light: #40A9FF;
         --sigma-bg: #f0f4f9;
         --white: #ffffff;
     }
@@ -16,12 +15,10 @@
         min-height: 100vh;
     }
 
-    /* Card Utama dengan Efek Neumorphism yang Senada dengan BG */
     .card-3d {
         background: var(--sigma-bg) !important;
         border-radius: 20px !important;
         border: none !important;
-        /* Shadow disesuaikan dengan tone warna bg baru */
         box-shadow: 8px 8px 16px #d1d9e6,
                    -8px -8px 16px #ffffff !important;
         transition: all 0.3s ease-in-out;
@@ -33,7 +30,6 @@
                    -12px -12px 20px #ffffff !important;
     }
 
-    /* Wadah Icon dengan Efek Inset yang konsisten */
     .icon-box-3d {
         width: 55px;
         height: 55px;
@@ -47,7 +43,6 @@
         color: var(--sigma-blue-main);
     }
 
-    /* Card Glassmorphism dengan warna biru tipis */
     .glass-card {
         background: rgba(255, 255, 255, 0.7) !important;
         backdrop-filter: blur(10px);
@@ -74,6 +69,19 @@
         border: none;
         padding: 8px 12px;
         border-radius: 8px;
+    }
+
+    .gudang-mini-card {
+        background: var(--white);
+        border-radius: 14px;
+        padding: 14px 16px;
+        box-shadow: 3px 3px 8px #d1d9e6, -3px -3px 8px #ffffff;
+    }
+
+    .progress-thin {
+        height: 8px;
+        border-radius: 10px;
+        background: #eef1f6;
     }
 </style>
 
@@ -113,7 +121,7 @@
                                 <i class="fas fa-exclamation-triangle text-danger"></i>
                             </div>
                             <div class="ms-3">
-                                <p class="text-danger mb-0 small fw-bold">Stok Menipis digudang</p>
+                                <p class="text-danger mb-0 small fw-bold">Stok Menipis</p>
                                 <h3 class="fw-bold mb-0 text-danger">{{ $stokMenipis ?? '0' }}</h3>
                             </div>
                         </div>
@@ -156,27 +164,59 @@
             </div>
         </div>
 
+        <!-- Kapasitas Gudang: pengganti fokus harga -> fokus fisik gudang -->
         <div class="row mt-2">
-            <div class="col-md-8 mb-4">
+            <div class="col-md-4 mb-4">
+                <div class="card glass-card h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3" style="color: var(--sigma-blue-dark)">
+                            <i class="fas fa-warehouse me-2" style="color: var(--sigma-blue-main)"></i>Kapasitas Gudang
+                        </h5>
+                        <div class="text-center mb-3">
+                            <h2 class="fw-bold" style="color: var(--sigma-blue-main)">{{ $persentaseKapasitas }}%</h2>
+                            <p class="text-muted small mb-0">{{ number_format($totalTerpakai) }} / {{ number_format($totalKapasitas) }} unit terpakai</p>
+                        </div>
+                        <div class="progress-thin mb-4">
+                            <div class="progress-bar bg-{{ $persentaseKapasitas >= 90 ? 'danger' : ($persentaseKapasitas >= 70 ? 'warning' : 'success') }}"
+                                style="width: {{ $persentaseKapasitas }}%; height: 100%; border-radius: 10px;"></div>
+                        </div>
+
+                        @foreach($gudangs as $g)
+                        <div class="gudang-mini-card mb-2">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <small class="fw-bold text-dark">{{ $g->nama_gudang }}</small>
+                                <small class="text-muted">{{ $g->persentase }}%</small>
+                            </div>
+                            <div class="progress-thin">
+                                <div class="progress-bar bg-{{ $g->persentase >= 90 ? 'danger' : ($g->persentase >= 70 ? 'warning' : 'success') }}"
+                                    style="width: {{ $g->persentase }}%; height: 100%; border-radius: 10px;"></div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5 mb-4">
                 <div class="card glass-card h-100">
                     <div class="card-body">
                         <h5 class="fw-bold mb-4" style="color: var(--sigma-blue-dark)">
                             <i class="fas fa-chart-line me-2" style="color: var(--sigma-blue-main)"></i>Tren Transaksi (7 Hari)
                         </h5>
-                        <div style="height: 300px;">
+                        <div style="height: 280px;">
                             <canvas id="lineChart"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-4 mb-4">
+            <div class="col-md-3 mb-4">
                 <div class="card glass-card h-100">
                     <div class="card-body">
                         <h5 class="fw-bold mb-4" style="color: var(--sigma-blue-dark)">
                             <i class="fas fa-chart-pie me-2" style="color: var(--sigma-blue-main)"></i>Kategori Barang
                         </h5>
-                        <div style="height: 300px;">
+                        <div style="height: 280px;">
                             <canvas id="pieChart"></canvas>
                         </div>
                     </div>
@@ -184,10 +224,10 @@
             </div>
         </div>
 
-        <!-- Tabel Aktivitas -->
         <div class="row mt-2">
-            <div class="col-md-12">
-                <div class="card glass-card">
+            <!-- Aktivitas Transaksi Terakhir -->
+            <div class="col-md-7 mb-4">
+                <div class="card glass-card h-100">
                     <div class="card-header bg-transparent border-0 pt-4 px-4">
                         <h5 class="fw-bold mb-0" style="color: var(--sigma-blue-dark)">
                             <i class="fas fa-history me-2" style="color: var(--sigma-blue-main)"></i>Aktivitas Transaksi Terakhir
@@ -200,9 +240,9 @@
                                     <tr>
                                         <th>No. Transaksi</th>
                                         <th>Tipe</th>
+                                        <th>Gudang</th>
                                         <th>Total Item</th>
-                                        <th>Total Harga</th>
-                                        <th>Petugas</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -216,21 +256,43 @@
                                                 <span class="badge bg-info rounded-pill px-3">Keluar</span>
                                             @endif
                                         </td>
+                                        <td>{{ $trx->gudang->nama_gudang ?? '-' }}</td>
                                         <td class="fw-bold text-dark">{{ $trx->jumlah_barang }}</td>
                                         <td>
-                                            <span class="fw-bold" style="color: var(--sigma-blue-main)">Rp {{ number_format($trx->total_harga, 0, ',', '.') }}</span>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <i class="fas fa-user-circle me-2 opacity-50"></i>
-                                                {{ $trx->petugas }}
-                                            </div>
+                                            @php $statusColor = ['pending'=>'secondary','diproses'=>'warning','selesai'=>'success','dibatalkan'=>'danger']; @endphp
+                                            <span class="badge bg-{{ $statusColor[$trx->status] ?? 'secondary' }} rounded-pill px-3">
+                                                {{ ucfirst($trx->status) }}
+                                            </span>
                                         </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alert Stok Menipis -->
+            <div class="col-md-5 mb-4">
+                <div class="card glass-card h-100">
+                    <div class="card-header bg-transparent border-0 pt-4 px-4">
+                        <h5 class="fw-bold mb-0 text-danger">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Barang Perlu Restock
+                        </h5>
+                    </div>
+                    <div class="card-body p-4">
+                        @forelse($barangStokMenipis as $b)
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                            <div>
+                                <small class="fw-bold text-dark d-block">{{ $b->produk->nama_produk }} - {{ $b->nama_varian }}</small>
+                                <small class="text-muted">{{ $b->nomor_sku }} &middot; {{ $b->rak->kode_rak ?? 'Belum ada lokasi' }}</small>
+                            </div>
+                            <span class="badge bg-danger rounded-pill px-3">{{ $b->stok_varian }}</span>
+                        </div>
+                        @empty
+                        <p class="text-muted text-center py-3 mb-0">Semua stok masih aman 👍</p>
+                        @endforelse
                     </div>
                 </div>
             </div>
@@ -294,9 +356,9 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                cutout: '75%',
+                cutout: '70%',
                 plugins: {
-                    legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } }
+                    legend: { position: 'bottom', labels: { usePointStyle: true, padding: 15, boxWidth: 10 } }
                 }
             }
         });
