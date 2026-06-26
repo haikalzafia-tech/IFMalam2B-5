@@ -6,25 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::create('kartu_stoks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('varian_produk_id')->constrained('varian_produks')->cascadeOnDelete();
-            $table->foreignId('gudang_id')->constrained('gudangs');
-            $table->foreignId('rak_id')->nullable()->constrained('raks')->nullOnDelete();
             $table->string('nomor_transaksi')->nullable();
-            $table->enum('jenis_transaksi', ['in', 'out', 'adjustment', 'retur', 'transfer']);
-            $table->string('nomor_batch')->nullable();
-            $table->integer('jumlah_masuk')->default(0);
-            $table->integer('jumlah_keluar')->default(0);
+            $table->enum('jenis_transaksi',['in','out','adjustment','retur']);
+            $table->string('nomor_sku');
+            $table->integer('jumlah_masuk')->nullable();
+            $table->integer('jumlah_keluar')->nullable();
             $table->integer('stok_akhir');
             $table->string('petugas');
-            $table->text('keterangan')->nullable();
             $table->timestamps();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::dropIfExists('kartu_stoks');
