@@ -2,16 +2,16 @@
 @section('page_title', 'Detail Transaksi Retur')
 
 @section('content')
-<div class="row">
-    <div class="col-md-4">
+<div class="row g-3">
+    <div class="col-lg-4">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="card-title">Info Retur</h4>
-                <a href="{{ route('transaksi-retur.index') }}" class="btn btn-sm btn-secondary"><i class="fas fa-arrow-left"></i></a>
+                <a href="{{ route('transaksi-retur.index') }}" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left"></i></a>
             </div>
             <div class="card-body">
-                <table class="table table-borderless table-sm">
-                    <tr><td class="text-muted">No. Retur</td><td><span class="badge bg-danger">{{ $transaksiRetur->nomor_retur }}</span></td></tr>
+                <table class="table table-borderless table-sm mb-3">
+                    <tr><td class="text-muted">No. Retur</td><td><span class="badge bg-secondary">{{ $transaksiRetur->nomor_retur }}</span></td></tr>
                     <tr><td class="text-muted">Tanggal</td><td>{{ $transaksiRetur->tanggal_retur->format('d/m/Y') }}</td></tr>
                     <tr><td class="text-muted">Transaksi Asal</td>
                         <td>
@@ -23,7 +23,7 @@
                     <tr><td class="text-muted">Jenis</td>
                         <td>
                             <span class="badge bg-{{ $transaksiRetur->jenis_retur == 'retur_masuk' ? 'success' : 'warning' }}">
-                                {{ $transaksiRetur->jenis_retur == 'retur_masuk' ? 'Masuk ke Gudang' : 'Keluar ke Supplier' }}
+                                {{ $transaksiRetur->jenis_retur == 'retur_masuk' ? 'Masuk Gudang' : 'Keluar Supplier' }}
                             </span>
                         </td>
                     </tr>
@@ -37,44 +37,44 @@
                         </td>
                     </tr>
                 </table>
-                <hr>
-                <small class="text-muted">Alasan Retur:</small>
-                <p>{{ $transaksiRetur->alasan_retur }}</p>
+                <hr style="border-color: var(--sigma-border)">
+                <small class="text-muted d-block">Alasan Retur:</small>
+                <p class="mb-2">{{ $transaksiRetur->alasan_retur }}</p>
                 @if($transaksiRetur->keterangan)
-                <small class="text-muted">Keterangan:</small>
-                <p>{{ $transaksiRetur->keterangan }}</p>
+                <small class="text-muted d-block">Keterangan:</small>
+                <p class="mb-0">{{ $transaksiRetur->keterangan }}</p>
                 @endif
             </div>
         </div>
     </div>
 
-    <div class="col-md-8">
+    <div class="col-lg-8">
         <div class="card">
             <div class="card-header"><h4 class="card-title">Daftar Barang Retur</h4></div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-hover table-sm">
-                        <thead class="table-dark">
+                    <table class="table table-hover">
+                        <thead>
                             <tr>
-                                <th>#</th>
+                                <th style="width: 50px">#</th>
                                 <th>SKU</th>
                                 <th>Barang</th>
                                 <th>No. Batch</th>
-                                <th>Qty Retur</th>
-                                <th>Kondisi</th>
+                                <th class="text-center">Qty Retur</th>
+                                <th class="text-center">Kondisi</th>
                                 <th>Keterangan</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($transaksiRetur->items as $item)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
+                                <td class="text-muted">{{ $loop->iteration }}</td>
                                 <td><span class="badge bg-secondary">{{ $item->varianProduk->nomor_sku }}</span></td>
-                                <td>{{ $item->varianProduk->produk->nama_produk }} - {{ $item->varianProduk->nama_varian }}</td>
+                                <td class="fw-semibold">{{ $item->varianProduk->produk->nama_produk }} - {{ $item->varianProduk->nama_varian }}</td>
                                 <td>{{ $item->nomor_batch ?? '-' }}</td>
-                                <td><strong>{{ $item->qty_retur }}</strong></td>
-                                <td>
-                                    @php $kondisiColor = ['baik'=>'success','rusak'=>'danger','cacat'=>'warning','kadaluarsa'=>'dark']; @endphp
+                                <td class="text-center fw-bold">{{ $item->qty_retur }}</td>
+                                <td class="text-center">
+                                    @php $kondisiColor = ['baik'=>'success','rusak'=>'danger','cacat'=>'warning','kadaluarsa'=>'secondary']; @endphp
                                     <span class="badge bg-{{ $kondisiColor[$item->kondisi_barang] }}">{{ ucfirst($item->kondisi_barang) }}</span>
                                 </td>
                                 <td>{{ $item->keterangan_kondisi ?? '-' }}</td>

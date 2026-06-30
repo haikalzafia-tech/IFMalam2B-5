@@ -3,11 +3,11 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-md-7">
+    <div class="col-lg-7">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="card-title">Form Tambah Zona</h4>
-                <a href="{{ route('master-data.zona.index') }}" class="btn btn-sm btn-secondary">
+                <a href="{{ route('master-data.zona.index') }}" class="btn btn-secondary btn-sm">
                     <i class="fas fa-arrow-left me-1"></i> Kembali
                 </a>
             </div>
@@ -22,8 +22,8 @@
                     @csrf
                     <div class="row g-3">
                         <div class="col-md-12">
-                            <label class="form-label fw-bold">Gudang <span class="text-danger">*</span></label>
-                            <select name="gudang_id" class="form-select @error('gudang_id') is-invalid @enderror" required>
+                            <label class="form-label">Gudang <span class="text-danger">*</span></label>
+                            <select name="gudang_id" class="form-select" required>
                                 <option value="">-- Pilih Gudang --</option>
                                 @foreach($gudangs as $g)
                                 <option value="{{ $g->id }}" {{ old('gudang_id') == $g->id ? 'selected' : '' }}>
@@ -31,17 +31,15 @@
                                 </option>
                                 @endforeach
                             </select>
-                            @error('gudang_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-12">
-                            <label class="form-label fw-bold">Nama Zona <span class="text-danger">*</span></label>
-                            <input type="text" name="nama_zona" class="form-control @error('nama_zona') is-invalid @enderror"
+                            <label class="form-label">Nama Zona <span class="text-danger">*</span></label>
+                            <input type="text" name="nama_zona" class="form-control"
                                 value="{{ old('nama_zona') }}" placeholder="Contoh: Zona Elektronik, Zona Bahan Baku" required>
-                            @error('nama_zona')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-12">
-                            <label class="form-label fw-bold">Jenis Zona <span class="text-danger">*</span></label>
-                            <select name="jenis_zona" class="form-select @error('jenis_zona') is-invalid @enderror" required>
+                            <label class="form-label">Jenis Zona <span class="text-danger">*</span></label>
+                            <select name="jenis_zona" class="form-select" required>
                                 <option value="">-- Pilih Jenis --</option>
                                 <option value="reguler" {{ old('jenis_zona') == 'reguler' ? 'selected' : '' }}>Reguler</option>
                                 <option value="dingin" {{ old('jenis_zona') == 'dingin' ? 'selected' : '' }}>Dingin (Cold Storage)</option>
@@ -49,12 +47,10 @@
                                 <option value="karantina" {{ old('jenis_zona') == 'karantina' ? 'selected' : '' }}>Karantina</option>
                                 <option value="ekspedisi" {{ old('jenis_zona') == 'ekspedisi' ? 'selected' : '' }}>Ekspedisi</option>
                             </select>
-                            @error('jenis_zona')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-12">
-                            <label class="form-label fw-bold">Keterangan</label>
-                            <textarea name="keterangan" class="form-control" rows="2"
-                                placeholder="Keterangan tambahan (opsional)">{{ old('keterangan') }}</textarea>
+                            <label class="form-label">Keterangan</label>
+                            <textarea name="keterangan" class="form-control" rows="2" placeholder="Opsional">{{ old('keterangan') }}</textarea>
                         </div>
                     </div>
                     <div class="mt-4 d-flex gap-2">

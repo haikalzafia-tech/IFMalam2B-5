@@ -34,6 +34,7 @@
     <link rel="stylesheet" href="<?php echo e(asset('template')); ?>/assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="<?php echo e(asset('template')); ?>/assets/css/plugins.min.css" />
     <link rel="stylesheet" href="<?php echo e(asset('template')); ?>/assets/css/kaiadmin.min.css" />
+    <link rel="stylesheet" href="<?php echo e(asset('template')); ?>/assets/css/sigma-design-system.css" />
 
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link rel="stylesheet" href="<?php echo e(asset('template')); ?>/assets/css/demo.css" />

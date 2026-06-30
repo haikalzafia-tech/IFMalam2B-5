@@ -298,14 +298,7 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="remember" name="remember">
-                    <label class="form-check-label small text-white-50" for="remember">
-                        Ingat saya
-                    </label>
-                </div>
-            </div>
+            
 
             <button type="submit" class="btn btn-sigma-primary">
                 Masuk Sekarang <i class="fa-solid fa-right-to-bracket ms-2"></i>

@@ -51,7 +51,8 @@ class Sidebar extends Component
                     ['label' => 'Data Gudang', 'route' => 'master-data.gudang.index'],
                     ['label' => 'Data Zona',   'route' => 'master-data.zona.index'],
                     ['label' => 'Data Rak',    'route' => 'master-data.rak.index'],
-                    ['label' => 'Lokasi Stok Barang', 'route' => 'lokasi-stok.index'],
+                    // Tambahkan 'only_admin' => true di sini
+                    ['label' => 'Lokasi Stok Barang', 'route' => 'lokasi-stok.index', 'only_admin' => true],
                 ],
             ],
 
@@ -117,6 +118,7 @@ class Sidebar extends Component
                     ['label' => 'Data Opname',      'route' => 'stok-opname.index'],
                 ],
             ],
+
             [
                 'label'       => 'Export Laporan',
                 'route'       => 'export-laporan.index',

@@ -73,7 +73,7 @@
                         <div class="profile-picture">
                             <div class="avatar avatar-xl">
                                 <img src="{{ Auth::user()->avatar ? asset('storage/'.Auth::user()->avatar) : asset('template/assets/img/profile.jpg') }}"
-                                     alt="Foto Profil" class="avatar-img rounded-circle border border-white">
+                                    alt="Foto Profil" class="avatar-img rounded-circle border border-white">
                             </div>
                         </div>
                     </div>

@@ -3,13 +3,13 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-md-8">
+    <div class="col-lg-8">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="card-title">
                     Atur Lokasi: {{ $varianProduk->produk->nama_produk }} - {{ $varianProduk->nama_varian }}
                 </h4>
-                <a href="{{ route('lokasi-stok.index') }}" class="btn btn-sm btn-secondary">
+                <a href="{{ route('lokasi-stok.index') }}" class="btn btn-secondary btn-sm">
                     <i class="fas fa-arrow-left me-1"></i> Kembali
                 </a>
             </div>
@@ -32,10 +32,10 @@
                 <form action="{{ route('lokasi-stok.update', $varianProduk) }}" method="POST" id="form-lokasi">
                     @csrf @method('PUT')
 
-                    <label class="form-label fw-bold">Distribusi per Rak</label>
-                    <div class="table-responsive">
+                    <label class="form-label">Distribusi per Rak</label>
+                    <div class="table-responsive mb-2">
                         <table class="table table-bordered" id="table-lokasi">
-                            <thead class="table-light">
+                            <thead>
                                 <tr>
                                     <th>Rak</th>
                                     <th style="width:140px">Qty</th>
@@ -61,18 +61,17 @@
                                     </td>
                                 </tr>
                                 @empty
-                                {{-- Akan diisi otomatis via JS jika belum ada lokasi sama sekali --}}
                                 @endforelse
                             </tbody>
                         </table>
                     </div>
-                    <button type="button" id="btn-add-lokasi" class="btn btn-sm btn-outline-primary mb-3">
+                    <button type="button" id="btn-add-lokasi" class="btn btn-outline-primary btn-sm mb-3">
                         <i class="fas fa-plus me-1"></i> Tambah Rak Lain
                     </button>
 
                     <div class="alert alert-secondary">
                         Total qty dari semua rak: <strong id="total-qty-display">0</strong>
-                        <span class="text-muted">(otomatis dihitung, akan menjadi total stok varian ini)</span>
+                        <span class="text-muted small">(otomatis dihitung, akan menjadi total stok varian ini)</span>
                     </div>
 
                     <div class="d-flex gap-2">
@@ -128,7 +127,7 @@ document.getElementById('lokasi-body').addEventListener('click', function(e) {
             e.target.closest('tr').remove();
             hitungTotalQty();
         } else {
-            alert('Minimal harus ada 1 lokasi rak.');
+            SigmaNotif.gagal('Minimal harus ada 1 lokasi rak.');
         }
     }
 });
@@ -147,7 +146,6 @@ function hitungTotalQty() {
     document.getElementById('total-qty-display').textContent = total;
 }
 
-// Jika belum ada lokasi sama sekali, tampilkan 1 baris kosong sebagai awal
 if (document.querySelectorAll('#lokasi-body tr').length === 0) {
     tambahBarisLokasi();
 }

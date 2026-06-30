@@ -2,11 +2,6 @@
     Modal filter tanggal sebelum export ke Excel.
     Penggunaan:
         <x-export-modal route="export.transaksi-masuk" judul="Export Transaksi Masuk" />
-
-    Tombol untuk membuka modal ini taruh terpisah, contoh:
-        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalExport{{ $id ?? '' }}">
-            <i class="fas fa-file-excel me-1"></i> Export
-        </button>
 --}}
 @php
     $modalId = 'modalExport' . ($id ?? '');
@@ -17,7 +12,7 @@
         <div class="modal-content">
             <form action="{{ route($route) }}" method="GET">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="fas fa-file-excel text-success me-2"></i>{{ $judul }}</h5>
+                    <h5 class="modal-title"><i class="fas fa-file-excel me-2" style="color: var(--sigma-success)"></i>{{ $judul }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -26,11 +21,11 @@
                     </p>
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Dari Tanggal</label>
+                            <label class="form-label">Dari Tanggal</label>
                             <input type="date" name="dari" class="form-control">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Sampai Tanggal</label>
+                            <label class="form-label">Sampai Tanggal</label>
                             <input type="date" name="sampai" class="form-control">
                         </div>
                     </div>

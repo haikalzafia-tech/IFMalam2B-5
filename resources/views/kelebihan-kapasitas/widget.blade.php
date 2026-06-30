@@ -1,7 +1,7 @@
 @if($kelebihanKapasitas->count() > 0)
-<div class="card border-warning mt-3">
-    <div class="card-header bg-warning-subtle">
-        <h5 class="card-title mb-0 text-warning-emphasis">
+<div class="card mt-3" style="border-left: 3px solid var(--sigma-warning);">
+    <div class="card-header" style="background: var(--sigma-warning-bg);">
+        <h5 class="card-title mb-0" style="color: var(--sigma-warning)">
             <i class="fas fa-exclamation-triangle me-2"></i> Ada Barang Melebihi Kapasitas Rak
         </h5>
     </div>
@@ -12,38 +12,38 @@
         </p>
 
         <div class="table-responsive">
-            <table class="table table-bordered align-middle">
-                <thead class="table-light">
+            <table class="table table-bordered align-middle mb-0">
+                <thead>
                     <tr>
                         <th>Barang</th>
                         <th>Rak Penuh</th>
-                        <th>Muat</th>
-                        <th>Kelebihan</th>
-                        <th style="min-width:320px">Aksi Penyelesaian</th>
+                        <th class="text-center">Muat</th>
+                        <th class="text-center">Kelebihan</th>
+                        <th style="min-width:280px">Aksi Penyelesaian</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($kelebihanKapasitas as $k)
                     <tr id="row-kk-{{ $k->id }}">
                         <td>
-                            <strong>{{ $k->varianProduk->produk->nama_produk }}</strong><br>
+                            <span class="fw-semibold d-block">{{ $k->varianProduk->produk->nama_produk }}</span>
                             <small class="text-muted">{{ $k->varianProduk->nama_varian }} ({{ $k->varianProduk->nomor_sku }})</small>
                         </td>
                         <td><span class="badge bg-secondary">{{ $k->rak->kode_rak }}</span></td>
-                        <td>{{ $k->qty_muat }}</td>
-                        <td><span class="badge bg-danger">{{ $k->qty_lebih }}</span></td>
+                        <td class="text-center">{{ $k->qty_muat }}</td>
+                        <td class="text-center"><span class="badge bg-danger">{{ $k->qty_lebih }}</span></td>
                         <td>
                             <div class="d-flex gap-2 flex-wrap">
                                 <button type="button" class="btn btn-sm btn-primary btn-pindah-rak"
                                     data-id="{{ $k->id }}"
                                     data-action="{{ route('kelebihan-kapasitas.pindah-rak', $k) }}"
                                     data-opsi-url="{{ route('kelebihan-kapasitas.opsi-rak', $k) }}">
-                                    <i class="fas fa-dolly me-1"></i> Pindah Rak Lain
+                                    <i class="fas fa-dolly me-1"></i> Pindah Rak
                                 </button>
                                 <button type="button" class="btn btn-sm btn-outline-danger btn-retur-lebih"
                                     data-id="{{ $k->id }}"
                                     data-action="{{ route('kelebihan-kapasitas.retur', $k) }}">
-                                    <i class="fas fa-undo me-1"></i> Retur ke Supplier
+                                    <i class="fas fa-undo me-1"></i> Retur
                                 </button>
                             </div>
                         </td>
@@ -66,7 +66,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <label class="form-label fw-bold">Pilih Rak Tujuan</label>
+                    <label class="form-label">Pilih Rak Tujuan</label>
                     <select name="rak_tujuan_id" id="select-rak-tujuan" class="form-select" required>
                         <option value="">-- Memuat opsi rak... --</option>
                     </select>
@@ -92,7 +92,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <label class="form-label fw-bold">Alasan / Catatan Retur</label>
+                    <label class="form-label">Alasan / Catatan Retur</label>
                     <textarea name="alasan_retur" class="form-control" rows="3" placeholder="Contoh: rak penuh, tidak ada lokasi alternatif" required></textarea>
                 </div>
                 <div class="modal-footer">
@@ -107,10 +107,7 @@
 @push('script')
 <script>
 (function() {
-    if (typeof bootstrap === 'undefined') {
-        console.error('Bootstrap JS belum tersedia. Pastikan kaiadmin.min.js sudah termuat sebelum script ini.');
-        return;
-    }
+    if (typeof bootstrap === 'undefined') return;
 
     const modalPindahEl = document.getElementById('modalPindahRak');
     const modalReturEl = document.getElementById('modalReturLebih');

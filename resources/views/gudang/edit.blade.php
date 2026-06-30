@@ -3,11 +3,11 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-md-8">
+    <div class="col-lg-8">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="card-title">Edit Gudang: {{ $gudang->nama_gudang }}</h4>
-                <a href="{{ route('master-data.gudang.index') }}" class="btn btn-sm btn-secondary">
+                <a href="{{ route('master-data.gudang.index') }}" class="btn btn-secondary btn-sm">
                     <i class="fas fa-arrow-left me-1"></i> Kembali
                 </a>
             </div>
@@ -22,40 +22,38 @@
                     @csrf @method('PUT')
                     <div class="row g-3">
                         <div class="col-md-12">
-                            <label class="form-label fw-bold">Nama Gudang <span class="text-danger">*</span></label>
-                            <input type="text" name="nama_gudang" class="form-control @error('nama_gudang') is-invalid @enderror"
-                                value="{{ old('nama_gudang', $gudang->nama_gudang) }}" required>
-                            @error('nama_gudang')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            <label class="form-label">Nama Gudang <span class="text-danger">*</span></label>
+                            <input type="text" name="nama_gudang" class="form-control" value="{{ old('nama_gudang', $gudang->nama_gudang) }}" required>
                         </div>
                         <div class="col-md-12">
-                            <label class="form-label fw-bold">Alamat <span class="text-danger">*</span></label>
+                            <label class="form-label">Alamat <span class="text-danger">*</span></label>
                             <textarea name="alamat" class="form-control" rows="2" required>{{ old('alamat', $gudang->alamat) }}</textarea>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Kota <span class="text-danger">*</span></label>
+                            <label class="form-label">Kota <span class="text-danger">*</span></label>
                             <input type="text" name="kota" class="form-control" value="{{ old('kota', $gudang->kota) }}" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Provinsi <span class="text-danger">*</span></label>
+                            <label class="form-label">Provinsi <span class="text-danger">*</span></label>
                             <input type="text" name="provinsi" class="form-control" value="{{ old('provinsi', $gudang->provinsi) }}" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Nama PIC <span class="text-danger">*</span></label>
+                            <label class="form-label">Nama PIC <span class="text-danger">*</span></label>
                             <input type="text" name="pic_nama" class="form-control" value="{{ old('pic_nama', $gudang->pic_nama) }}" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Telepon PIC</label>
+                            <label class="form-label">Telepon PIC</label>
                             <input type="text" name="pic_telepon" class="form-control" value="{{ old('pic_telepon', $gudang->pic_telepon) }}">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Status <span class="text-danger">*</span></label>
+                            <label class="form-label">Status <span class="text-danger">*</span></label>
                             <select name="status" class="form-select" required>
                                 <option value="aktif" {{ $gudang->status == 'aktif' ? 'selected' : '' }}>Aktif</option>
                                 <option value="nonaktif" {{ $gudang->status == 'nonaktif' ? 'selected' : '' }}>Nonaktif</option>
                             </select>
                         </div>
                         <div class="col-md-12">
-                            <label class="form-label fw-bold">Keterangan</label>
+                            <label class="form-label">Keterangan</label>
                             <textarea name="keterangan" class="form-control" rows="2">{{ old('keterangan', $gudang->keterangan) }}</textarea>
                         </div>
                     </div>

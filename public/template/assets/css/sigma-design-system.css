@@ -1,0 +1,485 @@
+/* =============================================================
+   SIGMA — Design System Terpusat
+   Satu file ini menjadi fondasi visual SELURUH halaman sistem.
+   Di-load sekali di layout utama, dipakai ulang di semua modul.
+   ============================================================= */
+
+:root {
+    /* --- Palet Warna Utama --- */
+    --sigma-navy-900: #0F1F3D;   /* teks utama, judul */
+    --sigma-navy-700: #1E3A6E;   /* warna brand utama */
+    --sigma-navy-500: #2D5BA3;   /* aksen, link, tombol primer */
+    --sigma-navy-300: #6E8CB8;   /* teks sekunder pada elemen gelap */
+    --sigma-navy-100: #DCE4F0;   /* border halus bertema navy */
+
+    --sigma-bg: #F7F8FA;         /* latar halaman */
+    --sigma-surface: #FFFFFF;    /* latar kartu/panel */
+    --sigma-border: #E5E9F0;    /* border standar */
+    --sigma-muted: #8A94A6;      /* teks abu redup */
+    --sigma-text: #1F2937;       /* teks isi body */
+
+    /* --- Warna Status (dipakai TERBATAS sesuai makna) --- */
+    --sigma-success: #0F9D6B;
+    --sigma-success-bg: #E7F7F0;
+    --sigma-danger: #DC4444;     /* HANYA untuk aksi hapus / status bahaya */
+    --sigma-danger-bg: #FCEAEA;
+    --sigma-warning: #D9920F;
+    --sigma-warning-bg: #FBF1DD;
+    --sigma-info: #2D7DD2;
+    --sigma-info-bg: #E8F1FC;
+
+    /* --- Radius & Shadow Konsisten --- */
+    --sigma-radius-sm: 10px;
+    --sigma-radius-md: 14px;
+    --sigma-radius-lg: 20px;
+
+    --sigma-shadow-soft: 0 2px 8px rgba(15, 31, 61, 0.06);
+    --sigma-shadow-card: 0 4px 16px rgba(15, 31, 61, 0.08);
+    --sigma-shadow-raised: 6px 6px 16px rgba(15, 31, 61, 0.08), -4px -4px 12px rgba(255, 255, 255, 0.7);
+    --sigma-shadow-inset: inset 3px 3px 8px rgba(15, 31, 61, 0.06), inset -2px -2px 6px rgba(255, 255, 255, 0.8);
+
+    /* --- Tipografi --- */
+    --sigma-font-body: 'Public Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* =============================================================
+   RESET & DASAR
+   ============================================================= */
+body {
+    font-family: var(--sigma-font-body);
+    background: var(--sigma-bg);
+    color: var(--sigma-text);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.page-inner {
+    background: var(--sigma-bg) !important;
+    padding: 24px !important;
+}
+
+@media (max-width: 768px) {
+    .page-inner {
+        padding: 14px !important;
+    }
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--sigma-navy-900);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.page-title {
+    color: var(--sigma-navy-900);
+    font-weight: 800;
+    font-size: 22px;
+}
+
+a {
+    color: var(--sigma-navy-500);
+}
+a:hover {
+    color: var(--sigma-navy-700);
+}
+
+/* =============================================================
+   KARTU / CARD — elemen paling sering dipakai di semua halaman
+   ============================================================= */
+.card {
+    background: var(--sigma-surface);
+    border: 1px solid var(--sigma-border);
+    border-radius: var(--sigma-radius-lg) !important;
+    box-shadow: var(--sigma-shadow-card) !important;
+    overflow: hidden;
+}
+
+.card-header {
+    background: var(--sigma-surface) !important;
+    border-bottom: 1px solid var(--sigma-border) !important;
+    padding: 18px 24px !important;
+}
+
+.card-header .card-title {
+    color: var(--sigma-navy-900);
+    font-weight: 700;
+    font-size: 17px;
+    margin-bottom: 0;
+}
+
+.card-body {
+    padding: 24px !important;
+}
+
+@media (max-width: 576px) {
+    .card-header, .card-body {
+        padding: 16px !important;
+    }
+}
+
+/* Aksen garis tipis di atas kartu, sebagai signature visual SIGMA */
+.card::before {
+    content: '';
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, var(--sigma-navy-700), var(--sigma-navy-500));
+}
+
+/* =============================================================
+   TOMBOL — warna sesuai MAKNA, tidak sekadar dekorasi
+   ============================================================= */
+.btn {
+    border-radius: var(--sigma-radius-sm) !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    padding: 8px 18px !important;
+    border: none !important;
+    transition: all 0.18s ease !important;
+    letter-spacing: 0.01em;
+}
+
+.btn-sm {
+    padding: 6px 14px !important;
+    font-size: 12.5px !important;
+}
+
+.btn-xs {
+    padding: 5px 10px !important;
+    font-size: 12px !important;
+    border-radius: 8px !important;
+}
+
+/* Primer: aksi utama yang membangun/menyimpan data */
+.btn-primary {
+    background: linear-gradient(135deg, var(--sigma-navy-700), var(--sigma-navy-500)) !important;
+    color: #fff !important;
+    box-shadow: 0 3px 10px rgba(30, 58, 110, 0.25) !important;
+}
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 14px rgba(30, 58, 110, 0.32) !important;
+}
+
+/* Sukses: konfirmasi aksi positif (export, selesai, dsb) */
+.btn-success {
+    background: var(--sigma-success) !important;
+    color: #fff !important;
+    box-shadow: 0 3px 10px rgba(15, 157, 107, 0.22) !important;
+}
+.btn-success:hover { transform: translateY(-1px); }
+
+/* Bahaya: HANYA untuk hapus / aksi merusak data */
+.btn-danger {
+    background: var(--sigma-danger) !important;
+    color: #fff !important;
+    box-shadow: 0 3px 10px rgba(220, 68, 68, 0.22) !important;
+}
+.btn-danger:hover { transform: translateY(-1px); }
+
+/* Peringatan: edit / aksi yang perlu perhatian tapi tidak merusak */
+.btn-warning {
+    background: var(--sigma-warning) !important;
+    color: #fff !important;
+    box-shadow: 0 3px 10px rgba(217, 146, 15, 0.22) !important;
+}
+.btn-warning:hover { transform: translateY(-1px); }
+
+/* Info: aksi melihat detail / netral */
+.btn-info {
+    background: var(--sigma-info) !important;
+    color: #fff !important;
+}
+
+/* Sekunder/Batal: netral, tenang */
+.btn-secondary {
+    background: var(--sigma-bg) !important;
+    color: var(--sigma-navy-700) !important;
+    border: 1px solid var(--sigma-border) !important;
+    box-shadow: none !important;
+}
+.btn-secondary:hover {
+    background: var(--sigma-navy-100) !important;
+}
+
+.btn-outline-primary {
+    background: transparent !important;
+    color: var(--sigma-navy-500) !important;
+    border: 1.5px solid var(--sigma-navy-500) !important;
+}
+.btn-outline-primary:hover {
+    background: var(--sigma-navy-500) !important;
+    color: #fff !important;
+}
+
+.btn-outline-danger {
+    background: transparent !important;
+    color: var(--sigma-danger) !important;
+    border: 1.5px solid var(--sigma-danger) !important;
+}
+.btn-outline-danger:hover {
+    background: var(--sigma-danger) !important;
+    color: #fff !important;
+}
+
+.btn-outline-secondary {
+    background: transparent !important;
+    color: var(--sigma-muted) !important;
+    border: 1.5px solid var(--sigma-border) !important;
+}
+
+/* =============================================================
+   BADGE — status & label kecil, warna sesuai makna konsisten
+   ============================================================= */
+.badge {
+    font-weight: 600 !important;
+    font-size: 11.5px !important;
+    padding: 5px 11px !important;
+    border-radius: 8px !important;
+    letter-spacing: 0.02em;
+}
+
+.bg-success { background: var(--sigma-success) !important; }
+.bg-danger { background: var(--sigma-danger) !important; }
+.bg-warning { background: var(--sigma-warning) !important; }
+.bg-info { background: var(--sigma-info) !important; }
+.bg-secondary { background: var(--sigma-navy-300) !important; }
+.bg-primary { background: var(--sigma-navy-500) !important; }
+
+/* =============================================================
+   TABEL — rapi, mudah dipindai mata, header jelas
+   ============================================================= */
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    background: var(--sigma-bg) !important;
+    color: var(--sigma-navy-700) !important;
+    font-weight: 700 !important;
+    font-size: 11.5px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 2px solid var(--sigma-border) !important;
+    padding: 13px 16px !important;
+    white-space: nowrap;
+}
+
+.table-dark thead th {
+    background: var(--sigma-navy-900) !important;
+    color: #fff !important;
+    border-bottom: none !important;
+}
+
+.table td {
+    padding: 13px 16px !important;
+    vertical-align: middle !important;
+    border-bottom: 1px solid var(--sigma-border) !important;
+    color: var(--sigma-text);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(247, 248, 250, 0.6);
+}
+
+.table-hover tbody tr:hover {
+    background-color: var(--sigma-navy-100) !important;
+    cursor: default;
+}
+
+.table-responsive {
+    border-radius: var(--sigma-radius-md);
+}
+
+/* =============================================================
+   FORM — input jelas, fokus terlihat, label tegas
+   ============================================================= */
+.form-label {
+    color: var(--sigma-navy-900);
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.form-control, .form-select {
+    border: 1.5px solid var(--sigma-border) !important;
+    border-radius: var(--sigma-radius-sm) !important;
+    padding: 9px 14px !important;
+    font-size: 13.5px !important;
+    color: var(--sigma-text) !important;
+    transition: all 0.15s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--sigma-navy-500) !important;
+    box-shadow: 0 0 0 3px rgba(45, 91, 163, 0.12) !important;
+}
+
+.form-control::placeholder {
+    color: var(--sigma-muted);
+}
+
+.form-control-sm, .form-select-sm {
+    padding: 7px 12px !important;
+    font-size: 13px !important;
+}
+
+textarea.form-control {
+    resize: vertical;
+}
+
+/* =============================================================
+   MODAL — sama dengan tema notifikasi 3D yang sudah ada
+   ============================================================= */
+.modal-content {
+    border-radius: var(--sigma-radius-lg) !important;
+    border: none !important;
+    box-shadow: 0 20px 50px rgba(15, 31, 61, 0.18) !important;
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--sigma-border) !important;
+    padding: 20px 24px !important;
+}
+
+.modal-header .modal-title {
+    color: var(--sigma-navy-900);
+    font-weight: 700;
+}
+
+.modal-body {
+    padding: 24px !important;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--sigma-border) !important;
+    padding: 16px 24px !important;
+}
+
+/* =============================================================
+   PAGINATION
+   ============================================================= */
+.pagination .page-link {
+    border: 1px solid var(--sigma-border) !important;
+    color: var(--sigma-navy-700) !important;
+    border-radius: 8px !important;
+    margin: 0 2px;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.pagination .page-item.active .page-link {
+    background: var(--sigma-navy-700) !important;
+    border-color: var(--sigma-navy-700) !important;
+    color: #fff !important;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: var(--sigma-muted) !important;
+    background: var(--sigma-bg) !important;
+}
+
+/* =============================================================
+   SIDEBAR — selaras dengan navy utama, accent bar pada menu aktif
+   ============================================================= */
+.sidebar {
+    background: var(--sigma-navy-900) !important;
+}
+
+.sidebar .nav-secondary > .nav-item > a {
+    color: #B8C4DC !important;
+    font-weight: 500;
+    font-size: 13.5px;
+    border-radius: 0 10px 10px 0;
+    margin-right: 12px;
+    transition: all 0.15s ease;
+}
+
+.sidebar .nav-secondary > .nav-item.active > a,
+.sidebar .nav-secondary > .nav-item > a:hover {
+    background: rgba(45, 91, 163, 0.25) !important;
+    color: #fff !important;
+}
+
+.sidebar .nav-secondary > .nav-item.active {
+    position: relative;
+}
+.sidebar .nav-secondary > .nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 8px; bottom: 8px;
+    width: 4px;
+    background: var(--sigma-navy-300);
+    border-radius: 0 4px 4px 0;
+}
+
+.sidebar .nav-collapse a {
+    color: #9AABC8 !important;
+    font-size: 13px;
+}
+.sidebar .nav-collapse a:hover {
+    color: #fff !important;
+}
+
+/* =============================================================
+   RESPONSIVE — pastikan nyaman di HP tanpa tabel pecah
+   ============================================================= */
+@media (max-width: 576px) {
+    .page-title { font-size: 18px; }
+    .card-header { flex-direction: column; align-items: stretch !important; gap: 10px; }
+    .card-header .d-flex { width: 100%; flex-wrap: wrap; }
+    .btn { width: 100%; justify-content: center; }
+    .card-header .btn, .card-header a.btn { width: auto; }
+    .table thead th, .table td { padding: 10px 12px !important; font-size: 12.5px; }
+}
+
+@media (min-width: 577px) and (max-width: 991px) {
+    .page-inner { padding: 18px !important; }
+}
+
+/* Mencegah filter form yang sempit tabrakan di tablet */
+@media (max-width: 991px) {
+    .filter-wrapper .row > div,
+    form.row.g-2 > div {
+        margin-bottom: 8px;
+    }
+}
+
+/* =============================================================
+   UTILITAS TAMBAHAN
+   ============================================================= */
+.text-muted { color: var(--sigma-muted) !important; }
+
+.progress {
+    background: var(--sigma-navy-100) !important;
+    border-radius: 10px !important;
+    overflow: hidden;
+}
+.progress-bar {
+    border-radius: 10px;
+}
+
+/* Kartu ringkasan/statistik (dashboard & halaman lain yang punya angka besar) */
+.kartu-statistik {
+    background: var(--sigma-surface);
+    border: 1px solid var(--sigma-border);
+    border-radius: var(--sigma-radius-lg);
+    box-shadow: var(--sigma-shadow-raised);
+    padding: 20px;
+    transition: transform 0.2s ease;
+}
+.kartu-statistik:hover {
+    transform: translateY(-3px);
+}
+
+.ikon-statistik {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--sigma-radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--sigma-bg);
+    box-shadow: var(--sigma-shadow-inset);
+    color: var(--sigma-navy-500);
+    font-size: 20px;
+}

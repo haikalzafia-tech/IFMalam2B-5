@@ -2,15 +2,15 @@
 @section('page_title', 'Detail Transaksi Keluar')
 
 @section('content')
-<div class="row">
-    <div class="col-md-4">
+<div class="row g-3">
+    <div class="col-lg-4">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="card-title">Info Transaksi</h4>
-                <a href="{{ route('transaksi-keluar.index') }}" class="btn btn-sm btn-secondary"><i class="fas fa-arrow-left"></i></a>
+                <a href="{{ route('transaksi-keluar.index') }}" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left"></i></a>
             </div>
             <div class="card-body">
-                <table class="table table-borderless table-sm">
+                <table class="table table-borderless table-sm mb-3">
                     <tr><td class="text-muted">No. Transaksi</td><td><span class="badge bg-primary">{{ $transaksi->nomor_transaksi }}</span></td></tr>
                     <tr><td class="text-muted">Tanggal</td><td>{{ $transaksi->tanggal_transaksi->format('d/m/Y') }}</td></tr>
                     <tr><td class="text-muted">Gudang</td><td>{{ $transaksi->gudang->nama_gudang }}</td></tr>
@@ -24,41 +24,41 @@
                             <span class="badge bg-{{ $statusColor[$transaksi->status] }}">{{ ucfirst($transaksi->status) }}</span>
                         </td>
                     </tr>
-                    <tr><td class="text-muted">Total Barang</td><td><strong>{{ $transaksi->jumlah_barang }}</strong></td></tr>
+                    <tr><td class="text-muted">Total Barang</td><td class="fw-bold">{{ $transaksi->jumlah_barang }}</td></tr>
                 </table>
                 @if($transaksi->keterangan)
-                <hr>
-                <small class="text-muted">Keterangan:</small>
-                <p>{{ $transaksi->keterangan }}</p>
+                <hr style="border-color: var(--sigma-border)">
+                <small class="text-muted d-block">Keterangan:</small>
+                <p class="mb-0">{{ $transaksi->keterangan }}</p>
                 @endif
             </div>
         </div>
     </div>
 
-    <div class="col-md-8">
+    <div class="col-lg-8">
         <div class="card">
             <div class="card-header"><h4 class="card-title">Daftar Barang Keluar</h4></div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-hover table-sm">
-                        <thead class="table-dark">
+                    <table class="table table-hover">
+                        <thead>
                             <tr>
-                                <th>#</th>
+                                <th style="width: 50px">#</th>
                                 <th>SKU</th>
                                 <th>Barang</th>
                                 <th>Rak Asal</th>
-                                <th>Qty</th>
+                                <th class="text-center">Qty</th>
                                 <th>Catatan</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($transaksi->items as $item)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
+                                <td class="text-muted">{{ $loop->iteration }}</td>
                                 <td><span class="badge bg-secondary">{{ $item->varianProduk->nomor_sku }}</span></td>
-                                <td>{{ $item->varianProduk->produk->nama_produk }} - {{ $item->varianProduk->nama_varian }}</td>
+                                <td class="fw-semibold">{{ $item->varianProduk->produk->nama_produk }} - {{ $item->varianProduk->nama_varian }}</td>
                                 <td>{{ $item->rak->kode_rak ?? '-' }} ({{ $item->rak->zona->nama_zona ?? '-' }})</td>
-                                <td><strong>{{ $item->qty }}</strong></td>
+                                <td class="text-center fw-bold">{{ $item->qty }}</td>
                                 <td>{{ $item->catatan ?? '-' }}</td>
                             </tr>
                             @endforeach
