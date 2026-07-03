@@ -10,9 +10,9 @@
     </div>
     <div class="card-body">
         <form method="GET" class="mb-4">
-            <div class="row g-2 mb-2">
-                <div class="col-md-3 col-sm-4">
-                    <?php if (isset($component)) { $__componentOriginal18e7e86833d3c3850dccc63d62d1bf2e = $component; } ?>
+    <div class="row g-2 mb-2">
+        <div class="col-md-3 col-sm-4">
+            <?php if (isset($component)) { $__componentOriginal18e7e86833d3c3850dccc63d62d1bf2e = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal18e7e86833d3c3850dccc63d62d1bf2e = $attributes; } ?>
 <?php $component = App\View\Components\PerPageOption::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('per-page-option'); ?>
@@ -32,51 +32,41 @@
 <?php $component = $__componentOriginal18e7e86833d3c3850dccc63d62d1bf2e; ?>
 <?php unset($__componentOriginal18e7e86833d3c3850dccc63d62d1bf2e); ?>
 <?php endif; ?>
-                </div>
-                <div class="col-md-5 col-sm-8">
-                    <select name="nomor_sku" class="form-select form-select-sm select2">
-                        <option value="">-- Semua Barang --</option>
-                        <?php $__currentLoopData = $varianProduks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <option value="<?php echo e($v->nomor_sku); ?>" <?php echo e(request('nomor_sku') == $v->nomor_sku ? 'selected' : ''); ?>>
-                            <?php echo e($v->nomor_sku); ?> - <?php echo e($v->produk->nama_produk); ?> (<?php echo e($v->nama_varian); ?>)
-                        </option>
-                        <?php $__currentLoopData = $gudangs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $g): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <option value="<?php echo e($g->id); ?>" <?php echo e(request('gudang_id') == $g->id ? 'selected' : ''); ?>><?php echo e($g->nama_gudang); ?></option>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </select>
-                </div>
-                <div class="col-md-4 col-sm-12">
-                    <select name="gudang_id" class="form-select form-select-sm">
-                        <option value="">-- Semua Gudang --</option>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </select>
-                </div>
-            </div>
+        </div>
 
-            <div class="row g-2">
-                <div class="col-md-3 col-sm-12">
-                    <select name="jenis_transaksi" class="form-select form-select-sm">
-                        <option value="">-- Semua Jenis --</option>
-                        <option value="in" <?php echo e(request('jenis_transaksi') == 'in' ? 'selected' : ''); ?>>Masuk</option>
-                        <option value="out" <?php echo e(request('jenis_transaksi') == 'out' ? 'selected' : ''); ?>>Keluar</option>
-                        <option value="retur" <?php echo e(request('jenis_transaksi') == 'retur' ? 'selected' : ''); ?>>Retur</option>
-                        <option value="adjustment" <?php echo e(request('jenis_transaksi') == 'adjustment' ? 'selected' : ''); ?>>Adjustment</option>
-                    </select>
-                </div>
-                <div class="col-md-6 col-sm-12">
-                    <div class="input-group input-group-sm">
-                        <input type="date" name="dari" class="form-control" value="<?php echo e(request('dari')); ?>">
-                        <span class="input-group-text bg-light text-muted">s/d</span>
-                        <input type="date" name="sampai" class="form-control" value="<?php echo e(request('sampai')); ?>">
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-12">
-                    <button type="submit" class="btn btn-secondary btn-sm w-100 fw-semibold">
-                        <i class="fas fa-filter me-1"></i> Filter
-                    </button>
-                </div>
-            </div>
-        </form>
+        <div class="col-md-5 col-sm-8">
+            <select name="nomor_sku" class="form-select form-select-sm select2">
+                <option value="">-- Semua Barang --</option>
+                <?php $__currentLoopData = $varianProduks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <option value="<?php echo e($v->nomor_sku); ?>" <?php echo e(request('nomor_sku') == $v->nomor_sku ? 'selected' : ''); ?>>
+                    <?php echo e($v->nomor_sku); ?> - <?php echo e($v->produk->nama_produk); ?> (<?php echo e($v->nama_varian); ?>)
+                </option>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </select>
+        </div>
+
+        <div class="col-md-4 col-sm-12">
+            <select name="gudang_id" class="form-select form-select-sm">
+                <option value="">-- Semua Gudang --</option>
+                <?php $__currentLoopData = $gudangs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $g): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <option value="<?php echo e($g->id); ?>" <?php echo e(request('gudang_id') == $g->id ? 'selected' : ''); ?>>
+                    <?php echo e($g->nama_gudang); ?>
+
+                </option>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </select>
+        </div>
+    </div>
+
+    <div class="row g-2">
+        <div class="col-md-6">
+            <input type="date" name="dari" class="form-control form-control-sm" value="<?php echo e(request('dari')); ?>">
+        </div>
+        <div class="col-md-6">
+            <input type="date" name="sampai" class="form-control form-control-sm" value="<?php echo e(request('sampai')); ?>">
+        </div>
+    </div>
+</form>
 
         <div class="table-responsive">
             <table class="table table-hover">

@@ -1,0 +1,156 @@
+<?php $__env->startSection('page_title', 'Atur Lokasi Stok'); ?>
+
+<?php $__env->startSection('content'); ?>
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="card-title">
+                    Atur Lokasi: <?php echo e($varianProduk->produk->nama_produk); ?> - <?php echo e($varianProduk->nama_varian); ?>
+
+                </h4>
+                <a href="<?php echo e(route('lokasi-stok.index')); ?>" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-arrow-left me-1"></i> Kembali
+                </a>
+            </div>
+            <div class="card-body">
+                <?php if($errors->any()): ?>
+                <div class="alert alert-danger">
+                    <ul class="mb-0"><?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $e): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><li><?php echo e($e); ?></li><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?></ul>
+                </div>
+                <?php endif; ?>
+                <?php if(session('error')): ?>
+                <div class="alert alert-danger"><?php echo e(session('error')); ?></div>
+                <?php endif; ?>
+
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-1"></i>
+                    SKU: <strong><?php echo e($varianProduk->nomor_sku); ?></strong> &middot;
+                    Total stok saat ini: <strong><?php echo e($varianProduk->stok_varian); ?></strong>
+                </div>
+
+                <form action="<?php echo e(route('lokasi-stok.update', $varianProduk)); ?>" method="POST" id="form-lokasi">
+                    <?php echo csrf_field(); ?> <?php echo method_field('PUT'); ?>
+
+                    <label class="form-label">Distribusi per Rak</label>
+                    <div class="table-responsive mb-2">
+                        <table class="table table-bordered" id="table-lokasi">
+                            <thead>
+                                <tr>
+                                    <th>Rak</th>
+                                    <th style="width:140px">Qty</th>
+                                    <th style="width:40px"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="lokasi-body">
+                                <?php $__empty_1 = true; $__currentLoopData = $varianProduk->lokasiStoks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $lokasi): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                <tr>
+                                    <td>
+                                        <select name="lokasi[<?php echo e($i); ?>][rak_id]" class="form-select form-select-sm" required>
+                                            <option value="">-- Pilih Rak --</option>
+                                            <?php $__currentLoopData = $raks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $r): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($r->id); ?>" <?php echo e($lokasi->rak_id == $r->id ? 'selected' : ''); ?>>
+                                                <?php echo e($r->zona->gudang->nama_gudang); ?> &raquo; <?php echo e($r->kode_rak); ?> - <?php echo e($r->nama_rak); ?>
+
+                                            </option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        </select>
+                                    </td>
+                                    <td><input type="number" name="lokasi[<?php echo e($i); ?>][qty]" class="form-control form-control-sm" value="<?php echo e($lokasi->qty); ?>" min="0" required></td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-xs btn-danger btn-remove-lokasi"><i class="fas fa-times"></i></button>
+                                    </td>
+                                </tr>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" id="btn-add-lokasi" class="btn btn-outline-primary btn-sm mb-3">
+                        <i class="fas fa-plus me-1"></i> Tambah Rak Lain
+                    </button>
+
+                    <div class="alert alert-secondary">
+                        Total qty dari semua rak: <strong id="total-qty-display">0</strong>
+                        <span class="text-muted small">(otomatis dihitung, akan menjadi total stok varian ini)</span>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Simpan Distribusi</button>
+                        <button type="button" class="btn btn-secondary" onclick="SigmaNotif.konfirmasiBatal('<?php echo e(route('lokasi-stok.index')); ?>')">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const RAK_OPTIONS = <?php echo json_encode($raks->map(fn($r) => [
+    'id' => $r->id, 'label' => $r->zona->gudang->nama_gudang . ' \u00bb ' . $r->kode_rak . ' - ' . $r->nama_rak, ])) ?>;
+
+let lokasiIndex = <?php echo e($varianProduk->lokasiStoks->count()); ?>;
+
+function buatBarisLokasi(index) {
+    let options = '<option value="">-- Pilih Rak --</option>';
+    RAK_OPTIONS.forEach(r => {
+        options += `<option value="${r.id}">${r.label}</option>`;
+    });
+
+    return `
+    <tr>
+        <td>
+            <select name="lokasi[${index}][rak_id]" class="form-select form-select-sm" required>
+                ${options}
+            </select>
+        </td>
+        <td><input type="number" name="lokasi[${index}][qty]" class="form-control form-control-sm" min="0" required></td>
+        <td class="text-center">
+            <button type="button" class="btn btn-xs btn-danger btn-remove-lokasi"><i class="fas fa-times"></i></button>
+        </td>
+    </tr>`;
+}
+
+function tambahBarisLokasi() {
+    document.getElementById('lokasi-body').insertAdjacentHTML('beforeend', buatBarisLokasi(lokasiIndex));
+    lokasiIndex++;
+    hitungTotalQty();
+}
+
+document.getElementById('btn-add-lokasi').addEventListener('click', tambahBarisLokasi);
+
+document.getElementById('lokasi-body').addEventListener('click', function(e) {
+    if (e.target.closest('.btn-remove-lokasi')) {
+        const rows = document.querySelectorAll('#lokasi-body tr');
+        if (rows.length > 1) {
+            e.target.closest('tr').remove();
+            hitungTotalQty();
+        } else {
+            SigmaNotif.gagal('Minimal harus ada 1 lokasi rak.');
+        }
+    }
+});
+
+document.getElementById('lokasi-body').addEventListener('input', function(e) {
+    if (e.target.matches('input[type="number"]')) {
+        hitungTotalQty();
+    }
+});
+
+function hitungTotalQty() {
+    let total = 0;
+    document.querySelectorAll('#lokasi-body input[type="number"]').forEach(inp => {
+        total += parseInt(inp.value || 0);
+    });
+    document.getElementById('total-qty-display').textContent = total;
+}
+
+if (document.querySelectorAll('#lokasi-body tr').length === 0) {
+    tambahBarisLokasi();
+}
+
+hitungTotalQty();
+</script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.kai', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laravel\IFMalam2B-5\resources\views/lokasi-stok/edit.blade.php ENDPATH**/ ?>

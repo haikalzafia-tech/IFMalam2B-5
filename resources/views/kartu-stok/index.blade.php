@@ -11,54 +11,43 @@
     </div>
     <div class="card-body">
         <form method="GET" class="mb-4">
-            <div class="row g-2 mb-2">
-                <div class="col-md-3 col-sm-4">
-                    <x-per-page-option />
-                </div>
-                <div class="col-md-5 col-sm-8">
-                    <select name="nomor_sku" class="form-select form-select-sm select2">
-                        <option value="">-- Semua Barang --</option>
-                        @foreach($varianProduks as $v)
-                        <option value="{{ $v->nomor_sku }}" {{ request('nomor_sku') == $v->nomor_sku ? 'selected' : '' }}>
-                            {{ $v->nomor_sku }} - {{ $v->produk->nama_produk }} ({{ $v->nama_varian }})
-                        </option>
-                        @foreach($gudangs as $g)
-                        <option value="{{ $g->id }}" {{ request('gudang_id') == $g->id ? 'selected' : '' }}>{{ $g->nama_gudang }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-4 col-sm-12">
-                    <select name="gudang_id" class="form-select form-select-sm">
-                        <option value="">-- Semua Gudang --</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
+    <div class="row g-2 mb-2">
+        <div class="col-md-3 col-sm-4">
+            <x-per-page-option />
+        </div>
 
-            <div class="row g-2">
-                <div class="col-md-3 col-sm-12">
-                    <select name="jenis_transaksi" class="form-select form-select-sm">
-                        <option value="">-- Semua Jenis --</option>
-                        <option value="in" {{ request('jenis_transaksi') == 'in' ? 'selected' : '' }}>Masuk</option>
-                        <option value="out" {{ request('jenis_transaksi') == 'out' ? 'selected' : '' }}>Keluar</option>
-                        <option value="retur" {{ request('jenis_transaksi') == 'retur' ? 'selected' : '' }}>Retur</option>
-                        <option value="adjustment" {{ request('jenis_transaksi') == 'adjustment' ? 'selected' : '' }}>Adjustment</option>
-                    </select>
-                </div>
-                <div class="col-md-6 col-sm-12">
-                    <div class="input-group input-group-sm">
-                        <input type="date" name="dari" class="form-control" value="{{ request('dari') }}">
-                        <span class="input-group-text bg-light text-muted">s/d</span>
-                        <input type="date" name="sampai" class="form-control" value="{{ request('sampai') }}">
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-12">
-                    <button type="submit" class="btn btn-secondary btn-sm w-100 fw-semibold">
-                        <i class="fas fa-filter me-1"></i> Filter
-                    </button>
-                </div>
-            </div>
-        </form>
+        <div class="col-md-5 col-sm-8">
+            <select name="nomor_sku" class="form-select form-select-sm select2">
+                <option value="">-- Semua Barang --</option>
+                @foreach($varianProduks as $v)
+                <option value="{{ $v->nomor_sku }}" {{ request('nomor_sku') == $v->nomor_sku ? 'selected' : '' }}>
+                    {{ $v->nomor_sku }} - {{ $v->produk->nama_produk }} ({{ $v->nama_varian }})
+                </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="col-md-4 col-sm-12">
+            <select name="gudang_id" class="form-select form-select-sm">
+                <option value="">-- Semua Gudang --</option>
+                @foreach($gudangs as $g)
+                <option value="{{ $g->id }}" {{ request('gudang_id') == $g->id ? 'selected' : '' }}>
+                    {{ $g->nama_gudang }}
+                </option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+
+    <div class="row g-2">
+        <div class="col-md-6">
+            <input type="date" name="dari" class="form-control form-control-sm" value="{{ request('dari') }}">
+        </div>
+        <div class="col-md-6">
+            <input type="date" name="sampai" class="form-control form-control-sm" value="{{ request('sampai') }}">
+        </div>
+    </div>
+</form>
 
         <div class="table-responsive">
             <table class="table table-hover">

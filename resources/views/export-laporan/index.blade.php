@@ -7,15 +7,13 @@
         <div class="card">
             <div class="card-header">
                 <h4 class="card-title"><i class="fas fa-file-excel me-2" style="color: var(--sigma-success)"></i>Export Laporan ke Excel</h4>
-                <small class="text-muted">Pilih laporan yang ingin diexport. Setiap laporan akan diunduh sebagai file Excel terpisah.</small>
+                <small class="text-muted">Pilih satu laporan yang ingin diexport.</small>
             </div>
             <div class="card-body">
 
                 <div class="alert alert-info">
                     <i class="fas fa-info-circle me-1"></i>
-                    Rentang tanggal di bawah berlaku untuk laporan <strong>Transaksi Masuk</strong>,
-                    <strong>Transaksi Keluar</strong>, <strong>Transaksi Retur</strong>, dan <strong>Kartu Stok</strong>.
-                    Kosongkan jika ingin mengexport seluruh data tanpa batasan periode.
+                    Rentang tanggal berlaku untuk laporan Transaksi dan Kartu Stok.
                 </div>
 
                 <div class="row g-3 mb-4">
@@ -31,81 +29,31 @@
 
                 <label class="form-label">Pilih Laporan</label>
                 <div class="row g-2 mb-4">
+                    @foreach([
+                        ['val' => 'produk', 'id' => 'cek-produk', 'icon' => 'fa-box', 'label' => 'Data Barang', 'tanggal' => 0],
+                        ['val' => 'supplier', 'id' => 'cek-supplier', 'icon' => 'fa-truck', 'label' => 'Data Supplier', 'tanggal' => 0],
+                        ['val' => 'rak', 'id' => 'cek-rak', 'icon' => 'fa-warehouse', 'label' => 'Kapasitas Rak', 'tanggal' => 0],
+                        ['val' => 'transaksi-masuk', 'id' => 'cek-masuk', 'icon' => 'fa-arrow-down', 'label' => 'Transaksi Masuk', 'tanggal' => 1],
+                        ['val' => 'transaksi-keluar', 'id' => 'cek-keluar', 'icon' => 'fa-arrow-up', 'label' => 'Transaksi Keluar', 'tanggal' => 1],
+                        ['val' => 'transaksi-retur', 'id' => 'cek-retur', 'icon' => 'fa-undo', 'label' => 'Transaksi Retur', 'tanggal' => 1],
+                        ['val' => 'kartu-stok', 'id' => 'cek-kartustok', 'icon' => 'fa-clipboard-list', 'label' => 'Kartu Stok', 'tanggal' => 1],
+                    ] as $item)
                     <div class="col-md-6">
                         <div class="form-check border rounded-3 p-3 d-flex align-items-start gap-2 h-100" style="border-color: var(--sigma-border) !important;">
-                            <input class="form-check-input flex-shrink-0 laporan-checkbox mt-1" type="checkbox" value="produk" id="cek-produk" data-butuh-tanggal="0">
-                            <label class="form-check-label w-100" for="cek-produk">
-                                <i class="fas fa-box me-1" style="color: var(--sigma-navy-500)"></i> <strong>Data Barang</strong>
-                                <br><small class="text-muted">Semua produk, kategori, dan status stok</small>
+                            <input class="form-check-input flex-shrink-0 laporan-radio mt-1" type="radio" name="laporan_pilihan" value="{{ $item['val'] }}" id="{{ $item['id'] }}" data-butuh-tanggal="{{ $item['tanggal'] }}">
+                            <label class="form-check-label w-100" for="{{ $item['id'] }}">
+                                <i class="fas {{ $item['icon'] }} me-1" style="color: var(--sigma-navy-500)"></i> <strong>{{ $item['label'] }}</strong>
                             </label>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-check border rounded-3 p-3 d-flex align-items-start gap-2 h-100" style="border-color: var(--sigma-border) !important;">
-                            <input class="form-check-input flex-shrink-0 laporan-checkbox mt-1" type="checkbox" value="supplier" id="cek-supplier" data-butuh-tanggal="0">
-                            <label class="form-check-label w-100" for="cek-supplier">
-                                <i class="fas fa-truck me-1" style="color: var(--sigma-navy-500)"></i> <strong>Data Supplier</strong>
-                                <br><small class="text-muted">Seluruh data supplier terdaftar</small>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-check border rounded-3 p-3 d-flex align-items-start gap-2 h-100" style="border-color: var(--sigma-border) !important;">
-                            <input class="form-check-input flex-shrink-0 laporan-checkbox mt-1" type="checkbox" value="rak" id="cek-rak" data-butuh-tanggal="0">
-                            <label class="form-check-label w-100" for="cek-rak">
-                                <i class="fas fa-warehouse me-1" style="color: var(--sigma-navy-500)"></i> <strong>Kapasitas Rak</strong>
-                                <br><small class="text-muted">Kondisi kapasitas rak saat ini</small>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-check border rounded-3 p-3 d-flex align-items-start gap-2 h-100" style="border-color: var(--sigma-border) !important;">
-                            <input class="form-check-input flex-shrink-0 laporan-checkbox mt-1" type="checkbox" value="transaksi-masuk" id="cek-masuk" data-butuh-tanggal="1">
-                            <label class="form-check-label w-100" for="cek-masuk">
-                                <i class="fas fa-arrow-down me-1" style="color: var(--sigma-success)"></i> <strong>Transaksi Masuk</strong>
-                                <br><small class="text-muted">Detail per item barang masuk</small>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-check border rounded-3 p-3 d-flex align-items-start gap-2 h-100" style="border-color: var(--sigma-border) !important;">
-                            <input class="form-check-input flex-shrink-0 laporan-checkbox mt-1" type="checkbox" value="transaksi-keluar" id="cek-keluar" data-butuh-tanggal="1">
-                            <label class="form-check-label w-100" for="cek-keluar">
-                                <i class="fas fa-arrow-up me-1" style="color: var(--sigma-info)"></i> <strong>Transaksi Keluar</strong>
-                                <br><small class="text-muted">Detail per item barang keluar</small>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-check border rounded-3 p-3 d-flex align-items-start gap-2 h-100" style="border-color: var(--sigma-border) !important;">
-                            <input class="form-check-input flex-shrink-0 laporan-checkbox mt-1" type="checkbox" value="transaksi-retur" id="cek-retur" data-butuh-tanggal="1">
-                            <label class="form-check-label w-100" for="cek-retur">
-                                <i class="fas fa-undo me-1" style="color: var(--sigma-danger)"></i> <strong>Transaksi Retur</strong>
-                                <br><small class="text-muted">Seluruh retur ke supplier maupun gudang</small>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-check border rounded-3 p-3 d-flex align-items-start gap-2 h-100" style="border-color: var(--sigma-border) !important;">
-                            <input class="form-check-input flex-shrink-0 laporan-checkbox mt-1" type="checkbox" value="kartu-stok" id="cek-kartustok" data-butuh-tanggal="1">
-                            <label class="form-check-label w-100" for="cek-kartustok">
-                                <i class="fas fa-clipboard-list me-1" style="color: var(--sigma-warning)"></i> <strong>Kartu Stok</strong>
-                                <br><small class="text-muted">Seluruh log pergerakan stok</small>
-                            </label>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
 
-                <div class="d-flex gap-2 align-items-center flex-wrap">
-                    <button type="button" id="btn-pilih-semua" class="btn btn-outline-secondary btn-sm">
-                        <i class="fas fa-check-double me-1"></i> Pilih Semua
-                    </button>
+                <div class="d-flex align-items-center">
                     <button type="button" id="btn-export-terpilih" class="btn btn-success">
-                        <i class="fas fa-download me-1"></i> Export Laporan Terpilih
+                        <i class="fas fa-download me-1"></i> Export Laporan
                     </button>
-                    <span id="info-jumlah-terpilih" class="text-muted small"></span>
                 </div>
-
             </div>
         </div>
     </div>
@@ -122,32 +70,11 @@ const RUTE_EXPORT = {
     'kartu-stok': "{{ route('export.kartu-stok') }}",
 };
 
-const semuaCheckbox = document.querySelectorAll('.laporan-checkbox');
-const btnPilihSemua = document.getElementById('btn-pilih-semua');
-const btnExport = document.getElementById('btn-export-terpilih');
-const infoJumlah = document.getElementById('info-jumlah-terpilih');
+document.getElementById('btn-export-terpilih').addEventListener('click', function () {
+    const terpilih = document.querySelector('.laporan-radio:checked');
 
-function updateInfoJumlah() {
-    const jumlah = document.querySelectorAll('.laporan-checkbox:checked').length;
-    infoJumlah.textContent = jumlah > 0 ? `${jumlah} laporan dipilih` : '';
-}
-
-semuaCheckbox.forEach(cb => cb.addEventListener('change', updateInfoJumlah));
-
-btnPilihSemua.addEventListener('click', function () {
-    const semuaTercentang = document.querySelectorAll('.laporan-checkbox:checked').length === semuaCheckbox.length;
-    semuaCheckbox.forEach(cb => cb.checked = !semuaTercentang);
-    this.innerHTML = semuaTercentang
-        ? '<i class="fas fa-check-double me-1"></i> Pilih Semua'
-        : '<i class="fas fa-times me-1"></i> Batal Semua';
-    updateInfoJumlah();
-});
-
-btnExport.addEventListener('click', function () {
-    const terpilih = Array.from(document.querySelectorAll('.laporan-checkbox:checked'));
-
-    if (terpilih.length === 0) {
-        SigmaNotif.gagal('Pilih minimal 1 laporan untuk diexport.');
+    if (!terpilih) {
+        SigmaNotif.gagal('Pilih salah satu laporan untuk diexport.');
         return;
     }
 
@@ -155,24 +82,19 @@ btnExport.addEventListener('click', function () {
     const sampai = document.getElementById('filter-sampai').value;
 
     if ((dari && !sampai) || (!dari && sampai)) {
-        SigmaNotif.gagal('Isi kedua tanggal (Dari dan Sampai), atau kosongkan keduanya.');
+        SigmaNotif.gagal('Isi kedua tanggal, atau kosongkan keduanya.');
         return;
     }
 
-    SigmaNotif.sukses(`Mengunduh ${terpilih.length} laporan...`);
+    const butuhTanggal = terpilih.dataset.butuhTanggal === '1';
+    let url = RUTE_EXPORT[terpilih.value];
 
-    terpilih.forEach((cb, index) => {
-        setTimeout(() => {
-            const butuhTanggal = cb.dataset.butuhTanggal === '1';
-            let url = RUTE_EXPORT[cb.value];
+    if (butuhTanggal && dari && sampai) {
+        url += `?dari=${dari}&sampai=${sampai}`;
+    }
 
-            if (butuhTanggal && dari && sampai) {
-                url += `?dari=${dari}&sampai=${sampai}`;
-            }
-
-            window.location.href = url;
-        }, index * 600);
-    });
+    // Karena hanya 1, kita bisa langsung redirect
+    window.location.href = url;
 });
 </script>
 @endsection
