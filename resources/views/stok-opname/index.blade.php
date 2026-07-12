@@ -1,15 +1,15 @@
 @extends('layouts.kai')
-@section('page_title', 'Stok Opname')
+@section('page_title', 'Pemeriksaan Fisik Persediaan')
 
 @section('content')
 <div class="card">
     <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
-        <h4 class="card-title">Daftar Stok Opname</h4>
+        <h4 class="card-title">Daftar Pemeriksaan Fisik Persediaan</h4>
 
-        {{-- HANYA ADMIN YANG BISA MEMBUAT STOK OPNAME BARU --}}
+        {{-- HANYA ADMIN YANG BISA MEMBUAT PEMERIKSAAN FISIK PERSEDIAAN BARU --}}
         @if(Auth::check() && Auth::user()->role == 'admin')
             <a href="{{ route('stok-opname.create') }}" class="btn btn-primary btn-sm">
-                <i class="fas fa-plus me-1"></i> Buat Opname Baru
+                <i class="fas fa-plus me-1"></i> Buat Fisik Persediaan Baru
             </a>
         @endif
     </div>
@@ -44,7 +44,7 @@
                 <thead>
                     <tr>
                         <th style="width: 50px">#</th>
-                        <th>No. Opname</th>
+                        <th>No. Pemeriksaan</th>
                         <th>Tanggal</th>
                         <th>Gudang</th>
                         <th>Petugas</th>
@@ -71,7 +71,7 @@
                         </td>
                     </tr>
                     @empty
-                    <tr><td colspan="7" class="text-center text-muted py-5">Belum ada data stok opname.</td></tr>
+                    <tr><td colspan="7" class="text-center text-muted py-5">Belum ada data pemeriksaan fisik persediaan.</td></tr>
                     @endforelse
                 </tbody>
             </table>

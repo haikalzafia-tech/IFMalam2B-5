@@ -1,10 +1,10 @@
 @extends('layouts.kai')
-@section('page_title', 'Transaksi Retur')
+@section('page_title', 'Transaksi Pengembalian')
 
 @section('content')
 <div class="card">
     <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
-        <h4 class="card-title">Daftar Transaksi Retur</h4>
+        <h4 class="card-title">Daftar Transaksi Pengembalian</h4>
         <div class="d-flex gap-2">
             <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalExport">
                 <i class="fas fa-file-excel me-1"></i> Export
@@ -13,7 +13,7 @@
             {{-- HANYA ADMIN YANG BISA MEMBUAT RETUR BARU --}}
             @if(Auth::check() && Auth::user()->role == 'admin')
                 <a href="{{ route('transaksi-retur.create') }}" class="btn btn-primary btn-sm">
-                    <i class="fas fa-plus me-1"></i> Retur Baru
+                    <i class="fas fa-plus me-1"></i> Pengembalian Baru
                 </a>
             @endif
         </div>
@@ -25,7 +25,7 @@
             </div>
             <div class="col-12 col-md-3">
                 <input type="text" name="search" class="form-control form-control-sm"
-                    placeholder="Cari nomor retur..." value="{{ request('search') }}">
+                    placeholder="Cari nomor pengembalian..." value="{{ request('search') }}">
             </div>
             <div class="col-6 col-md-3">
                 <select name="jenis_retur" class="form-select form-select-sm">
@@ -58,7 +58,7 @@
                 <thead>
                     <tr>
                         <th style="width: 50px">#</th>
-                        <th>No. Retur</th>
+                        <th>No. Pengembalian</th>
                         <th>Tanggal</th>
                         <th>Transaksi Asal</th>
                         <th>Jenis</th>
@@ -93,7 +93,7 @@
                         </td>
                     </tr>
                     @empty
-                    <tr><td colspan="9" class="text-center text-muted py-5">Belum ada transaksi retur.</td></tr>
+                    <tr><td colspan="9" class="text-center text-muted py-5">Belum ada transaksi pengembalian.</td></tr>
                     @endforelse
                 </tbody>
             </table>
@@ -102,5 +102,5 @@
     </div>
 </div>
 
-<x-export-modal route="export.transaksi-retur" judul="Export Transaksi Retur" />
+<x-export-modal route="export.transaksi-retur" judul="Export Transaksi Pengembalian" />
 @endsection

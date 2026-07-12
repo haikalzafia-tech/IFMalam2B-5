@@ -80,14 +80,14 @@ class Sidebar extends Component
                 ],
             ],
             [
-                'label'       => 'Transaksi Retur',
+                'label'       => 'Transaksi Pengembalian',
                 'route'       => '#',
                 'is_active'   => request()->routeIs('transaksi-retur.*'),
                 'icon'        => 'fas fa-exchange-alt',
                 'is_dropdown' => true,
                 'items'       => [
-                    ['label' => 'Retur Baru',     'route' => 'transaksi-retur.create', 'only_admin' => true],
-                    ['label' => 'Data Retur',     'route' => 'transaksi-retur.index'],
+                    ['label' => 'Pengembalian Baru',     'route' => 'transaksi-retur.create', 'only_admin' => true],
+                    ['label' => 'Data Pengembalian',     'route' => 'transaksi-retur.index'],
                 ],
             ],
 
@@ -108,19 +108,19 @@ class Sidebar extends Component
                 'badge'       => \App\Models\KelebihanKapasitas::where('status', 'menunggu')->count() ?: null,
             ],
             [
-                'label'       => 'Stok Opname',
+                'label'       => 'Pemeriksaan Fisik Persediaan',
                 'route'       => '#',
                 'is_active'   => request()->routeIs('stok-opname.*'),
                 'icon'        => 'fas fa-tasks',
                 'is_dropdown' => true,
                 'items'       => [
-                    ['label' => 'Buat Opname Baru', 'route' => 'stok-opname.create', 'only_admin' => true],
-                    ['label' => 'Data Opname',      'route' => 'stok-opname.index'],
+                    ['label' => 'Buat Fisik Persediaan Baru', 'route' => 'stok-opname.create', 'only_admin' => true],
+                    ['label' => 'Data Fisik Persediaan',      'route' => 'stok-opname.index'],
                 ],
             ],
 
             [
-                'label'       => 'Export Laporan',
+                'label'       => 'Ekspor Laporan',
                 'route'       => 'export-laporan.index',
                 'is_active'   => request()->routeIs('export-laporan.*'),
                 'icon'        => 'fas fa-file-excel',

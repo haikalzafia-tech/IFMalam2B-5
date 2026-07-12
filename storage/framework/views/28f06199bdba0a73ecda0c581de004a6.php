@@ -1,9 +1,9 @@
-<?php $__env->startSection('page_title', 'Transaksi Retur'); ?>
+<?php $__env->startSection('page_title', 'Transaksi Pengembalian'); ?>
 
 <?php $__env->startSection('content'); ?>
 <div class="card">
     <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
-        <h4 class="card-title">Daftar Transaksi Retur</h4>
+        <h4 class="card-title">Daftar Transaksi Pengembalian</h4>
         <div class="d-flex gap-2">
             <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalExport">
                 <i class="fas fa-file-excel me-1"></i> Export
@@ -12,7 +12,7 @@
             
             <?php if(Auth::check() && Auth::user()->role == 'admin'): ?>
                 <a href="<?php echo e(route('transaksi-retur.create')); ?>" class="btn btn-primary btn-sm">
-                    <i class="fas fa-plus me-1"></i> Retur Baru
+                    <i class="fas fa-plus me-1"></i> Pengembalian Baru
                 </a>
             <?php endif; ?>
         </div>
@@ -43,7 +43,7 @@
             </div>
             <div class="col-12 col-md-3">
                 <input type="text" name="search" class="form-control form-control-sm"
-                    placeholder="Cari nomor retur..." value="<?php echo e(request('search')); ?>">
+                    placeholder="Cari nomor pengembalian..." value="<?php echo e(request('search')); ?>">
             </div>
             <div class="col-6 col-md-3">
                 <select name="jenis_retur" class="form-select form-select-sm">
@@ -76,7 +76,7 @@
                 <thead>
                     <tr>
                         <th style="width: 50px">#</th>
-                        <th>No. Retur</th>
+                        <th>No. Pengembalian</th>
                         <th>Tanggal</th>
                         <th>Transaksi Asal</th>
                         <th>Jenis</th>
@@ -112,7 +112,7 @@
                         </td>
                     </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                    <tr><td colspan="9" class="text-center text-muted py-5">Belum ada transaksi retur.</td></tr>
+                    <tr><td colspan="9" class="text-center text-muted py-5">Belum ada transaksi pengembalian.</td></tr>
                     <?php endif; ?>
                 </tbody>
             </table>
@@ -123,14 +123,14 @@
 
 <?php if (isset($component)) { $__componentOriginal298e4bd81774a252458e6ac6784dd2ba = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal298e4bd81774a252458e6ac6784dd2ba = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.export-modal','data' => ['route' => 'export.transaksi-retur','judul' => 'Export Transaksi Retur']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.export-modal','data' => ['route' => 'export.transaksi-retur','judul' => 'Export Transaksi Pengembalian']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('export-modal'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['route' => 'export.transaksi-retur','judul' => 'Export Transaksi Retur']); ?>
+<?php $component->withAttributes(['route' => 'export.transaksi-retur','judul' => 'Export Transaksi Pengembalian']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal298e4bd81774a252458e6ac6784dd2ba)): ?>

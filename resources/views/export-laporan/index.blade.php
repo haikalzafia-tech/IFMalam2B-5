@@ -1,13 +1,13 @@
 @extends('layouts.kai')
-@section('page_title', 'Export Laporan')
+@section('page_title', 'Ekspor Laporan')
 
 @section('content')
 <div class="row justify-content-center">
     <div class="col-lg-9">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title"><i class="fas fa-file-excel me-2" style="color: var(--sigma-success)"></i>Export Laporan ke Excel</h4>
-                <small class="text-muted">Pilih satu laporan yang ingin diexport.</small>
+                <h4 class="card-title"><i class="fas fa-file-excel me-2" style="color: var(--sigma-success)"></i>Ekspor Laporan ke Excel</h4>
+                <small class="text-muted">Pilih satu laporan yang ingin diekpor.</small>
             </div>
             <div class="card-body">
 
@@ -51,7 +51,7 @@
 
                 <div class="d-flex align-items-center">
                     <button type="button" id="btn-export-terpilih" class="btn btn-success">
-                        <i class="fas fa-download me-1"></i> Export Laporan
+                        <i class="fas fa-download me-1"></i> Ekpor Laporan
                     </button>
                 </div>
             </div>
@@ -74,7 +74,7 @@ document.getElementById('btn-export-terpilih').addEventListener('click', functio
     const terpilih = document.querySelector('.laporan-radio:checked');
 
     if (!terpilih) {
-        SigmaNotif.gagal('Pilih salah satu laporan untuk diexport.');
+        SigmaNotif.gagal('Pilih salah satu laporan untuk diekpor.');
         return;
     }
 

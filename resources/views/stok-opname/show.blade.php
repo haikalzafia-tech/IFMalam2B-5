@@ -1,5 +1,5 @@
 @extends('layouts.kai')
-@section('page_title', 'Detail Stok Opname')
+@section('page_title', 'Detail Pemeriksaan Fisik Persediaan')
 
 @section('content')
 <div class="card">
@@ -24,7 +24,7 @@
         @if($stokOpname->status == 'berlangsung')
         <div class="alert alert-warning">
             <i class="fas fa-exclamation-circle me-1"></i>
-            Opname sedang berlangsung. Silakan isi stok fisik untuk setiap barang.
+            Pemeriksaan Fisik Persediaan sedang berlangsung. Silakan isi stok fisik untuk setiap barang.
             @if(Auth::check() && Auth::user()->role !== 'admin')
                 <br><small><strong>Catatan:</strong> Anda hanya dapat mengisi data. Penyesuaian stok akhir harus dilakukan oleh Admin.</small>
             @endif
@@ -71,7 +71,7 @@
             {{-- HANYA ADMIN YANG DAPAT MENYELESAIKAN/MENUTUP OPNAME --}}
             @if(Auth::check() && Auth::user()->role == 'admin')
                 <button type="button" id="btn-selesai-opname" class="btn btn-success mt-2">
-                    <i class="fas fa-check me-1"></i> Selesaikan Opname
+                    <i class="fas fa-check me-1"></i> Selesaikan Fisik Persediaan
                 </button>
             @else
                 <button type="submit" class="btn btn-primary mt-2">
@@ -83,7 +83,7 @@
         <script>
         document.getElementById('btn-selesai-opname')?.addEventListener('click', function() {
             SigmaNotif.konfirmasi({
-                judul: 'Selesaikan Opname?',
+                judul: 'Selesaikan Fisik Persediaan?',
                 teks: 'Stok sistem akan disesuaikan otomatis dengan stok fisik yang diinput.',
                 icon: 'question',
             }, function() {

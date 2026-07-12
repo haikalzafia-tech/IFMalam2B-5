@@ -1,14 +1,14 @@
-<?php $__env->startSection('page_title', 'Stok Opname'); ?>
+<?php $__env->startSection('page_title', 'Pemeriksaan Fisik Persediaan'); ?>
 
 <?php $__env->startSection('content'); ?>
 <div class="card">
     <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
-        <h4 class="card-title">Daftar Stok Opname</h4>
+        <h4 class="card-title">Daftar Pemeriksaan Fisik Persediaan</h4>
 
         
         <?php if(Auth::check() && Auth::user()->role == 'admin'): ?>
             <a href="<?php echo e(route('stok-opname.create')); ?>" class="btn btn-primary btn-sm">
-                <i class="fas fa-plus me-1"></i> Buat Opname Baru
+                <i class="fas fa-plus me-1"></i> Buat Fisik Persediaan Baru
             </a>
         <?php endif; ?>
     </div>
@@ -62,7 +62,7 @@
                 <thead>
                     <tr>
                         <th style="width: 50px">#</th>
-                        <th>No. Opname</th>
+                        <th>No. Pemeriksaan</th>
                         <th>Tanggal</th>
                         <th>Gudang</th>
                         <th>Petugas</th>
@@ -90,7 +90,7 @@
                         </td>
                     </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                    <tr><td colspan="7" class="text-center text-muted py-5">Belum ada data stok opname.</td></tr>
+                    <tr><td colspan="7" class="text-center text-muted py-5">Belum ada data pemeriksaan fisik persediaan.</td></tr>
                     <?php endif; ?>
                 </tbody>
             </table>

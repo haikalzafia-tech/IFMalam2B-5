@@ -1,17 +1,17 @@
 @extends('layouts.kai')
-@section('page_title', 'Detail Transaksi Retur')
+@section('page_title', 'Detail Transaksi Pengembalian')
 
 @section('content')
 <div class="row g-3">
     <div class="col-lg-4">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="card-title">Info Retur</h4>
+                <h4 class="card-title">Info Pengembalian</h4>
                 <a href="{{ route('transaksi-retur.index') }}" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left"></i></a>
             </div>
             <div class="card-body">
                 <table class="table table-borderless table-sm mb-3">
-                    <tr><td class="text-muted">No. Retur</td><td><span class="badge bg-secondary">{{ $transaksiRetur->nomor_retur }}</span></td></tr>
+                    <tr><td class="text-muted">No. Pengembalian</td><td><span class="badge bg-secondary">{{ $transaksiRetur->nomor_retur }}</span></td></tr>
                     <tr><td class="text-muted">Tanggal</td><td>{{ $transaksiRetur->tanggal_retur->format('d/m/Y') }}</td></tr>
                     <tr><td class="text-muted">Transaksi Asal</td>
                         <td>
@@ -50,7 +50,7 @@
 
     <div class="col-lg-8">
         <div class="card">
-            <div class="card-header"><h4 class="card-title">Daftar Barang Retur</h4></div>
+            <div class="card-header"><h4 class="card-title">Daftar Barang Pengembalian</h4></div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover">
@@ -60,7 +60,7 @@
                                 <th>SKU</th>
                                 <th>Barang</th>
                                 <th>No. Batch</th>
-                                <th class="text-center">Qty Retur</th>
+                                <th class="text-center">Qty Pengembalian</th>
                                 <th class="text-center">Kondisi</th>
                                 <th>Keterangan</th>
                             </tr>

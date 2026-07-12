@@ -1,10 +1,10 @@
 @extends('layouts.kai')
-@section('page_title', 'Buat Retur Baru')
+@section('page_title', 'Buat Pengembalian Baru')
 
 @section('content')
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h4 class="card-title">Form Transaksi Retur</h4>
+        <h4 class="card-title">Form Transaksi Pengembalian</h4>
         <a href="{{ route('transaksi-retur.index') }}" class="btn btn-secondary btn-sm">
             <i class="fas fa-arrow-left me-1"></i> Kembali
         </a>
@@ -19,7 +19,7 @@
         <form action="{{ route('transaksi-retur.store') }}" method="POST" id="form-retur">
             @csrf
 
-            <h6 class="text-muted mb-3 fw-bold"><i class="fas fa-info-circle me-1"></i> Informasi Retur</h6>
+            <h6 class="text-muted mb-3 fw-bold"><i class="fas fa-info-circle me-1"></i> Informasi Pengembalian</h6>
             <div class="row g-3 mb-4">
                 <div class="col-md-4">
                     <label class="form-label">Transaksi Asal <span class="text-danger">*</span></label>
@@ -32,10 +32,10 @@
                         </option>
                         @endforeach
                     </select>
-                    <small class="text-muted">Pilih transaksi yang barangnya ingin diretur</small>
+                    <small class="text-muted">Pilih transaksi yang barangnya ingin dikembalikan</small>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Jenis Retur <span class="text-danger">*</span></label>
+                    <label class="form-label">Jenis Pengembalian <span class="text-danger">*</span></label>
                     <select name="jenis_retur" class="form-select" required>
                         <option value="">-- Pilih Jenis --</option>
                         <option value="retur_masuk">Masuk ke Gudang</option>
@@ -52,12 +52,12 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <label class="form-label">Tanggal Retur <span class="text-danger">*</span></label>
+                    <label class="form-label">Tanggal pengembalian <span class="text-danger">*</span></label>
                     <input type="date" name="tanggal_retur" class="form-control" value="{{ date('Y-m-d') }}" required>
                 </div>
                 <div class="col-md-12">
-                    <label class="form-label">Alasan Retur <span class="text-danger">*</span></label>
-                    <textarea name="alasan_retur" class="form-control" rows="2" placeholder="Jelaskan alasan retur (barang rusak, salah kirim, cacat produksi, dll)" required></textarea>
+                    <label class="form-label">Alasan pengembalian <span class="text-danger">*</span></label>
+                    <textarea name="alasan_retur" class="form-control" rows="2" placeholder="Jelaskan alasan pengembalian (barang rusak, salah kirim, cacat produksi, dll)" required></textarea>
                 </div>
                 <div class="col-md-12">
                     <label class="form-label">Keterangan Tambahan</label>
@@ -65,7 +65,7 @@
                 </div>
             </div>
 
-            <h6 class="text-muted mb-3 fw-bold"><i class="fas fa-boxes me-1"></i> Daftar Barang Retur</h6>
+            <h6 class="text-muted mb-3 fw-bold"><i class="fas fa-boxes me-1"></i> Daftar Barang Pengembalian</h6>
             <div id="alert-pilih-transaksi" class="alert alert-info">
                 Silakan pilih transaksi asal terlebih dahulu untuk menampilkan daftar barang.
             </div>
@@ -77,7 +77,7 @@
                             <th style="width: 60px;">Pilih</th>
                             <th style="min-width: 220px;" class="text-start">Barang</th>
                             <th style="width: 100px;">Qty Asal</th>
-                            <th style="width: 110px;">Qty Retur</th>
+                            <th style="width: 110px;">Qty Pengembalian</th>
                             <th style="min-width: 140px;">Kondisi Barang</th>
                             <th style="min-width: 160px;">Keterangan Kondisi</th>
                         </tr>
@@ -87,7 +87,7 @@
             </div>
 
             <div class="mt-4 d-flex gap-2">
-                <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Simpan Retur</button>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Simpan Pengembalian</button>
                 <button type="button" class="btn btn-secondary" onclick="SigmaNotif.konfirmasiBatal('{{ route('transaksi-retur.index') }}')">Batal</button>
             </div>
         </form>
@@ -206,7 +206,7 @@ document.getElementById('form-retur').addEventListener('submit', function(e) {
 
     if (!adaTerpilih) {
         e.preventDefault();
-        SigmaNotif.gagal('Pilih minimal 1 barang yang akan diretur (centang checkbox).');
+        SigmaNotif.gagal('Pilih minimal 1 barang yang akan dikembalikan (centang checkbox).');
     }
 });
 

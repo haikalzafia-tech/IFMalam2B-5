@@ -17,7 +17,7 @@
                 </div>
                 <div class="modal-body">
                     <p class="text-muted small mb-3">
-                        Kosongkan kedua tanggal jika ingin mengexport seluruh data tanpa batasan periode.
+                        Kosongkan kedua tanggal jika ingin mengekpor seluruh data tanpa batasan periode.
                     </p>
                     <div class="row g-3">
                         <div class="col-md-6">
